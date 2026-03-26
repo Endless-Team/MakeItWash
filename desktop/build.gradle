@@ -1,6 +1,16 @@
 apply plugin: 'application'
 
-mainClassName = 'com.makeitwash.DesktopLauncher'
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+application {
+    mainClass = 'com.makeitwash.DesktopLauncher'
+}
 
 dependencies {
     implementation project(':core')
