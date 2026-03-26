@@ -1,7 +1,7 @@
 # 📄 PRD — MakeItWash
 
-> **Versione:** 0.1 — Draft  
-> **Team:** Endless-Team (2 persone)  
+> **Versione:** 0.2 — Draft  
+> **Team:** Endless-Team  
 > **Engine:** Java + LibGDX  
 > **Ultimo aggiornamento:** Marzo 2026
 
@@ -18,6 +18,10 @@ soddisfare i clienti e sopravvivere alla crescente domanda giorno dopo giorno.
 Lo stile visivo si ispira a **Factorio**: visuale top-down con effetto di
 profondità/tridimensionalità, grafica 2D con isometria leggera o ombre che
 simulano il volume.
+
+Il gioco è progettato per essere **cross-platform fin dall'inizio**: Desktop
+e Android condividono tutta la logica di gioco nel modulo `core/`, con solo
+i layer di input e UI adattati per piattaforma.
 
 ---
 
@@ -41,7 +45,7 @@ soddisfacendo tutti i clienti che entrano nel ristorante.
 - Il giocatore si muove liberamente sulla griglia
 - Interagisce con un **menu di costruzione** per piazzare elementi
 - Gli elementi occupano 1 o più celle della griglia
-- Gli elementi possono essere rimossi (con rimborso parziale)
+- Gli elementi possono essere rimossi
 
 ### 3.2 — Produzione
 La produzione di sushi segue una **catena di lavorazione**:
@@ -72,7 +76,22 @@ le macchine. I robot eseguono azioni specifiche (raccogliere, portare, piazzare)
 - Ogni sushi consegnato genera **¥ (yen)**
 - I macchinari costano yen per essere acquistati
 - Espandere la griglia (comprare spazio) costa yen
-- I robot e i nastri consumano **energia** (risorsa secondaria)
+- I robot e i nastri consumano **energia** da pagare nella bolletta dopo ogni giornata
+
+### 3.6 — Input multi-piattaforma
+
+| Azione | Desktop | Android |
+|--------|---------|---------|
+| Muovere il giocatore | WASD / Frecce | Joystick virtuale (touch) |
+| Selezionare una cella | Click sinistro mouse | Tap |
+| Aprire menu costruzione | E / Click destro | Pulsante HUD dedicato |
+| Ruotare macchina | R | Pulsante rotazione nell'overlay |
+| Zoom | Rotella mouse | Pinch to zoom |
+| Pausa | ESC | Pulsante pausa HUD |
+
+> **Principio di design:** nessuna meccanica deve richiedere hover o input
+> non replicabili su touch. Le celle della griglia devono avere dimensione
+> minima di **64x64px** per essere tappabili comodamente su mobile.
 
 ---
 
@@ -91,13 +110,13 @@ le macchine. I robot eseguono azioni specifiche (raccogliere, portare, piazzare)
 | `SushiAssembler` | Assembla riso + ingrediente → sushi |
 | `PlatingStation` | Impiattta il sushi |
 | `DeliveryCounter` | Banco di consegna ai clienti |
-| `Refrigerator` | Conserva gli ingredienti |
+| `Refrigerator` | Conserva gli ingredienti e i piatti già pronti |
 
 ### Trasporto
 | Entità | Descrizione |
 |--------|-------------|
-| `ConveyorBelt` | Sposta oggetti da una cella all'altra automaticamente (già in codebase) |
-| `Robot` | Esegue azioni specifiche (raccogliere, depositare, smistare) (già in codebase) |
+| `ConveyorBelt` | Sposta oggetti da una cella all'altra automaticamente |
+| `Robot` | Esegue azioni specifiche (raccogliere, depositare, smistare) |
 
 ### Clienti
 | Entità | Descrizione |
@@ -123,37 +142,56 @@ le macchine. I robot eseguono azioni specifiche (raccogliere, portare, piazzare)
 | `BuildMenuScreen` | Overlay/pannello per selezionare cosa costruire |
 | `PauseScreen` | Pausa con opzioni |
 | `DayResultScreen` | Fine giornata: riepilogo guadagni e reputazione |
-| `GameOverScreen` | Sconfitta |
-| `VictoryScreen` | Vittoria |
+| `GameOverScreen` | Sconfitta in caso di bancarotta |
+| `VictoryScreen` | Vittoria (opzionale, da definire) |
 
 ---
 
 ## 6. Requisiti Tecnici
 
-- **Linguaggio:** Java 17+
+- **Linguaggio:** Java 17+ (Desktop), Java 11+ compatibile (Android SDK)
 - **Framework:** LibGDX 1.12.1
-- **Build:** Gradle 9.x
-- **Target:** Desktop (Windows/macOS/Linux)
-- **Risoluzione base:** 1280x720 (scalabile)
+- **Build:** Gradle 9.x con moduli separati per piattaforma
+- **Target:** Desktop (Windows/macOS/Linux), Android (API 21+, Android 5.0+)
+- **Risoluzione base:** 1280x720 (desktop) — viewport adattivo su Android
 - **Renderer:** SpriteBatch per sprite, ShapeRenderer per debug griglia
-- **UI:** Scene2D (LibGDX) per menu e HUD
+- **UI:** Scene2D (LibGDX) per menu e HUD — layout responsive per touch
 - **Camera:** OrthographicCamera con zoom e pan
+- **Salvataggio:** `Preferences` LibGDX (cross-platform, nessuna dipendenza esterna)
+
+### Struttura moduli Gradle
+
+```
+MakeItWash/
+├── core/          → logica di gioco (condivisa tra tutte le piattaforme)
+├── desktop/       → launcher LWJGL3 per PC
+└── android/       → activity Android + AndroidManifest.xml
+```
+
+### Requisiti Android
+- `minSdkVersion`: 21 (Android 5.0 Lollipop)
+- `targetSdkVersion`: 34
+- Permessi richiesti: nessuno (gioco offline)
+- Orientamento: **landscape forzato**
+- Supporto controller fisici bluetooth: opzionale (v2.0)
 
 ---
 
 ## 7. Fuori Scope (v1.0)
 
 - Multiplayer
-- Versione mobile
+- Versione iOS
 - Editor di livelli
 - Modalità endless
 - Salvataggio cloud
+- Controller fisici
 
 ---
 
 ## 8. Metriche di Successo
 
-- Il giocatore completa almeno 5 giornate senza crash
+- Il giocatore completa almeno 5 giornate senza crash su Desktop e Android
 - La produzione è ottimizzabile (non c'è un solo modo per vincere)
 - Il feedback visivo rende chiaro lo stato di ogni macchina
 - Il gioco è avviabile e giocabile in meno di 30 secondi dall'apertura
+- Su Android: nessun lag su dispositivi con almeno 3GB RAM (2020+)

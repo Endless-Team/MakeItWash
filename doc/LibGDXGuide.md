@@ -1,7 +1,8 @@
 # 📚 Guida LibGDX per MakeItWash
 
-> Guida pratica all'uso di LibGDX per un gioco gestionale 2D.  
-> Calibrata sulla struttura del progetto MakeItWash e sul livello del team (Java esperti, LibGDX zero).
+> Guida pratica all'uso di LibGDX per un gioco gestionale 2D cross-platform.
+> Target: Desktop (Windows/macOS/Linux) + Android.
+> Calibrata su MakeItWash (Java esperti, LibGDX zero).
 
 ---
 
@@ -13,117 +14,118 @@
 4. [SpriteBatch — disegnare texture](#4-spritebatch--disegnare-texture)
 5. [Texture e TextureRegion](#5-texture-e-textureregion)
 6. [OrthographicCamera — la telecamera](#6-orthographiccamera--la-telecamera)
-7. [ShapeRenderer — debug e forme geometriche](#7-shaperenderer--debug-e-forme-geometriche)
-8. [Input — tastiera, mouse, touch](#8-input--tastiera-mouse-touch)
-9. [Scene2D — UI e HUD](#9-scene2d--ui-e-hud)
-10. [BitmapFont — testo a schermo](#10-bitmapfont--testo-a-schermo)
-11. [AssetManager — caricare le risorse](#11-assetmanager--caricare-le-risorse)
-12. [La griglia di gioco — implementazione pratica](#12-la-griglia-di-gioco--implementazione-pratica)
-13. [Gestione della memoria — dispose()](#13-gestione-della-memoria--dispose)
-14. [Struttura consigliata per MakeItWash](#14-struttura-consigliata-per-makeitwash)
+7. [Viewport — adattarsi a ogni schermo](#7-viewport--adattarsi-a-ogni-schermo)
+8. [ShapeRenderer — debug e forme geometriche](#8-shaperenderer--debug-e-forme-geometriche)
+9. [Input — tastiera, mouse e touch](#9-input--tastiera-mouse-e-touch)
+10. [Gesture — pinch zoom e swipe su Android](#10-gesture--pinch-zoom-e-swipe-su-android)
+11. [Scene2D — UI e HUD](#11-scene2d--ui-e-hud)
+12. [BitmapFont — testo a schermo](#12-bitmapfont--testo-a-schermo)
+13. [AssetManager — caricare le risorse](#13-assetmanager--caricare-le-risorse)
+14. [Preferences — salvataggio cross-platform](#14-preferences--salvataggio-cross-platform)
+15. [La griglia di gioco — implementazione pratica](#15-la-griglia-di-gioco--implementazione-pratica)
+16. [Gestione della memoria — dispose()](#16-gestione-della-memoria--dispose)
+17. [Modulo Android — setup e differenze](#17-modulo-android--setup-e-differenze)
+18. [Struttura consigliata per MakeItWash](#18-struttura-consigliata-per-makeitwash)
 
 ---
 
 ## 1. Come funziona LibGDX
 
-LibGDX è un framework che astrae le differenze tra piattaforme (desktop, Android, iOS).
-Invece di chiamare direttamente OpenGL, usi classi di alto livello come `SpriteBatch` e `Texture`.
+LibGDX astrae le differenze tra piattaforme (Desktop, Android, iOS).
+Il progetto è diviso in tre moduli:
 
-Il progetto è diviso in due moduli:
-- **`core/`** → tutta la logica di gioco (indipendente dalla piattaforma)
-- **`desktop/`** → solo il launcher, crea la finestra e avvia il core
+- **`core/`** → tutta la logica di gioco, condivisa ← scrivi tutto qui
+- **`desktop/`** → crea la finestra LWJGL3 e avvia il core
+- **`android/`** → Activity Android che avvia il core
 
-**Regola fondamentale:** tutto il codice di gioco va in `core/`. Non mettere mai
-codice di gioco in `desktop/`.
+**Regola fondamentale:** tutto il codice di gioco va in `core/`.
+I moduli `desktop/` e `android/` contengono solo il launcher (2-3 file ciascuno).
 
 ---
 
 ## 2. Il ciclo di vita del gioco
-
-`MainGame` estende `Game` e ha questi metodi:
 
 ```java
 public class MainGame extends Game {
 
     @Override
     public void create() {
-        // Chiamato UNA VOLTA all'avvio
-        // Inizializza risorse globali (AssetManager, font, ecc.)
+        // Chiamato UNA VOLTA all'avvio (desktop e android)
         setScreen(new MenuScreen(this));
     }
 
     @Override
     public void render() {
-        // Chiamato OGNI FRAME (tipicamente 60 fps)
-        // Non scrivere logica qui: delega alla Screen corrente
-        super.render(); // obbligatorio: chiama screen.render()
+        super.render(); // obbligatorio: delega alla Screen corrente
+    }
+
+    @Override
+    public void pause() {
+        // Android: app va in background → salva stato
+        // Desktop: finestra minimizzata
+    }
+
+    @Override
+    public void resume() {
+        // Android: app torna in primo piano
+        // Le texture vengono ricaricate automaticamente se usi AssetManager
     }
 
     @Override
     public void dispose() {
-        // Chiamato alla chiusura del gioco
-        // Libera le risorse globali
+        // Chiusura del gioco → libera risorse globali
     }
 }
 ```
+
+> **Nota Android critica:** quando l'app va in background, il contesto OpenGL
+> viene distrutto e tutte le texture vengono perse. `AssetManager` le ricarica
+> automaticamente al resume. Se carichi texture con `new Texture(...)` manualmente,
+> devi ricaricarle tu in `resume()`.
 
 ---
 
 ## 3. Screen — gestione delle schermate
 
-Ogni schermata (menu, gioco, pausa) è una classe separata che implementa `Screen`
-o estende `ScreenAdapter` (più comodo: implementa solo i metodi che ti servono).
-
 ```java
 public class GameScreen extends ScreenAdapter {
+    private final MainGame game;
 
-    private final MainGame game; // riferimento per cambiare screen
-
-    public GameScreen(MainGame game) {
-        this.game = game;
-    }
+    public GameScreen(MainGame game) { this.game = game; }
 
     @Override
     public void show() {
-        // Chiamato quando questa screen diventa attiva
-        // Inizializza SpriteBatch, camera, ecc. QUI (non nel costruttore)
+        // Inizializza SpriteBatch, camera, Stage QUI — non nel costruttore
     }
 
     @Override
     public void render(float delta) {
-        // delta = secondi dall'ultimo frame (es. 0.016f a 60fps)
-        // 1. Aggiorna la logica con delta
-        // 2. Pulisci lo schermo
-        // 3. Disegna
+        // delta = secondi dall'ultimo frame (0.016f a 60fps)
+        // Usalo per movimenti frame-rate indipendenti: x += velocità * delta
     }
 
     @Override
     public void resize(int width, int height) {
-        // Gestisci il ridimensionamento della finestra
+        // Desktop: ridimensionamento finestra
+        // Android: rotazione dispositivo
+        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
-    public void dispose() {
-        // Libera le risorse create in show()
-    }
+    public void dispose() { /* libera risorse create in show() */ }
 }
 ```
 
 **Cambiare schermata:**
 ```java
-// Da qualsiasi punto del codice con accesso a game:
 game.setScreen(new DayResultScreen(game));
-// La vecchia screen riceve automaticamente hide() e poi dispose() se non riutilizzata
+// La vecchia screen riceve hide() poi dispose() automaticamente
 ```
 
 ---
 
 ## 4. SpriteBatch — disegnare texture
-
-`SpriteBatch` è il modo principale per disegnare in LibGDX. Raggruppa le chiamate
-di disegno in un unico "batch" per motivi di performance.
-
-**Regola d'oro:** tutto ciò che disegni deve stare tra `batch.begin()` e `batch.end()`.
 
 ```java
 // In show():
@@ -131,137 +133,144 @@ SpriteBatch batch = new SpriteBatch();
 
 // In render():
 Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
-Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // pulisci schermo
+Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-batch.setProjectionMatrix(camera.combined); // usa le coordinate della camera
+batch.setProjectionMatrix(camera.combined);
 batch.begin();
     batch.draw(texture, x, y, width, height);
-    // altri draw...
 batch.end();
 ```
 
-**Non creare un nuovo SpriteBatch ogni frame** — è costoso. Crealo una volta in `show()`.
+- Non creare un nuovo `SpriteBatch` ogni frame — crealo una volta in `show()`
+- Non annidare `begin()`/`end()` — non puoi chiamare `begin()` mentre è già aperto
 
 ---
 
 ## 5. Texture e TextureRegion
 
-Una `Texture` è un'immagine caricata in memoria GPU.
-
 ```java
-// Caricamento (in show() o tramite AssetManager):
+// Caricamento diretto (solo per testing — usa AssetManager in produzione):
 Texture robotTexture = new Texture(Gdx.files.internal("entities/robot.png"));
+batch.draw(robotTexture, x, y, 64, 64);
 
-// Disegno:
-batch.draw(robotTexture, x, y, 64, 64); // x, y, larghezza, altezza
+// TextureRegion — ritaglio di una spritesheet:
+TextureRegion region = new TextureRegion(sheet, frameX, frameY, 32, 32);
 
-// IMPORTANTE: libera la memoria quando non serve più
-robotTexture.dispose();
-```
-
-**TextureRegion** — ritaglio di una texture (spritesheet):
-```java
-// Se hai un'unica immagine con tutte le texture del gioco (TextureAtlas):
-TextureRegion region = new TextureRegion(robotTexture, 0, 0, 32, 32);
-// oppure da un atlas:
+// TextureAtlas — un file con tutte le texture (CONSIGLIATO):
 TextureAtlas atlas = new TextureAtlas("game.atlas");
 TextureRegion robotIdle = atlas.findRegion("robot_idle");
+TextureRegion conveyor  = atlas.findRegion("conveyor");
 ```
 
-**Consiglio per MakeItWash:** metti tutte le texture in un unico file `atlas`
-(generabile con LibGDX TexturePacker) e caricale tutte con un solo `TextureAtlas`.
+**Consiglio MakeItWash:** usa un unico `TextureAtlas` per tutte le texture.
+Si genera con **LibGDX TexturePacker**. Riduce i draw call → performance migliori su Android.
 
 ---
 
 ## 6. OrthographicCamera — la telecamera
 
-La camera definisce cosa vedi a schermo. Per un gestionale 2D si usa `OrthographicCamera`.
-
 ```java
 // In show():
 OrthographicCamera camera = new OrthographicCamera();
-camera.setToOrtho(false, 1280, 720); // false = y va verso l'alto
+camera.setToOrtho(false, 1280, 720); // false = y verso l'alto
 
-// Seguire il giocatore (in render(), prima del batch):
+// Seguire il giocatore (in render()):
 camera.position.set(player.x, player.y, 0);
 camera.update();
 
 // Zoom:
-camera.zoom = 1.5f; // > 1 = zoom out, < 1 = zoom in
+camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 3f);
 camera.update();
 
-// Convertire coordinate mouse → coordinate mondo:
-Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-camera.unproject(mousePos);
-// mousePos.x e mousePos.y ora sono le coordinate nel mondo di gioco
-```
-
-**Viewport** — gestisce il ridimensionamento della finestra:
-```java
-// In show():
-Viewport viewport = new FitViewport(1280, 720, camera);
-
-// In resize():
-viewport.update(width, height, true);
+// Convertire coordinate touch/mouse → coordinate mondo:
+Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+camera.unproject(pos);
+// pos.x e pos.y ora sono coordinate nel mondo di gioco
+// Funziona identicamente su Desktop (mouse) e Android (touch)
 ```
 
 ---
 
-## 7. ShapeRenderer — debug e forme geometriche
+## 7. Viewport — adattarsi a ogni schermo
 
-Utile per disegnare la griglia, barre della pazienza, hitbox di debug.
+Il `Viewport` è **fondamentale** per il cross-platform. Gestisce come il mondo
+di gioco si adatta a schermi diversi (monitor 1080p, tablet, telefono).
+
+```java
+// FitViewport: mantiene le proporzioni, aggiunge bande nere se necessario
+// Consigliato per MakeItWash
+Viewport viewport = new FitViewport(1280, 720, camera);
+
+// ExtendViewport: estende il mondo invece di aggiungere bande nere
+// Buono se vuoi mostrare più griglia su schermi più grandi
+Viewport viewport = new ExtendViewport(1280, 720, camera);
+
+// In resize() — OBBLIGATORIO:
+@Override
+public void resize(int width, int height) {
+    viewport.update(width, height, true);          // aggiorna world viewport
+    stage.getViewport().update(width, height, true); // aggiorna UI stage
+}
+
+// In render():
+batch.setProjectionMatrix(camera.combined);
+```
+
+> Su Android `resize()` viene chiamato anche ad ogni rotazione dispositivo.
+> Con orientamento landscape forzato in AndroidManifest questo non accade.
+
+---
+
+## 8. ShapeRenderer — debug e forme geometriche
 
 ```java
 ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-// In render() — per disegnare la griglia:
+// Griglia (in render(), dopo batch.end()):
 shapeRenderer.setProjectionMatrix(camera.combined);
 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-    shapeRenderer.setColor(Color.DARK_GRAY);
-    for (int x = 0; x <= GRID_WIDTH; x++) {
+    shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1f);
+    for (int x = 0; x <= GRID_WIDTH; x++)
         shapeRenderer.line(x * CELL_SIZE, 0, x * CELL_SIZE, GRID_HEIGHT * CELL_SIZE);
-    }
-    for (int y = 0; y <= GRID_HEIGHT; y++) {
+    for (int y = 0; y <= GRID_HEIGHT; y++)
         shapeRenderer.line(0, y * CELL_SIZE, GRID_WIDTH * CELL_SIZE, y * CELL_SIZE);
-    }
 shapeRenderer.end();
 
-// Per riempire una cella (es. macchina selezionata):
+// Cella evidenziata (anteprima piazzamento):
+Gdx.gl.glEnable(GL20.GL_BLEND);
 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.setColor(new Color(1, 1, 0, 0.3f)); // giallo semi-trasparente
+    shapeRenderer.setColor(1f, 1f, 0f, 0.3f);
     shapeRenderer.rect(cellX * CELL_SIZE, cellY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 shapeRenderer.end();
 ```
 
-**Attenzione:** `ShapeRenderer` e `SpriteBatch` non possono essere attivi contemporaneamente.
-Prima `batch.end()`, poi `shapeRenderer.begin()`.
+**Regola:** `ShapeRenderer` e `SpriteBatch` non possono essere aperti contemporaneamente.
+Sempre `batch.end()` prima di `shapeRenderer.begin()`.
 
 ---
 
-## 8. Input — tastiera, mouse, touch
+## 9. Input — tastiera, mouse e touch
 
 ```java
-// Polling — controllo diretto ogni frame (in render()):
-if (Gdx.input.isKeyPressed(Input.Keys.W)) player.moveUp(delta);
-if (Gdx.input.isKeyPressed(Input.Keys.A)) player.moveLeft(delta);
+// --- TASTIERA (solo desktop) ---
+if (Gdx.input.isKeyPressed(Input.Keys.W))        player.moveUp(delta);
+if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pauseGame();
 
-// isKeyJustPressed — si attiva SOLO al primo frame della pressione:
-if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-    game.setScreen(new PauseScreen(game));
-}
+// --- MOUSE (desktop) / TOUCH (android) — stessa API ---
+boolean touched   = Gdx.input.isTouched();     // tenuto premuto
+boolean justTouch = Gdx.input.justTouched();   // solo primo frame
 
-// Mouse:
-float mouseX = Gdx.input.getX();   // coordinate schermo
-float mouseY = Gdx.input.getY();
-boolean leftClick = Gdx.input.isButtonJustPressed(Input.Buttons.LEFT);
+// Converti in coordinate mondo:
+Vector3 pos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+camera.unproject(pos);
 
-// Rotella del mouse per lo zoom:
-// (si usa InputProcessor)
+// --- MULTI-TOUCH (android) ---
+if (Gdx.input.isTouched(0)) { /* primo dito  */ }
+if (Gdx.input.isTouched(1)) { /* secondo dito (pinch zoom) */ }
 ```
 
-**InputProcessor** — per eventi (click, scroll):
+**InputProcessor** per eventi:
 ```java
-// In show():
 Gdx.input.setInputProcessor(new InputAdapter() {
     @Override
     public boolean scrolled(float amountX, float amountY) {
@@ -271,31 +280,62 @@ Gdx.input.setInputProcessor(new InputAdapter() {
     }
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // converti coordinate e gestisci click sulla griglia
+        Vector3 pos = new Vector3(screenX, screenY, 0);
+        camera.unproject(pos);
+        handleCellTap(grid.toGridX(pos.x), grid.toGridY(pos.y));
         return true;
     }
 });
 ```
 
+**Combinare Stage UI e InputProcessor:**
+```java
+InputMultiplexer multiplexer = new InputMultiplexer();
+multiplexer.addProcessor(stage);      // la UI intercetta prima
+multiplexer.addProcessor(gameInput);  // poi la logica di gioco
+Gdx.input.setInputProcessor(multiplexer);
+```
+
 ---
 
-## 9. Scene2D — UI e HUD
+## 10. Gesture — pinch zoom e swipe su Android
 
-Scene2D è il sistema UI di LibGDX (bottoni, label, tabelle, ecc.).
-È il modo corretto per fare menu e HUD.
+```java
+GestureDetector gestureDetector = new GestureDetector(new GestureAdapter() {
+    private float initialZoom;
+
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
+        if (initialDistance == distance) initialZoom = camera.zoom;
+        camera.zoom = initialZoom * (initialDistance / distance);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 3f);
+        return true;
+    }
+
+    @Override
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        camera.translate(-deltaX * camera.zoom, deltaY * camera.zoom);
+        return true;
+    }
+});
+
+// Aggiungilo al multiplexer dopo lo Stage:
+multiplexer.addProcessor(gestureDetector);
+```
+
+---
+
+## 11. Scene2D — UI e HUD
 
 ```java
 // In show():
 Stage stage = new Stage(new FitViewport(1280, 720));
-Gdx.input.setInputProcessor(stage); // stage gestisce gli input
-
-// Skin (tema visivo dei widget):
 Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-// Label (testo):
+// Label:
 Label yenLabel = new Label("¥ 0", skin);
 
-// Bottone:
+// TextButton:
 TextButton playButton = new TextButton("Inizia", skin);
 playButton.addListener(new ChangeListener() {
     @Override
@@ -304,65 +344,60 @@ playButton.addListener(new ChangeListener() {
     }
 });
 
-// Table (layout):
+// Table — layout responsive:
 Table table = new Table();
-table.setFillParent(true); // occupa tutto lo schermo
+table.setFillParent(true);
 table.center();
-table.add(playButton).width(200).height(60);
+table.add(playButton).width(200).height(80); // 80px = tappabile su mobile
 stage.addActor(table);
 
 // In render():
-stage.act(delta);   // aggiorna animazioni e logica UI
-stage.draw();       // disegna
-
-// In resize():
-stage.getViewport().update(width, height, true);
+stage.act(delta);
+stage.draw();
 
 // In dispose():
 stage.dispose();
 skin.dispose();
 ```
 
-**Skin gratuita per iniziare:** scarica `uiskin.json` dalla repository
-[libgdx/libgdx-demo-tests](https://github.com/libgdx/libgdx-demo-tests) oppure
-usa [Skin Composer](https://github.com/raeleus/skin-composer) per crearne una custom.
-
 ---
 
-## 10. BitmapFont — testo a schermo
+## 12. BitmapFont — testo a schermo
 
 ```java
-// Font di default LibGDX (Arial 15px):
 BitmapFont font = new BitmapFont();
+font.getData().setScale(2f); // scala per leggibilità su mobile
 
-// Font personalizzato (da file .fnt generato con Hiero o bmfont):
-BitmapFont customFont = new BitmapFont(Gdx.files.internal("fonts/myfont.fnt"));
-
-// Disegno (dentro batch.begin() / batch.end()):
 font.setColor(Color.WHITE);
-font.draw(batch, "¥ 1500", 20, Gdx.graphics.getHeight() - 20);
-
-// Scala:
-font.getData().setScale(1.5f);
+font.draw(batch, "¥ 1500", x, y); // dentro batch.begin()/end()
 ```
 
+**Consiglio Android:** usa font almeno 20-24px o scala con `setScale()`.
+
 ---
 
-## 11. AssetManager — caricare le risorse
+## 13. AssetManager — caricare le risorse
 
-`AssetManager` carica le risorse in modo asincrono e gestisce il caching.
-È il modo corretto per caricare texture, font e audio in un progetto reale.
+`AssetManager` è **obbligatorio per Android**: ricarica automaticamente le texture
+dopo che il contesto OpenGL viene perso (app in background).
 
 ```java
-// In MainGame.create():
-AssetManager assets = new AssetManager();
-assets.load("entities/robot.png", Texture.class);
-assets.load("entities/conveyor.png", Texture.class);
-assets.load("fonts/game.fnt", BitmapFont.class);
-assets.finishLoading(); // blocca fino al completamento (ok per desktop)
+// In MainGame:
+public AssetManager assets;
 
-// Recupero delle risorse (da qualsiasi screen tramite game.assets):
-Texture robotTex = assets.get("entities/robot.png", Texture.class);
+@Override
+public void create() {
+    assets = new AssetManager();
+    assets.load("entities/robot.png", Texture.class);
+    assets.load("ui/uiskin.json", Skin.class);
+    assets.load("fonts/game.fnt", BitmapFont.class);
+    assets.finishLoading(); // blocca fino al termine
+
+    setScreen(new MenuScreen(this));
+}
+
+// In qualsiasi Screen:
+Texture robotTex = game.assets.get("entities/robot.png", Texture.class);
 
 // In MainGame.dispose():
 assets.dispose(); // libera tutto in un colpo
@@ -370,20 +405,34 @@ assets.dispose(); // libera tutto in un colpo
 
 ---
 
-## 12. La griglia di gioco — implementazione pratica
+## 14. Preferences — salvataggio cross-platform
 
-La griglia è il cuore di MakeItWash. Ecco un'implementazione base:
+Stessa API su Desktop (file locale) e Android (SharedPreferences):
+
+```java
+Preferences prefs = Gdx.app.getPreferences("MakeItWash");
+
+// Salva:
+prefs.putInteger("currentDay", 5);
+prefs.putFloat("yen", 1500f);
+prefs.putFloat("reputation", 80f);
+prefs.flush(); // OBBLIGATORIO per persistere su disco
+
+// Leggi (con valore di default):
+int   day        = prefs.getInteger("currentDay", 1);
+float yen        = prefs.getFloat("yen", 500f);
+float reputation = prefs.getFloat("reputation", 100f);
+```
+
+---
+
+## 15. La griglia di gioco — implementazione pratica
 
 ```java
 // world/Grid.java
-package com.makeitwash.world;
-
-import com.makeitwash.entities.PlaceableEntity;
-
 public class Grid {
-    public static final int CELL_SIZE = 64; // pixel per cella
-    private final int width;
-    private final int height;
+    public static final int CELL_SIZE = 64; // px per cella (tappabile su mobile)
+    private final int width, height;
     private final PlaceableEntity[][] cells;
 
     public Grid(int width, int height) {
@@ -392,29 +441,26 @@ public class Grid {
         this.cells = new PlaceableEntity[width][height];
     }
 
-    public boolean isEmpty(int gridX, int gridY) {
-        return isValid(gridX, gridY) && cells[gridX][gridY] == null;
+    public boolean isEmpty(int x, int y) {
+        return isValid(x, y) && cells[x][y] == null;
     }
 
-    public boolean place(PlaceableEntity entity, int gridX, int gridY) {
-        if (!isEmpty(gridX, gridY)) return false;
-        cells[gridX][gridY] = entity;
-        entity.gridX = gridX;
-        entity.gridY = gridY;
+    public boolean place(PlaceableEntity entity, int x, int y) {
+        if (!isEmpty(x, y)) return false;
+        cells[x][y] = entity;
+        entity.gridX = x;
+        entity.gridY = y;
         return true;
     }
 
-    public PlaceableEntity remove(int gridX, int gridY) {
-        PlaceableEntity e = cells[gridX][gridY];
-        cells[gridX][gridY] = null;
+    public PlaceableEntity remove(int x, int y) {
+        PlaceableEntity e = cells[x][y];
+        cells[x][y] = null;
         return e;
     }
 
-    // Converti pixel → griglia:
-    public int toGridX(float pixelX) { return (int)(pixelX / CELL_SIZE); }
-    public int toGridY(float pixelY) { return (int)(pixelY / CELL_SIZE); }
-
-    // Converti griglia → pixel (angolo in basso a sinistra della cella):
+    public int toGridX(float worldX) { return (int)(worldX / CELL_SIZE); }
+    public int toGridY(float worldY) { return (int)(worldY / CELL_SIZE); }
     public float toPixelX(int gridX) { return gridX * CELL_SIZE; }
     public float toPixelY(int gridY) { return gridY * CELL_SIZE; }
 
@@ -424,63 +470,156 @@ public class Grid {
 }
 ```
 
-**Rilevare su quale cella sta il mouse** (in `GameScreen.render()`):
+**Rilevare la cella toccata/cliccata (desktop e android identici):**
 ```java
-Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-camera.unproject(mouse);
-int hoveredCellX = grid.toGridX(mouse.x);
-int hoveredCellY = grid.toGridY(mouse.y);
+Vector3 pos = new Vector3(screenX, screenY, 0);
+camera.unproject(pos);
+int cellX = grid.toGridX(pos.x);
+int cellY = grid.toGridY(pos.y);
 ```
 
 ---
 
-## 13. Gestione della memoria — dispose()
-
-LibGDX **non usa il garbage collector** per le risorse GPU. Devi liberarle tu.
-Ogni classe che implementa `Disposable` va chiamata con `.dispose()`.
+## 16. Gestione della memoria — dispose()
 
 | Classe | Va liberata con |
 |--------|----------------|
-| `Texture` | `texture.dispose()` |
-| `SpriteBatch` | `batch.dispose()` |
-| `ShapeRenderer` | `shapeRenderer.dispose()` |
-| `BitmapFont` | `font.dispose()` |
-| `Stage` | `stage.dispose()` |
-| `Skin` | `skin.dispose()` |
-| `AssetManager` | `assets.dispose()` (libera tutto) |
+| `Texture` / `TextureAtlas` | `.dispose()` |
+| `SpriteBatch` | `.dispose()` |
+| `ShapeRenderer` | `.dispose()` |
+| `BitmapFont` | `.dispose()` |
+| `Stage` | `.dispose()` |
+| `Skin` | `.dispose()` |
+| `AssetManager` | `.dispose()` — libera tutto |
+| `Music` / `Sound` | `.dispose()` |
 
-**Regola:** se l'hai creato in `show()`, liberalo in `dispose()`.  
-Se l'hai creato in `MainGame.create()`, liberalo in `MainGame.dispose()`.
+**Regola:** creato in `show()` → liberato in `dispose()`.
+Creato in `MainGame.create()` → liberato in `MainGame.dispose()`.
+Se usi `AssetManager`, non fare `dispose()` sulle singole risorse — le gestisce lui.
 
 ---
 
-## 14. Struttura consigliata per MakeItWash
+## 17. Modulo Android — setup e differenze
+
+### `android/build.gradle`
+
+```groovy
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.makeitwash'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.makeitwash'
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+}
+```
+
+### `android/src/.../AndroidLauncher.java`
+
+```java
+package com.makeitwash;
+
+import android.os.Bundle;
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+public class AndroidLauncher extends AndroidApplication {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.useImmersiveMode = true; // fullscreen su Android
+        initialize(new MainGame(), config);
+    }
+}
+```
+
+### `android/AndroidManifest.xml` (parti importanti)
+
+```xml
+<activity
+    android:name=".AndroidLauncher"
+    android:screenOrientation="landscape"
+    android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+</activity>
+```
+
+### Differenze Desktop vs Android
+
+| Aspetto | Desktop | Android |
+|---------|---------|---------|
+| Contesto OpenGL | Persiste sempre | Perso quando l'app va in background |
+| Input principale | Mouse + tastiera | Touch multi-dito |
+| Percorsi file (`assets/`) | Gestito da LibGDX — identico | Identico |
+| Back button | Non esiste | Catturalo: `Gdx.input.setCatchKey(Input.Keys.BACK, true)` |
+| Thread UI | Unico thread LibGDX | Unico thread LibGDX — non usare `runOnUiThread` |
+| Permessi necessari | Nessuno | Nessuno (gioco offline) |
+
+---
+
+## 18. Struttura consigliata per MakeItWash
 
 ```
-core/src/com/makeitwash/
-├── MainGame.java              ← Game, AssetManager globale
-├── screens/
-│   ├── MenuScreen.java        ← Scene2D: bottoni, titolo
-│   ├── GameScreen.java        ← camera, griglia, entità, HUD
-│   ├── BuildMenuScreen.java   ← pannello costruzione (Stage overlay)
-│   ├── PauseScreen.java
-│   ├── DayResultScreen.java
-│   └── GameOverScreen.java
-├── world/
-│   ├── Grid.java              ← matrice di celle, piazzamento
-│   ├── Day.java               ← timer giornata, ondate clienti
-│   └── Economy.java           ← yen, costi, guadagni
-├── entities/
-│   ├── PlaceableEntity.java   ← classe base per tutto ciò che va sulla griglia
-│   ├── WashingMachine.java
-│   ├── ConveyorBelt.java
-│   ├── Robot.java
-│   ├── Player.java
-│   └── Customer.java
-├── items/
-│   ├── Item.java              ← classe base per gli oggetti trasportabili
-│   ├── Rice.java
-│   └── SushiItem.java
-└── ui/
-    └── HUD.java               ← Stage con yen, reputazione, timer giornata
+MakeItWash/
+├── build.gradle                        ← root: gdxVersion, plugin android
+├── settings.gradle                     ← include 'core', 'desktop', 'android'
+├── core/
+│   ├── build.gradle
+│   ├── assets/                         ← texture, font, audio, skin UI
+│   │   ├── entities/
+│   │   ├── ui/
+│   │   └── fonts/
+│   └── src/com/makeitwash/
+│       ├── MainGame.java               ← Game, AssetManager globale
+│       ├── screens/
+│       │   ├── MenuScreen.java
+│       │   ├── GameScreen.java
+│       │   ├── BuildMenuScreen.java
+│       │   ├── PauseScreen.java
+│       │   ├── DayResultScreen.java
+│       │   └── GameOverScreen.java
+│       ├── world/
+│       │   ├── Grid.java
+│       │   ├── Day.java
+│       │   └── Economy.java
+│       ├── entities/
+│       │   ├── PlaceableEntity.java    ← classe base
+│       │   ├── WashingMachine.java
+│       │   ├── ConveyorBelt.java
+│       │   ├── Robot.java
+│       │   ├── Player.java
+│       │   └── Customer.java
+│       ├── items/
+│       │   ├── Item.java
+│       │   ├── Rice.java
+│       │   └── SushiItem.java
+│       └── ui/
+│           └── HUD.java               ← Stage con yen, reputazione, timer
+├── desktop/
+│   ├── build.gradle
+│   └── src/com/makeitwash/
+│       └── DesktopLauncher.java
+└── android/
+    ├── build.gradle
+    ├── AndroidManifest.xml
+    └── src/com/makeitwash/
+        └── AndroidLauncher.java
 ```
