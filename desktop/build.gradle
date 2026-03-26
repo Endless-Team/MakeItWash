@@ -1,0 +1,9 @@
+apply plugin: 'application'
+
+mainClassName = 'com.makeitwash.DesktopLauncher'
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
