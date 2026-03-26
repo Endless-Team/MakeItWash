@@ -1,5 +1,7 @@
+package com.makeitwash;
+
 import com.badlogic.gdx.Game;
-import screens.GameScreen;
+import com.makeitwash.screens.GameScreen;
 
 public class MainGame extends Game {
     @Override
