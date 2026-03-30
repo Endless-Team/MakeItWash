@@ -19,20 +19,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
+import com.makeitwash.world.Day;
 import com.makeitwash.world.Economy;
 
-public class MenuScreen extends ScreenAdapter {
+public class PauseScreen extends ScreenAdapter {
     private final MainGame game;
     private final Grid grid;
+    private final Day day;
     private final Economy economy;
-    private SpriteBatch batch;
     private Stage stage;
+    private SpriteBatch batch;
     private BitmapFont font;
 
-    public MenuScreen(MainGame game) {
+    public PauseScreen(MainGame game, Grid grid, Day day, Economy economy) {
         this.game = game;
-        this.grid = new Grid();
-        this.economy = new Economy();
+        this.grid = grid;
+        this.day = day;
+        this.economy = economy;
     }
 
     private TextureRegionDrawable createColorDrawable(Color color) {
@@ -49,6 +52,7 @@ public class MenuScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.getData().setScale(2f);
+
         stage = new Stage();
         
         Skin skin = new Skin();
@@ -69,31 +73,41 @@ public class MenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.center();
 
-        Label titleLabel = new Label("MakeItWash", skin);
+        Label titleLabel = new Label("PAUSA", skin);
         titleLabel.setStyle(labelStyle);
 
-        TextButton playButton = new TextButton("Inizia Partita", skin);
-        TextButton quitButton = new TextButton("Esci", skin);
+        TextButton resumeBtn = new TextButton("Riprendi", skin);
+        TextButton buildBtn = new TextButton("Costruisci", skin);
+        TextButton mainMenuBtn = new TextButton("Menu Principale", skin);
 
-        playButton.addListener(new ChangeListener() {
+        resumeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new GameScreen(game, grid, economy));
+                game.setScreen(new GameScreen(game, grid, day, economy));
             }
         });
 
-        quitButton.addListener(new ChangeListener() {
+        buildBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                Gdx.app.exit();
+                game.setScreen(new BuildMenuScreen(game, grid, economy));
             }
         });
 
-        table.add(titleLabel).padBottom(50);
+        mainMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
+        table.add(titleLabel).padBottom(30);
         table.row();
-        table.add(playButton).width(250).height(60).padBottom(15);
+        table.add(resumeBtn).width(250).height(60).padBottom(15);
         table.row();
-        table.add(quitButton).width(250).height(60);
+        table.add(buildBtn).width(250).height(60).padBottom(15);
+        table.row();
+        table.add(mainMenuBtn).width(250).height(60);
 
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -101,7 +115,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
+        Gdx.gl.glClearColor(0.05f, 0.05f, 0.1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -110,8 +124,8 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
         stage.dispose();
+        batch.dispose();
         font.dispose();
     }
 }

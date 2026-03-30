@@ -21,18 +21,18 @@ import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
 
-public class MenuScreen extends ScreenAdapter {
+public class BuildMenuScreen extends ScreenAdapter {
     private final MainGame game;
     private final Grid grid;
     private final Economy economy;
-    private SpriteBatch batch;
     private Stage stage;
+    private SpriteBatch batch;
     private BitmapFont font;
 
-    public MenuScreen(MainGame game) {
+    public BuildMenuScreen(MainGame game, Grid grid, Economy economy) {
         this.game = game;
-        this.grid = new Grid();
-        this.economy = new Economy();
+        this.grid = grid;
+        this.economy = economy;
     }
 
     private TextureRegionDrawable createColorDrawable(Color color) {
@@ -49,6 +49,7 @@ public class MenuScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.getData().setScale(2f);
+
         stage = new Stage();
         
         Skin skin = new Skin();
@@ -68,32 +69,39 @@ public class MenuScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.center();
+        table.pad(20);
 
-        Label titleLabel = new Label("MakeItWash", skin);
+        Label titleLabel = new Label("MENU COSTRUZIONE", skin);
         titleLabel.setStyle(labelStyle);
 
-        TextButton playButton = new TextButton("Inizia Partita", skin);
-        TextButton quitButton = new TextButton("Esci", skin);
+        TextButton washingMachineBtn = new TextButton("Lavatrice (100 Yen)", skin);
+        TextButton conveyorBtn = new TextButton("Nastro Trasportatore (50 Yen)", skin);
+        TextButton robotBtn = new TextButton("Robot (200 Yen)", skin);
+        TextButton closeBtn = new TextButton("Chiudi (ESC)", skin);
 
-        playButton.addListener(new ChangeListener() {
+        washingMachineBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                // Place washing machine logic
+            }
+        });
+
+        closeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
                 game.setScreen(new GameScreen(game, grid, economy));
             }
         });
 
-        quitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        table.add(titleLabel).padBottom(50);
+        table.add(titleLabel).colspan(2).padBottom(30);
         table.row();
-        table.add(playButton).width(250).height(60).padBottom(15);
+        table.add(washingMachineBtn).width(300).height(60).padBottom(15);
         table.row();
-        table.add(quitButton).width(250).height(60);
+        table.add(conveyorBtn).width(300).height(60).padBottom(15);
+        table.row();
+        table.add(robotBtn).width(300).height(60).padBottom(15);
+        table.row();
+        table.add(closeBtn).width(300).height(60);
 
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -101,7 +109,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -110,8 +118,8 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
         stage.dispose();
+        batch.dispose();
         font.dispose();
     }
 }

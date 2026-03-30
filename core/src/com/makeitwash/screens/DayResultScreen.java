@@ -18,21 +18,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.makeitwash.MainGame;
-import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
 
-public class MenuScreen extends ScreenAdapter {
+public class DayResultScreen extends ScreenAdapter {
     private final MainGame game;
-    private final Grid grid;
     private final Economy economy;
-    private SpriteBatch batch;
+    private final int dayNumber;
+    private final float earnedYen;
     private Stage stage;
+    private SpriteBatch batch;
     private BitmapFont font;
 
-    public MenuScreen(MainGame game) {
+    public DayResultScreen(MainGame game, Economy economy, int dayNumber, float earnedYen) {
         this.game = game;
-        this.grid = new Grid();
-        this.economy = new Economy();
+        this.economy = economy;
+        this.dayNumber = dayNumber;
+        this.earnedYen = earnedYen;
     }
 
     private TextureRegionDrawable createColorDrawable(Color color) {
@@ -49,6 +50,7 @@ public class MenuScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.getData().setScale(2f);
+
         stage = new Stage();
         
         Skin skin = new Skin();
@@ -69,31 +71,34 @@ public class MenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.center();
 
-        Label titleLabel = new Label("MakeItWash", skin);
+        Label titleLabel = new Label("FINE GIORNATA " + dayNumber, skin);
         titleLabel.setStyle(labelStyle);
 
-        TextButton playButton = new TextButton("Inizia Partita", skin);
-        TextButton quitButton = new TextButton("Esci", skin);
+        Label earningsLabel = new Label(String.format("Guadagno: %.0f Yen", earnedYen), skin);
+        Label totalLabel = new Label(String.format("Totale: %.0f Yen", economy.getYen()), skin);
+        Label reputationLabel = new Label(String.format("Reputazione: %.0f%%", economy.getReputation()), skin);
 
-        playButton.addListener(new ChangeListener() {
+        TextButton nextDayBtn = new TextButton("Giorno Successivo", skin);
+        TextButton mainMenuBtn = new TextButton("Menu Principale", skin);
+
+        nextDayBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new GameScreen(game, grid, economy));
+                game.setScreen(new MenuScreen(game));
             }
         });
 
-        quitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        table.add(titleLabel).padBottom(50);
+        table.add(titleLabel).padBottom(30);
         table.row();
-        table.add(playButton).width(250).height(60).padBottom(15);
+        table.add(earningsLabel).padBottom(10);
         table.row();
-        table.add(quitButton).width(250).height(60);
+        table.add(totalLabel).padBottom(10);
+        table.row();
+        table.add(reputationLabel).padBottom(30);
+        table.row();
+        table.add(nextDayBtn).width(250).height(60).padBottom(15);
+        table.row();
+        table.add(mainMenuBtn).width(250).height(60);
 
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -101,7 +106,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
+        Gdx.gl.glClearColor(0.1f, 0.15f, 0.1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -110,8 +115,8 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
         stage.dispose();
+        batch.dispose();
         font.dispose();
     }
 }
