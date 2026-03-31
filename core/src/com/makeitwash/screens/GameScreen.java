@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Day;
@@ -23,6 +24,7 @@ public class GameScreen extends ScreenAdapter {
     private final Economy economy;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private FitViewport viewport;
     private Texture gridLineTexture;
     private HUD hud;
     private BuildHotbarOverlay buildHud;
@@ -47,13 +49,19 @@ public class GameScreen extends ScreenAdapter {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
+        camera.setToOrtho(false, 1920, 1080);
+        viewport = new FitViewport(1920, 1080, camera);
+        viewport.apply();
+
         camera.setToOrtho(false, 1280, 720);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.3f, 0.3f, 0.3f, 1f);
         pixmap.fill();
         gridLineTexture = new Texture(pixmap);
+        gridLineTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         pixmap.dispose();
+
 
         hud = new HUD();
 
@@ -80,6 +88,9 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         // 1. Transizioni schermo — prima di qualsiasi update
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        day.update(delta);
+
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             game.setScreen(new PauseScreen(game, grid, day, economy));
             return;
         }
@@ -103,6 +114,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        viewport.apply();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -126,6 +138,9 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
+        camera.setToOrtho(false, 1920, 1080);
+        hud.resize(width, height);
+        viewport.update(width, height, true);
         camera.setToOrtho(false, 1280, 720);
         if (buildHud != null) buildHud.resize(width, height);
     }

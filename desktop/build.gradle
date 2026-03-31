@@ -12,6 +12,10 @@ application {
     mainClass = 'com.makeitwash.DesktopLauncher'
 }
 
+run {
+    jvmArgs = ["-XstartOnFirstThread"]
+}
+
 dependencies {
     implementation project(':core')
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
