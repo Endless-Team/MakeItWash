@@ -7,6 +7,12 @@ public class WashingMachine extends PlaceableEntity {
     private boolean isWashing;
     private static final float WASH_DURATION = 3f;
 
+    public WashingMachine() {
+        super();
+        this.washProgress = 0f;
+        this.isWashing = false;
+    }
+
     public WashingMachine(int gridX, int gridY) {
         super();
         setGridPosition(gridX, gridY);

@@ -3,6 +3,9 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
+        resources {
+            srcDirs = ['assets']
+        }
     }
 }
 

@@ -52,7 +52,7 @@ public class Grid {
         return gridY * CELL_SIZE;
     }
 
-    private boolean isValid(int x, int y) {
+    public boolean isValid(int x, int y) {
         return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
 

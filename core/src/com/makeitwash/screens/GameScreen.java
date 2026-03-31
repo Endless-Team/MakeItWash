@@ -123,6 +123,15 @@ public class GameScreen extends ScreenAdapter {
         for (int y = 0; y <= Grid.HEIGHT; y++) {
             batch.draw(gridLineTexture, 0, y * Grid.CELL_SIZE, Grid.WIDTH * Grid.CELL_SIZE, 1);
         }
+        
+        for (int x = 0; x < Grid.WIDTH; x++) {
+            for (int y = 0; y < Grid.HEIGHT; y++) {
+                var entity = grid.get(x, y);
+                if (entity != null) {
+                    entity.render(batch);
+                }
+            }
+        }
         batch.end();
 
         // 5. UI sopra al mondo — HUD poi overlay

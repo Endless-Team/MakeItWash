@@ -12,7 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.makeitwash.MainGame;
+import com.makeitwash.entities.*;
 import com.makeitwash.world.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuildHotbarOverlay extends ScreenAdapter {
 
@@ -48,6 +51,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private int    draggingCost  = 0;
     private int hoverSlot = -1;
     private float lastMouseY = 0;
+    private Map<String, Texture> itemIcons = new HashMap<>();
 
     private static final Object[][] ALL_ITEMS = {
         // {id, label, cost, category}
@@ -74,6 +78,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         parameter.size = 20;
         font = generator.generateFont(parameter);
         generator.dispose();
+        
+        loadItemIcons();
 
         stage = new Stage(new ScreenViewport());
         skin  = new Skin();
@@ -138,6 +144,20 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         });
         Gdx.input.setInputProcessor(mux);
     }
+    
+    private void loadItemIcons() {
+        try {
+            itemIcons.put("lavatrice", new Texture("isometric_buildings/PNG/buildingTiles_128.png"));
+            itemIcons.put("asciugatrice", new Texture("isometric_buildings/PNG/buildingTiles_127.png"));
+            itemIcons.put("nastro", new Texture("isometric_buildings/PNG/buildingTiles_064.png"));
+            itemIcons.put("nastro_curve", new Texture("isometric_buildings/PNG/buildingTiles_063.png"));
+            itemIcons.put("robot", new Texture("isometric_buildings/PNG/buildingTiles_080.png"));
+            itemIcons.put("drone", new Texture("isometric_buildings/PNG/buildingTiles_081.png"));
+            Gdx.app.log("BuildHotbar", "Icons loaded: " + itemIcons.size());
+        } catch(Exception e) {
+            Gdx.app.log("BuildHotbar", "Error loading icons: " + e.getMessage());
+        }
+    }
 
     private void buildHotbar() {
         float sw = Gdx.graphics.getWidth();
@@ -172,9 +192,15 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
             // Se slot ha un item
             if(hotbarIds[i] != null) {
-                Label itemLabel = new Label(hotbarLabels[i], skin);
+                Texture icon = itemIcons.get(hotbarIds[i]);
+                if(icon != null) {
+                    Image iconImg = new Image(icon);
+                    slot.add(iconImg).size(48f, 48f).center().row();
+                } else {
+                    Label itemLabel = new Label(hotbarLabels[i], skin);
+                    slot.add(itemLabel).center().row();
+                }
                 Label costLabel = new Label(hotbarCosts[i] + "¥", skin);
-                slot.add(itemLabel).center().row();
                 slot.add(costLabel).center();
             }
 
@@ -290,6 +316,12 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             Table card = new Table();
             card.setBackground(makeColorDrawable(new Color(0.14f, 0.16f, 0.22f, 1f)));
             card.pad(8f);
+            
+            Texture icon = itemIcons.get(id);
+            if(icon != null) {
+                Image iconImg = new Image(icon);
+                card.add(iconImg).size(40f, 40f).center().row();
+            }
             card.add(new Label(label, skin)).center().row();
             card.add(new Label(cost + " ¥", skin)).center();
 
@@ -330,11 +362,38 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         return -1;
     }
 
-    private void placeFromActiveSlot(float wx, float wy) {
+    public Grid getGrid() {
+        return grid;
+    }
+    
+    private void placeFromActiveSlot(float screenX, float screenY) {
         if(hotbarIds[activeSlot] == null) return;
+        
+        int gx = grid.toGridX(screenX);
+        int gy = grid.toGridY(screenY);
+        
+        if(!grid.isValid(gx, gy) || !grid.isEmpty(gx, gy)) return;
+        
         int cost = hotbarCosts[activeSlot];
         if(economy.getYen() < cost) return;
         if(!economy.spendYen(cost)) return;
+        
+        String id = hotbarIds[activeSlot];
+        PlaceableEntity entity = null;
+        
+        if(id.equals("lavatrice")) {
+            entity = new WashingMachine();
+        } else if(id.equals("asciugatrice")) {
+            entity = new WashingMachine();
+        } else if(id.equals("nastro") || id.equals("nastro_curve")) {
+            entity = new ConveyorBelt(id.equals("nastro_curve"));
+            entity = new Robot();
+        }
+        
+        if(entity != null) {
+            grid.place(entity, gx, gy);
+            Gdx.app.log("BuildHotbar", "Placed " + id + " at (" + gx + "," + gy + ")");
+        }
     }
 
     public void toggleTray() {
@@ -398,6 +457,9 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     public void dispose() { 
         if(stage != null) stage.dispose(); 
         if(batch != null) batch.dispose(); 
-        if(font != null) font.dispose(); 
+        if(font != null) font.dispose();
+        for(Texture t : itemIcons.values()) {
+            if(t != null) t.dispose();
+        }
     }
 }

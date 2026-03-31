@@ -9,6 +9,14 @@ public class Robot extends PlaceableEntity {
     private float speed;
     private float moveProgress;
 
+    public Robot() {
+        super();
+        this.targetX = 0;
+        this.targetY = 0;
+        this.speed = 3f;
+        this.moveProgress = 1f;
+    }
+
     public Robot(int gridX, int gridY) {
         super();
         setGridPosition(gridX, gridY);
