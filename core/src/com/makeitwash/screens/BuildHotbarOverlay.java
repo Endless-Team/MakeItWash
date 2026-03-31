@@ -1,4 +1,3 @@
-// BuildHotbarOverlay.java — Architettura MINECRAFT BOTTOM BAR (Opzione B)
 package com.makeitwash.screens;
 
 import com.badlogic.gdx.*;
@@ -26,6 +25,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private Stage stage;
     private SpriteBatch batch;
     private BitmapFont font;
+    private BitmapFont smallFont;   // font ridotto per numero shortcut
     private Skin skin;
     private InputAdapter inputAdapter;
 
@@ -54,7 +54,6 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private Map<String, Texture> itemIcons = new HashMap<>();
 
     private static final Object[][] ALL_ITEMS = {
-        // {id, label, cost, category}
         {"lavatrice",   "Lavatrice",     100, "machines"},
         {"asciugatrice","Asciugatrice",  150, "machines"},
         {"nastro",      "Nastro",         50, "conveyor"},
@@ -72,21 +71,33 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
+
+        // Font principale — usato nel tray e nel drag ghost
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
+        parameter.size = 16;
         font = generator.generateFont(parameter);
+
+        // Font piccolo per numero shortcut (angolo slot) e costo nel tray
+        FreeTypeFontGenerator.FreeTypeFontParameter smallParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        smallParam.size = 13;
+        smallFont = generator.generateFont(smallParam);
+
         generator.dispose();
-        
+
         loadItemIcons();
 
         stage = new Stage(new ScreenViewport());
         skin  = new Skin();
         skin.add("default", font);
+        skin.add("small",   smallFont);
 
         Label.LabelStyle ls = new Label.LabelStyle(font, Color.WHITE);
         skin.add("default", ls);
+
+        Label.LabelStyle lsSmall = new Label.LabelStyle(smallFont, new Color(1f, 1f, 1f, 0.65f));
+        skin.add("small", lsSmall);
 
         buildHotbar();
         buildTray();
@@ -144,15 +155,15 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         });
         Gdx.input.setInputProcessor(mux);
     }
-    
+
     private void loadItemIcons() {
         try {
-            itemIcons.put("lavatrice", new Texture("isometric_buildings/PNG/buildingTiles_128.png"));
+            itemIcons.put("lavatrice",    new Texture("isometric_buildings/PNG/buildingTiles_128.png"));
             itemIcons.put("asciugatrice", new Texture("isometric_buildings/PNG/buildingTiles_127.png"));
-            itemIcons.put("nastro", new Texture("isometric_buildings/PNG/buildingTiles_064.png"));
+            itemIcons.put("nastro",       new Texture("isometric_buildings/PNG/buildingTiles_064.png"));
             itemIcons.put("nastro_curve", new Texture("isometric_buildings/PNG/buildingTiles_063.png"));
-            itemIcons.put("robot", new Texture("isometric_buildings/PNG/buildingTiles_080.png"));
-            itemIcons.put("drone", new Texture("isometric_buildings/PNG/buildingTiles_081.png"));
+            itemIcons.put("robot",        new Texture("isometric_buildings/PNG/buildingTiles_080.png"));
+            itemIcons.put("drone",        new Texture("isometric_buildings/PNG/buildingTiles_081.png"));
             Gdx.app.log("BuildHotbar", "Icons loaded: " + itemIcons.size());
         } catch(Exception e) {
             Gdx.app.log("BuildHotbar", "Error loading icons: " + e.getMessage());
@@ -163,67 +174,60 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         float sw = Gdx.graphics.getWidth();
         hotbar = new Table();
         hotbar.setBackground(makeColorDrawable(new Color(0.11f, 0.12f, 0.18f, 0.95f)));
-        float totalW = HOTBAR_SLOTS * SLOT_W + 80f; // 80 per tasto espandi
+        float totalW = HOTBAR_SLOTS * SLOT_W + 50f; // 50 per tasto espandi compatto
         hotbar.setBounds((sw - totalW) / 2f, 0, totalW, HOTBAR_H);
 
-        // Bottone espandi tray
+        // --- Bottone espandi tray ---
+        // "☰" = menu aperto,  "▼" = tray visibile
         TextButton.TextButtonStyle expandStyle = new TextButton.TextButtonStyle();
         expandStyle.font = font;
         expandStyle.up   = makeColorDrawable(new Color(0.16f, 0.18f, 0.26f, 1f));
         expandStyle.over = makeColorDrawable(new Color(0.26f, 0.34f, 1f, 0.3f));
         skin.add("expand", expandStyle);
 
-        TextButton expandBtn = new TextButton("▲", skin, "expand");
-        expandBtn.setSize(70f, HOTBAR_H);
+        TextButton expandBtn = new TextButton(trayOpen ? "▼" : "☰", skin, "expand");
+        expandBtn.setName("expandBtn");
+        expandBtn.setSize(44f, HOTBAR_H);
         expandBtn.addListener(new ChangeListener() {
             @Override public void changed(ChangeEvent e, Actor a) { toggleTray(); }
         });
-        hotbar.add(expandBtn).size(70f, HOTBAR_H);
+        hotbar.add(expandBtn).size(44f, HOTBAR_H).padRight(6f);
 
-        // 9 slot hotbar
+        // --- 9 slot hotbar ---
         for(int i = 0; i < HOTBAR_SLOTS; i++) {
             final int idx = i;
-            Table slot = new Table();
-            slot.setName("slot_" + i);
-            slot.setBackground(makeColorDrawable(new Color(0.09f, 0.10f, 0.14f, 1f)));
 
-            Label numLabel = new Label(String.valueOf(i + 1), skin);
-            slot.add(numLabel).top().left().padLeft(4f).padTop(2f).row();
+            // Stack sovrappone: sfondo + icona centrata + numero in overlay
+            Stack cellStack = new Stack();
+            cellStack.setName("slot_" + i);
 
-            // Se slot ha un item
+            // 1. Sfondo cella (Image drawable, aggiornabile via listener)
+            final Image bg = new Image(makeColorDrawable(
+                i == activeSlot
+                    ? new Color(1f, 0.7f, 0.28f, 0.35f)
+                    : new Color(0.09f, 0.10f, 0.14f, 1f)));
+            cellStack.add(bg);
+
+            // 2. Icona centrata — padding simmetrico per allineamento visivo
             if(hotbarIds[i] != null) {
                 Texture icon = itemIcons.get(hotbarIds[i]);
                 if(icon != null) {
+                    Table iconTable = new Table();
                     Image iconImg = new Image(icon);
-                    slot.add(iconImg).size(48f, 48f).center().row();
-                } else {
-                    Label itemLabel = new Label(hotbarLabels[i], skin);
-                    slot.add(itemLabel).center().row();
+                    iconTable.add(iconImg).size(50f, 50f).center().pad(11f, 7f, 6f, 7f);
+                    cellStack.add(iconTable);
                 }
-                Label costLabel = new Label(hotbarCosts[i] + "¥", skin);
-                slot.add(costLabel).center();
             }
 
-            // Diventa drop target per il drag
-            slot.addListener(new InputListener() {
-                @Override
-                public void enter(InputEvent e, float x, float y, int ptr, Actor from) {
-                    if(draggingId != null) {
-                        hoverSlot = idx;
-                        slot.setBackground(
-                            makeColorDrawable(new Color(0.29f, 0.92f, 0.74f, 0.25f)));
-                    }
-                }
-                @Override
-                public void exit(InputEvent e, float x, float y, int ptr, Actor to) {
-                    if(draggingId != null && hoverSlot == idx) {
-                        hoverSlot = -1;
-                    }
-                    slot.setBackground(makeColorDrawable(
-                        idx == activeSlot
-                            ? new Color(1f, 0.7f, 0.28f, 0.25f)
-                            : new Color(0.09f, 0.10f, 0.14f, 1f)));
-                }
+            // 3. Numero shortcut in overlay, angolo alto-sinistra, semitrasparente
+            Table numOverlay = new Table();
+            numOverlay.top().left();
+            Label numLabel = new Label(String.valueOf(i + 1), skin, "small");
+            numOverlay.add(numLabel).top().left().pad(3f, 4f, 0f, 0f);
+            cellStack.add(numOverlay);
+
+            // Listener sull'intero Stack: copre TUTTA l'area della cella (vuota o piena)
+            cellStack.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent e, float x, float y, int ptr, int btn) {
                     if(draggingId != null) {
@@ -231,7 +235,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                         hotbarLabels[idx] = draggingLabel;
                         hotbarCosts[idx]  = draggingCost;
                         draggingId = null;
-                        hoverSlot = -1;
+                        hoverSlot  = -1;
                         refreshHotbarVisuals();
                         return true;
                     }
@@ -246,23 +250,44 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                     refreshHotbarVisuals();
                     return true;
                 }
+
+                @Override
+                public void enter(InputEvent e, float x, float y, int ptr, Actor from) {
+                    hoverSlot = idx;
+                    bg.setDrawable(makeColorDrawable(
+                        draggingId != null
+                            ? new Color(0.29f, 0.92f, 0.74f, 0.30f)
+                            : new Color(0.22f, 0.24f, 0.34f, 1f)));
+                }
+
+                @Override
+                public void exit(InputEvent e, float x, float y, int ptr, Actor to) {
+                    if(hoverSlot == idx) hoverSlot = -1;
+                    bg.setDrawable(makeColorDrawable(
+                        idx == activeSlot
+                            ? new Color(1f, 0.7f, 0.28f, 0.35f)
+                            : new Color(0.09f, 0.10f, 0.14f, 1f)));
+                }
             });
 
-            hotbar.add(slot).size(SLOT_W, HOTBAR_H);
+            hotbar.add(cellStack).size(SLOT_W, HOTBAR_H).space(2f);
         }
 
         stage.addActor(hotbar);
     }
 
     private void buildTray() {
-        float sw = Gdx.graphics.getWidth();
-        trayGroup = new Group();
-        trayGroup.setSize(Math.min(900f, sw * 0.96f), TRAY_H);
-        float tx = (sw - trayGroup.getWidth()) / 2f;
-        trayGroup.setPosition(tx, -TRAY_H); // nascosto sotto
+        float sw     = Gdx.graphics.getWidth();
+        float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
+        float trayX  = (sw - totalW) / 2f;
 
-        Image trayBg = new Image(makeColorDrawable(new Color(0.10f, 0.11f, 0.16f, 0.97f)));
-        trayBg.setSize(trayGroup.getWidth(), TRAY_H);
+        trayGroup = new Group();
+        trayGroup.setSize(totalW, TRAY_H);
+        trayGroup.setPosition(trayX, -TRAY_H); // nascosto sotto
+
+        Image trayBg = new Image(makeColorDrawable(new Color(0.10f, 0.11f, 0.17f, 0.97f)));
+        trayBg.setSize(totalW, TRAY_H);
+        trayBg.setPosition(0, 0);
 
         trayItemTable = new Table();
         trayItemTable.top().left().pad(12f);
@@ -271,14 +296,13 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         scroll.setSize(trayGroup.getWidth(), TRAY_H - 56f);
         scroll.setPosition(0, 0);
 
-        // Tabs
         Table tabBar = new Table();
         tabBar.setBackground(makeColorDrawable(new Color(0.12f, 0.13f, 0.20f, 1f)));
         tabBar.setSize(trayGroup.getWidth(), 52f);
         tabBar.setPosition(0, TRAY_H - 52f);
 
-        String[] tabNames = {"[M] Macchine", "[C] Nastri", "[R] Robot"};
-        String[] tabFilter= {"machines", "conveyor", "robots"};
+        String[] tabNames  = {"[M] Macchine", "[C] Nastri", "[R] Robot"};
+        String[] tabFilter = {"machines", "conveyor", "robots"};
         for(int i = 0; i < tabNames.length; i++) {
             final String filter = tabFilter[i];
             TextButton.TextButtonStyle ts = new TextButton.TextButtonStyle();
@@ -287,11 +311,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             ts.over = makeColorDrawable(new Color(0.42f, 0.55f, 1f, 0.2f));
             skin.add("tray_tab_" + i, ts);
             TextButton tb = new TextButton(tabNames[i], skin, "tray_tab_" + i);
-            final int fi = i;
             tb.addListener(new ChangeListener() {
-                @Override public void changed(ChangeEvent e, Actor a) {
-                    fillTrayItems(filter);
-                }
+                @Override public void changed(ChangeEvent e, Actor a) { fillTrayItems(filter); }
             });
             tabBar.add(tb).expandX().fillX().height(52f);
         }
@@ -316,14 +337,18 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             Table card = new Table();
             card.setBackground(makeColorDrawable(new Color(0.14f, 0.16f, 0.22f, 1f)));
             card.pad(8f);
-            
+
             Texture icon = itemIcons.get(id);
             if(icon != null) {
                 Image iconImg = new Image(icon);
                 card.add(iconImg).size(40f, 40f).center().row();
             }
-            card.add(new Label(label, skin)).center().row();
-            card.add(new Label(cost + " ¥", skin)).center();
+            Label nameLabel = new Label(label, skin);
+            card.add(nameLabel).center().row();
+            // Costo con smallFont in giallo — distinguibile dal nome
+            Label costLabel = new Label(cost + " \u00a5", skin, "small");
+            costLabel.setColor(new Color(1f, 0.85f, 0.3f, 1f));
+            card.add(costLabel).center();
 
             card.addListener(new InputListener() {
                 @Override
@@ -341,7 +366,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                         hotbarLabels[targetSlot] = label;
                         hotbarCosts[targetSlot]  = cost;
                         draggingId = null;
-                        hoverSlot = -1;
+                        hoverSlot  = -1;
                         refreshHotbarVisuals();
                     }
                 }
@@ -353,43 +378,42 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     }
 
     private int calculateSlotFromX(float screenX) {
-        float sw = Gdx.graphics.getWidth();
-        float totalW = HOTBAR_SLOTS * SLOT_W + 80f;
-        float hotbarX = (sw - totalW) / 2f + 70f;
+        float sw     = Gdx.graphics.getWidth();
+        float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
+        float hotbarX = (sw - totalW) / 2f + 50f; // offset del bottone espandi (44 + 6 pad)
         if(screenX >= hotbarX && screenX < hotbarX + HOTBAR_SLOTS * SLOT_W) {
             return (int)((screenX - hotbarX) / SLOT_W);
         }
         return -1;
     }
 
-    public Grid getGrid() {
-        return grid;
-    }
-    
+    public Grid getGrid() { return grid; }
+
     private void placeFromActiveSlot(float screenX, float screenY) {
         if(hotbarIds[activeSlot] == null) return;
-        
+
         int gx = grid.toGridX(screenX);
         int gy = grid.toGridY(screenY);
-        
+
         if(!grid.isValid(gx, gy) || !grid.isEmpty(gx, gy)) return;
-        
+
         int cost = hotbarCosts[activeSlot];
         if(economy.getYen() < cost) return;
         if(!economy.spendYen(cost)) return;
-        
+
         String id = hotbarIds[activeSlot];
         PlaceableEntity entity = null;
-        
+
         if(id.equals("lavatrice")) {
             entity = new WashingMachine();
         } else if(id.equals("asciugatrice")) {
             entity = new WashingMachine();
         } else if(id.equals("nastro") || id.equals("nastro_curve")) {
             entity = new ConveyorBelt(id.equals("nastro_curve"));
+        } else if(id.equals("robot") || id.equals("drone")) {
             entity = new Robot();
         }
-        
+
         if(entity != null) {
             grid.place(entity, gx, gy);
             Gdx.app.log("BuildHotbar", "Placed " + id + " at (" + gx + "," + gy + ")");
@@ -399,17 +423,30 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     public void toggleTray() {
         if(trayOpen) closeTray(); else openTray();
     }
+
     public void openTray() {
         trayOpen = true;
         trayGroup.addAction(Actions.moveTo(trayGroup.getX(), HOTBAR_H, 0.35f, Interpolation.exp10Out));
+        updateExpandButton();
     }
+
     public void closeTray() {
         trayGroup.addAction(
             Actions.sequence(
                 Actions.moveTo(trayGroup.getX(), -TRAY_H, 0.28f, Interpolation.exp5In),
-                Actions.run(() -> trayOpen = false)
+                Actions.run(() -> {
+                    trayOpen = false;
+                    updateExpandButton();
+                })
             )
         );
+    }
+
+    private void updateExpandButton() {
+        Actor btn = hotbar.findActor("expandBtn");
+        if(btn instanceof TextButton) {
+            ((TextButton) btn).setText(trayOpen ? "\u25bc" : "\u2630");
+        }
     }
 
     private void refreshHotbarVisuals() {
@@ -430,10 +467,9 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
 
-        // Ghost di drag sopra tutto
         if(draggingId != null && batch != null && font != null) {
             batch.begin();
-            font.draw(batch, "[" + draggingLabel + "]",
+            font.draw(batch, "[ " + draggingLabel + " ]",
                 Gdx.input.getX() - 30,
                 Gdx.graphics.getHeight() - Gdx.input.getY() + 20);
             batch.end();
@@ -441,25 +477,20 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     }
 
     @Override
-    public void resize(int w, int h) { 
-        if(stage != null) stage.getViewport().update(w, h, true); 
+    public void resize(int w, int h) {
+        if(stage != null) stage.getViewport().update(w, h, true);
     }
 
-    public Stage getStage() {
-        return stage;
-    }
+    public Stage getStage() { return stage; }
 
-    public InputAdapter getInputAdapter() {
-        return inputAdapter;
-    }
+    public InputAdapter getInputAdapter() { return inputAdapter; }
 
     @Override
-    public void dispose() { 
-        if(stage != null) stage.dispose(); 
-        if(batch != null) batch.dispose(); 
-        if(font != null) font.dispose();
-        for(Texture t : itemIcons.values()) {
-            if(t != null) t.dispose();
-        }
+    public void dispose() {
+        if(stage != null) stage.dispose();
+        if(batch != null) batch.dispose();
+        if(font  != null) font.dispose();
+        if(smallFont != null) smallFont.dispose();
+        for(Texture t : itemIcons.values()) { if(t != null) t.dispose(); }
     }
 }

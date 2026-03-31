@@ -12,56 +12,72 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-
 public class HUD {
     private final Stage stage;
     private final Label yenLabel;
     private final Label reputationLabel;
     private final Label dayLabel;
     private final Label timeLabel;
-    private final BitmapFont font;
+    private final BitmapFont fontMain;
+    private final BitmapFont fontSmall;
     private final Skin skin;
-
 
     public HUD() {
         stage = new Stage(new ScreenViewport());
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 28;
-        parameter.color = Color.WHITE;
-        font = generator.generateFont(parameter);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+            Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
+
+        // Font principale per valori primari (Yen, Reputazione)
+        FreeTypeFontGenerator.FreeTypeFontParameter mainParam =
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
+        mainParam.size = 18;
+        mainParam.color = Color.WHITE;
+        fontMain = generator.generateFont(mainParam);
+
+        // Font secondario per etichette contestuali (Giorno, Tempo)
+        FreeTypeFontGenerator.FreeTypeFontParameter smallParam =
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
+        smallParam.size = 14;
+        smallParam.color = new Color(0.80f, 0.80f, 0.80f, 1f);
+        fontSmall = generator.generateFont(smallParam);
+
         generator.dispose();
 
         skin = new Skin();
-        skin.add("default", font);
 
-        LabelStyle style = new LabelStyle();
-        style.font = font;
-        skin.add("default", style);
+        LabelStyle styleMain = new LabelStyle();
+        styleMain.font = fontMain;
+        skin.add("default", styleMain);
+
+        LabelStyle styleSmall = new LabelStyle();
+        styleSmall.font = fontSmall;
+        skin.add("small", styleSmall);
 
         Table table = new Table();
         table.setFillParent(true);
         table.top().left();
-        table.pad(20);
+        table.pad(16);
 
-        yenLabel = new Label("Yen: 500", skin);
+        // Giorno e Tempo: font secondario, grigio chiaro
+        dayLabel  = new Label("Giorno 1",   skin, "small");
+        timeLabel = new Label("Tempo: 3:00", skin, "small");
+        dayLabel.setColor(new Color(0.75f, 0.85f, 1.00f, 1f));   // azzurro tenue
+        timeLabel.setColor(new Color(0.80f, 0.80f, 0.80f, 1f));  // grigio neutro
+
+        // Yen e Reputazione: font principale, colori vivaci
+        yenLabel        = new Label("Yen: 500",       skin);
         reputationLabel = new Label("Reputazione: 50%", skin);
-        dayLabel = new Label("Giorno 1", skin);
-        timeLabel = new Label("Tempo: 3:00", skin);
+        yenLabel.setColor(new Color(1.00f, 0.88f, 0.25f, 1f));   // giallo caldo
+        reputationLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f)); // ciano-verde
 
-        yenLabel.setColor(Color.YELLOW);
-        reputationLabel.setColor(Color.CYAN);
-        dayLabel.setColor(Color.WHITE);
-        timeLabel.setColor(Color.WHITE);
-
-        table.add(dayLabel).align(Align.left).padBottom(10);
+        table.add(dayLabel).align(Align.left).padBottom(2f);
         table.row();
-        table.add(yenLabel).align(Align.left).padBottom(10);
+        table.add(timeLabel).align(Align.left).padBottom(10f);
         table.row();
-        table.add(reputationLabel).align(Align.left).padBottom(10);
+        table.add(yenLabel).align(Align.left).padBottom(4f);
         table.row();
-        table.add(timeLabel).align(Align.left);
+        table.add(reputationLabel).align(Align.left);
 
         stage.addActor(table);
     }
@@ -80,17 +96,14 @@ public class HUD {
         stage.getViewport().update(width, height, true);
     }
 
-    public void act(float delta) {
-        stage.act(delta);
-    }
+    public void act(float delta) { stage.act(delta); }
 
-    public void draw() {
-        stage.draw();
-    }
+    public void draw() { stage.draw(); }
 
     public void dispose() {
         stage.dispose();
-        font.dispose();
+        fontMain.dispose();
+        fontSmall.dispose();
         skin.dispose();
     }
 }
