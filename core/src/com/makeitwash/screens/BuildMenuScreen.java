@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
@@ -40,6 +41,7 @@ public class BuildMenuScreen extends ScreenAdapter {
         pixmap.setColor(color);
         pixmap.fill();
         Texture texture = new Texture(pixmap);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         pixmap.dispose();
         return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture));
     }
@@ -48,17 +50,17 @@ public class BuildMenuScreen extends ScreenAdapter {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-        font.getData().setScale(2f);
+        font.getData().setScale(1.5f);
 
-        stage = new Stage();
-        
+        stage = new Stage(new ScreenViewport(), batch);
+
         Skin skin = new Skin();
         skin.add("default", font);
-        
+
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
         skin.add("default", labelStyle);
-        
+
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.up = createColorDrawable(Color.DARK_GRAY);
@@ -114,6 +116,11 @@ public class BuildMenuScreen extends ScreenAdapter {
 
         stage.act(delta);
         stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

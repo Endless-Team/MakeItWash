@@ -8,4 +8,6 @@ sourceSets {
 
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    runtimeOnly "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
 }
