@@ -13,7 +13,9 @@ application {
 }
 
 run {
-    jvmArgs = ["-XstartOnFirstThread"]
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        jvmArgs = ["-XstartOnFirstThread"]
+    }
 }
 
 dependencies {

@@ -4,6 +4,7 @@ package com.makeitwash.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -45,6 +46,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private String draggingId    = null;
     private String draggingLabel = null;
     private int    draggingCost  = 0;
+    private int hoverSlot = -1;
+    private float lastMouseY = 0;
 
     private static final Object[][] ALL_ITEMS = {
         // {id, label, cost, category}
@@ -65,8 +68,12 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        font  = new BitmapFont();
-        font.getData().setScale(1.4f);
+        
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        font = generator.generateFont(parameter);
+        generator.dispose();
 
         stage = new Stage(new ScreenViewport());
         skin  = new Skin();
@@ -81,7 +88,6 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         InputMultiplexer mux = new InputMultiplexer(stage, inputAdapter = new InputAdapter() {
             @Override
             public boolean keyDown(int k) {
-                // Selezione slot 1-9
                 if(k >= Input.Keys.NUM_1 && k <= Input.Keys.NUM_9) {
                     activeSlot = k - Input.Keys.NUM_1;
                     refreshHotbarVisuals();
@@ -92,11 +98,39 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                 return false;
             }
             @Override
+            public boolean mouseMoved(int sx, int sy) {
+                lastMouseY = sy;
+                return false;
+            }
+            @Override
             public boolean touchDown(int sx, int sy, int ptr, int btn) {
+                lastMouseY = sy;
                 float wy = Gdx.graphics.getHeight() - sy;
-                // Click nel mondo (non sulla UI)
                 if(wy > HOTBAR_H + (trayOpen ? TRAY_H : 0)) {
                     placeFromActiveSlot(sx, wy);
+                    return true;
+                }
+                return false;
+            }
+            @Override
+            public boolean touchUp(int sx, int sy, int ptr, int btn) {
+                if(draggingId != null) {
+                    float wy = Gdx.graphics.getHeight() - sy;
+                    if(wy <= HOTBAR_H) {
+                        int targetSlot = calculateSlotFromX(sx);
+                        if(targetSlot >= 0 && targetSlot < HOTBAR_SLOTS) {
+                            hotbarIds[targetSlot]    = draggingId;
+                            hotbarLabels[targetSlot] = draggingLabel;
+                            hotbarCosts[targetSlot]  = draggingCost;
+                        }
+                    } else {
+                        hotbarIds[activeSlot]    = draggingId;
+                        hotbarLabels[activeSlot] = draggingLabel;
+                        hotbarCosts[activeSlot]  = draggingCost;
+                    }
+                    draggingId = null;
+                    hoverSlot = -1;
+                    refreshHotbarVisuals();
                     return true;
                 }
                 return false;
@@ -148,11 +182,17 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             slot.addListener(new InputListener() {
                 @Override
                 public void enter(InputEvent e, float x, float y, int ptr, Actor from) {
-                    if(draggingId != null) slot.setBackground(
-                        makeColorDrawable(new Color(0.29f, 0.92f, 0.74f, 0.25f)));
+                    if(draggingId != null) {
+                        hoverSlot = idx;
+                        slot.setBackground(
+                            makeColorDrawable(new Color(0.29f, 0.92f, 0.74f, 0.25f)));
+                    }
                 }
                 @Override
                 public void exit(InputEvent e, float x, float y, int ptr, Actor to) {
+                    if(draggingId != null && hoverSlot == idx) {
+                        hoverSlot = -1;
+                    }
                     slot.setBackground(makeColorDrawable(
                         idx == activeSlot
                             ? new Color(1f, 0.7f, 0.28f, 0.25f)
@@ -165,6 +205,14 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                         hotbarLabels[idx] = draggingLabel;
                         hotbarCosts[idx]  = draggingCost;
                         draggingId = null;
+                        hoverSlot = -1;
+                        refreshHotbarVisuals();
+                        return true;
+                    }
+                    if(btn == Input.Buttons.RIGHT) {
+                        hotbarIds[idx]    = null;
+                        hotbarLabels[idx] = null;
+                        hotbarCosts[idx]  = 0;
                         refreshHotbarVisuals();
                         return true;
                     }
@@ -256,11 +304,12 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                 @Override
                 public void touchUp(InputEvent e, float x, float y, int ptr, int btn) {
                     if(draggingId != null) {
-                        // Se non finito su uno slot, assegna all'activeSlot
-                        hotbarIds[activeSlot]    = id;
-                        hotbarLabels[activeSlot] = label;
-                        hotbarCosts[activeSlot]  = cost;
+                        int targetSlot = hoverSlot >= 0 ? hoverSlot : activeSlot;
+                        hotbarIds[targetSlot]    = id;
+                        hotbarLabels[targetSlot] = label;
+                        hotbarCosts[targetSlot]  = cost;
                         draggingId = null;
+                        hoverSlot = -1;
                         refreshHotbarVisuals();
                     }
                 }
@@ -271,13 +320,21 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         }
     }
 
+    private int calculateSlotFromX(float screenX) {
+        float sw = Gdx.graphics.getWidth();
+        float totalW = HOTBAR_SLOTS * SLOT_W + 80f;
+        float hotbarX = (sw - totalW) / 2f + 70f;
+        if(screenX >= hotbarX && screenX < hotbarX + HOTBAR_SLOTS * SLOT_W) {
+            return (int)((screenX - hotbarX) / SLOT_W);
+        }
+        return -1;
+    }
+
     private void placeFromActiveSlot(float wx, float wy) {
         if(hotbarIds[activeSlot] == null) return;
         int cost = hotbarCosts[activeSlot];
         if(economy.getYen() < cost) return;
         if(!economy.spendYen(cost)) return;
-        // Notify GameScreen di piazzare l'elemento
-        // game.getGameScreen().placeBuilding(hotbarIds[activeSlot], wx, wy);
     }
 
     public void toggleTray() {

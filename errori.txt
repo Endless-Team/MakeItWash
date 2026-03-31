@@ -1,17 +1,3 @@
-PS C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
-
-> Task :desktop:run
-Exception in thread "main" java.lang.NullPointerException: Cannot invoke "com.badlogic.gdx.scenes.scene2d.Stage.act(float)" because "this.stage" is null
-        at com.makeitwash.screens.BuildHotbarOverlay.render(BuildHotbarOverlay.java:312)
-        at com.makeitwash.screens.GameScreen.render(GameScreen.java:100)
-        at com.badlogic.gdx.Game.render(Game.java:48)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:387)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:193)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:167)
-        at com.makeitwash.DesktopLauncher.main(DesktopLauncher.java:11)
-
-> Task :desktop:run FAILED
-
 [Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
 
 FAILURE: Build failed with an exception.
@@ -32,5 +18,5 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 7s
-4 actionable tasks: 2 executed, 2 up-to-date
+BUILD FAILED in 5s
+4 actionable tasks: 1 executed, 3 up-to-date

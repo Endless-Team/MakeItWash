@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -52,8 +53,12 @@ public class PauseScreen extends ScreenAdapter {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.getData().setScale(2f);
+        
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        font = generator.generateFont(parameter);
+        generator.dispose();
 
         stage = new Stage();
         
@@ -85,6 +90,13 @@ public class PauseScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
                 game.setScreen(new GameScreen(game, grid, day, economy));
+            }
+        });
+
+        mainMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                game.setScreen(new MenuScreen(game));
             }
         });
 

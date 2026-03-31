@@ -49,8 +49,8 @@ public class GameScreen extends ScreenAdapter {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1920, 1080);
-        viewport = new FitViewport(1920, 1080, camera);
+        camera.setToOrtho(false, 1280, 720);
+        viewport = new FitViewport(1280, 720, camera);
         viewport.apply();
 
         camera.setToOrtho(false, 1280, 720);
@@ -88,9 +88,6 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         // 1. Transizioni schermo — prima di qualsiasi update
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-        day.update(delta);
-
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             game.setScreen(new PauseScreen(game, grid, day, economy));
             return;
         }
@@ -138,7 +135,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, 1920, 1080);
+        camera.setToOrtho(false, 1280, 720);
         hud.resize(width, height);
         viewport.update(width, height, true);
         camera.setToOrtho(false, 1280, 720);
