@@ -1,5 +1,7 @@
 package com.makeitwash.screens;
 
+import javax.swing.event.ListDataListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -77,7 +79,6 @@ public class PauseScreen extends ScreenAdapter {
         titleLabel.setStyle(labelStyle);
 
         TextButton resumeBtn = new TextButton("Riprendi", skin);
-        TextButton buildBtn = new TextButton("Costruisci", skin);
         TextButton mainMenuBtn = new TextButton("Menu Principale", skin);
 
         resumeBtn.addListener(new ChangeListener() {
@@ -87,25 +88,9 @@ public class PauseScreen extends ScreenAdapter {
             }
         });
 
-        buildBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new BuildMenuScreen(game, grid, economy));
-            }
-        });
-
-        mainMenuBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new MenuScreen(game));
-            }
-        });
-
         table.add(titleLabel).padBottom(30);
         table.row();
         table.add(resumeBtn).width(250).height(60).padBottom(15);
-        table.row();
-        table.add(buildBtn).width(250).height(60).padBottom(15);
         table.row();
         table.add(mainMenuBtn).width(250).height(60);
 

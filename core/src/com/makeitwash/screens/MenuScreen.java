@@ -35,6 +35,7 @@ public class MenuScreen extends ScreenAdapter {
         this.economy = new Economy();
     }
 
+    // Crea un drawable colorato da usare come sfondo per i bottoni
     private TextureRegionDrawable createColorDrawable(Color color) {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
@@ -51,13 +52,16 @@ public class MenuScreen extends ScreenAdapter {
         font.getData().setScale(2f);
         stage = new Stage();
         
+        // Skin: contenitore di stili per la UI (font, bottoni, label)
         Skin skin = new Skin();
         skin.add("default", font);
         
+        // Stile per le label (testo del titolo)
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
         skin.add("default", labelStyle);
         
+        // Stile per i bottoni con colori per i vari stati (normale, premuto, hover)
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.font = font;
         buttonStyle.up = createColorDrawable(Color.DARK_GRAY);
@@ -65,16 +69,20 @@ public class MenuScreen extends ScreenAdapter {
         buttonStyle.over = createColorDrawable(Color.LIGHT_GRAY);
         skin.add("default", buttonStyle);
 
+        // Table: layout tabellare per centrare gli elementi
         Table table = new Table();
         table.setFillParent(true);
         table.center();
 
+        // Titolo del gioco
         Label titleLabel = new Label("MakeItWash", skin);
         titleLabel.setStyle(labelStyle);
 
+        // Bottoni: "Inizia Partita" e "Esci"
         TextButton playButton = new TextButton("Inizia Partita", skin);
         TextButton quitButton = new TextButton("Esci", skin);
 
+        // Listener per il bottone "Inizia Partita": passa al GameScreen
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
@@ -82,6 +90,7 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+        // Listener per il bottone "Esci": chiude l'applicazione
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
@@ -89,6 +98,7 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+        // Disposizione degli elementi nella tabella (verticale, centrati)
         table.add(titleLabel).padBottom(50);
         table.row();
         table.add(playButton).width(250).height(60).padBottom(15);
@@ -101,15 +111,18 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        // Pulisce lo schermo con un colore di sfondo scuro
         Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Aggiorna e disegna la UI (stage)
         stage.act(delta);
         stage.draw();
     }
 
     @Override
     public void dispose() {
+        // Libera le risorse (batch, stage, font)
         batch.dispose();
         stage.dispose();
         font.dispose();

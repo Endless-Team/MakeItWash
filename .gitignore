@@ -1,3 +1,4 @@
+.opencode/
 .gradle/
 build/
 out/
@@ -5,4 +6,3 @@ out/
 .DS_Store
 .idea/
 *.iml
-errori.txt
