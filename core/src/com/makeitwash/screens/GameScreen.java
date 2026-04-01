@@ -15,7 +15,7 @@ import com.makeitwash.world.Grid;
 import com.makeitwash.world.Day;
 import com.makeitwash.world.Economy;
 import com.makeitwash.ui.HUD;
-
+import com.makeitwash.entities.ConveyorBelt;
 
 public class GameScreen extends ScreenAdapter {
     private final MainGame game;
@@ -29,7 +29,6 @@ public class GameScreen extends ScreenAdapter {
     private HUD hud;
     private BuildHotbarOverlay buildHud;
 
-
     public GameScreen(MainGame game, Grid grid, Day day, Economy economy) {
         this.game = game;
         this.grid = grid;
@@ -37,15 +36,13 @@ public class GameScreen extends ScreenAdapter {
         this.economy = economy;
     }
 
-
     public GameScreen(MainGame game, Grid grid, Economy economy) {
         this(game, grid, new Day(), economy);
     }
 
-
     @Override
     public void show() {
-        if (batch != null) return; // guardia contro doppio show()
+        if (batch != null) return;
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -62,6 +59,7 @@ public class GameScreen extends ScreenAdapter {
         gridLineTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         pixmap.dispose();
 
+        ConveyorBelt.ensureTexturesLoaded();
 
         hud = new HUD();
 
@@ -76,27 +74,21 @@ public class GameScreen extends ScreenAdapter {
         day.start();
     }
 
-
     @Override
     public void hide() {
-        // Deregistra il processor quando si cambia schermo
         Gdx.input.setInputProcessor(null);
     }
 
-
     @Override
     public void render(float delta) {
-        // 1. Transizioni schermo — prima di qualsiasi update
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new PauseScreen(game, grid, day, economy));
             return;
         }
 
-        // 2. Game logic update
         day.update(delta);
         grid.update(delta);
 
-        // 3. Controlli stato — dopo update, prima di render
         if (day.isFinished()) {
             game.setScreen(new DayResultScreen(game, economy, day.getDayNumber(), 0));
             return;
@@ -107,7 +99,6 @@ public class GameScreen extends ScreenAdapter {
             return;
         }
 
-        // 4. Rendering mondo
         Gdx.gl.glClearColor(0.12f, 0.14f, 0.16f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -134,13 +125,11 @@ public class GameScreen extends ScreenAdapter {
         }
         batch.end();
 
-        // 5. UI sopra al mondo — HUD poi overlay
         hud.update(economy.getYen(), economy.getReputation(), day.getDayNumber(), day.getTimeRemaining());
         hud.draw();
 
-        buildHud.render(delta); // render overlay — show() NON va mai chiamato qui
+        buildHud.render(delta);
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -151,12 +140,12 @@ public class GameScreen extends ScreenAdapter {
         if (buildHud != null) buildHud.resize(width, height);
     }
 
-
     @Override
     public void dispose() {
-        if (batch != null)           batch.dispose();
+        if (batch != null) batch.dispose();
         if (gridLineTexture != null) gridLineTexture.dispose();
-        if (hud != null)             hud.dispose();
-        if (buildHud != null)        buildHud.dispose();
+        if (hud != null) hud.dispose();
+        if (buildHud != null) buildHud.dispose();
+        ConveyorBelt.disposeTextures();
     }
 }

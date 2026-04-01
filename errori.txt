@@ -1,71 +1,12 @@
-PS C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
-
-> Task :desktop:run FAILED
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_flat.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_gloss.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_depth_flat.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_depth_gloss.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_round_flat.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_round_gloss.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_flat.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_gloss.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_depth_flat.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_depth_gloss.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_horizontal_grey.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_horizontal_color.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_vertical_grey.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_vertical_color.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_square_grey.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_square_color.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_round_grey.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_round_color.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_checkmark.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_cross.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_circle.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_square.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_arrow_up_light.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_arrow_down_light.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_play_light.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_repeat_light.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/star.png
-[UISkin] Failed to load: assets/ui/PNG/Blue/Default/star_outline.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/divider.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/input_rectangle.png
-[UISkin] Failed to load: assets/ui/PNG/Extra/Default/input_square.png
-Exception in thread "main" java.lang.IllegalArgumentException: texture cannot be null.
-        at com.badlogic.gdx.graphics.g2d.TextureRegion.<init>(TextureRegion.java:37)
-        at com.makeitwash.ui.UISkin.createTextButtonStyles(UISkin.java:130)
-        at com.makeitwash.ui.UISkin.<init>(UISkin.java:113)
-        at com.makeitwash.ui.UISkin.get(UISkin.java:233)
-        at com.makeitwash.screens.MenuScreen.show(MenuScreen.java:45)
-        at com.badlogic.gdx.Game.setScreen(Game.java:63)
-        at com.makeitwash.MainGame.create(MainGame.java:9)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:366)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:193)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:167)
-        at com.makeitwash.DesktopLauncher.main(DesktopLauncher.java:11)
-
+$ cd C:\Users\VGit\Documents\GitHub\MakeItWash; .\gradlew.bat compileJava 2>&1 | Select-Object -First 15
+Starting a Gradle Daemon, 1 busy and 2 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :compileJava NO-SOURCE
+> Task :core:compileJava
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes
+> Task :core:jar
+> Task :desktop:compileJava
 [Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
-
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Execution failed for task ':desktop:run'.
-> Process 'command 'C:\Program Files\Eclipse Adoptium\jdk-17.0.17.10-hotspot\bin\java.exe'' finished with non-zero exit value 1
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to generate a Build Scan (Powered by Develocity).
-> Get more help at https://help.gradle.org.
-
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
-
 You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-
-BUILD FAILED in 6s
-5 actionable tasks: 3 executed, 2 up-to-date
-PS C:\Users\VGit\Documents\GitHub\MakeItWash>
