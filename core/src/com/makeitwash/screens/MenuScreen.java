@@ -62,12 +62,12 @@ public class MenuScreen extends ScreenAdapter {
         greenButtonStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
         skin.add("green_button", greenButtonStyle);
 
-        TextButtonStyle greyButtonStyle = new TextButtonStyle();
-        greyButtonStyle.font = font;
-        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
-        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
-        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
-        skin.add("red_button", greyButtonStyle);
+        TextButtonStyle redButtonStyle = new TextButtonStyle();
+        redButtonStyle.font = font;
+        redButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
+        redButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
+        redButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
+        skin.add("red_button", redButtonStyle);
 
         Table table = new Table();
         table.setFillParent(true);
