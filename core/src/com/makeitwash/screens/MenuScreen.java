@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
+import com.makeitwash.ui.UISkin;
 
 public class MenuScreen extends ScreenAdapter {
     private final MainGame game;
@@ -29,6 +31,7 @@ public class MenuScreen extends ScreenAdapter {
     private SpriteBatch batch;
     private Stage stage;
     private BitmapFont font;
+    private UISkin uiSkin;
 
     public MenuScreen(MainGame game) {
         this.game = game;
@@ -36,55 +39,47 @@ public class MenuScreen extends ScreenAdapter {
         this.economy = new Economy();
     }
 
-    // Crea un drawable colorato da usare come sfondo per i bottoni
-    private TextureRegionDrawable createColorDrawable(Color color) {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture));
-    }
-
     @Override
     public void show() {
         batch = new SpriteBatch();
+        uiSkin = UISkin.get();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         font = generator.generateFont(parameter);
         stage = new Stage();
         
-        // Skin: contenitore di stili per la UI (font, bottoni, label)
         Skin skin = new Skin();
         skin.add("default", font);
         
-        // Stile per le label (testo del titolo)
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
         skin.add("default", labelStyle);
         
-        // Stile per i bottoni con colori per i vari stati (normale, premuto, hover)
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.font = font;
-        buttonStyle.up = createColorDrawable(Color.DARK_GRAY);
-        buttonStyle.down = createColorDrawable(Color.GRAY);
-        buttonStyle.over = createColorDrawable(Color.LIGHT_GRAY);
-        skin.add("default", buttonStyle);
+        TextButtonStyle greenButtonStyle = new TextButtonStyle();
+        greenButtonStyle.font = font;
+        greenButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_depth_gloss.png");
+        greenButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_gloss.png");
+        greenButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_flat.png");
+        skin.add("green_button", greenButtonStyle);
 
-        // Table: layout tabellare per centrare gli elementi
+        TextButtonStyle greyButtonStyle = new TextButtonStyle();
+        greyButtonStyle.font = font;
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_flat.png");
+        skin.add("grey_button", greyButtonStyle);
+
         Table table = new Table();
         table.setFillParent(true);
         table.center();
 
-        // Titolo del gioco
         Label titleLabel = new Label("MakeItWash", skin);
         titleLabel.setStyle(labelStyle);
+        titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
-        // Bottoni: "Inizia Partita" e "Esci"
-        TextButton playButton = new TextButton("Inizia Partita", skin);
-        TextButton quitButton = new TextButton("Esci", skin);
+        TextButton playButton = new TextButton("Inizia Partita", skin, "green_button");
+        TextButton quitButton = new TextButton("Esci", skin, "grey_button");
 
-        // Listener per il bottone "Inizia Partita": passa al GameScreen
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
@@ -92,7 +87,6 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-        // Listener per il bottone "Esci": chiude l'applicazione
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
@@ -100,7 +94,6 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-        // Disposizione degli elementi nella tabella (verticale, centrati)
         table.add(titleLabel).padBottom(50);
         table.row();
         table.add(playButton).width(250).height(60).padBottom(15);

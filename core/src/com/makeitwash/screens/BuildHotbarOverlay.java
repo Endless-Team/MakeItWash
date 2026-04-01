@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.makeitwash.MainGame;
 import com.makeitwash.entities.*;
 import com.makeitwash.world.*;
+import com.makeitwash.ui.UISkin;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private BitmapFont font;
     private BitmapFont smallFont;   // font ridotto per numero shortcut
     private Skin skin;
+    private UISkin uiSkin;
     private InputAdapter inputAdapter;
 
     // Hotbar state
@@ -36,7 +38,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private int[]     hotbarCosts  = new int[HOTBAR_SLOTS];
     private int activeSlot = 0;
 
-    // Tray
+    // tray
     private Group  trayGroup;
     private Table  trayItemTable;
     private Table  hotbar;
@@ -52,6 +54,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private int hoverSlot = -1;
     private float lastMouseY = 0;
     private Map<String, Texture> itemIcons = new HashMap<>();
+
+    private Image[] slotBackgrounds;
 
     private static final Object[][] ALL_ITEMS = {
         {"lavatrice",   "Lavatrice",     100, "machines"},
@@ -71,15 +75,14 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     @Override
     public void show() {
         batch = new SpriteBatch();
+        uiSkin = UISkin.get();
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
 
-        // Font principale — usato nel tray e nel drag ghost
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 16;
         font = generator.generateFont(parameter);
 
-        // Font piccolo per numero shortcut (angolo slot) e costo nel tray
         FreeTypeFontGenerator.FreeTypeFontParameter smallParam = new FreeTypeFontGenerator.FreeTypeFontParameter();
         smallParam.size = 13;
         smallFont = generator.generateFont(smallParam);
@@ -98,6 +101,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
         Label.LabelStyle lsSmall = new Label.LabelStyle(smallFont, new Color(1f, 1f, 1f, 0.65f));
         skin.add("small", lsSmall);
+
+        slotBackgrounds = new Image[HOTBAR_SLOTS];
 
         buildHotbar();
         buildTray();
@@ -174,15 +179,13 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         float sw = Gdx.graphics.getWidth();
         hotbar = new Table();
         hotbar.setBackground(makeColorDrawable(new Color(0.11f, 0.12f, 0.18f, 0.95f)));
-        float totalW = HOTBAR_SLOTS * SLOT_W + 50f; // 50 per tasto espandi compatto
+        float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
         hotbar.setBounds((sw - totalW) / 2f, 0, totalW, HOTBAR_H);
 
-        // --- Bottone espandi tray ---
-        // "☰" = menu aperto,  "▼" = tray visibile
         TextButton.TextButtonStyle expandStyle = new TextButton.TextButtonStyle();
         expandStyle.font = font;
-        expandStyle.up   = makeColorDrawable(new Color(0.16f, 0.18f, 0.26f, 1f));
-        expandStyle.over = makeColorDrawable(new Color(0.26f, 0.34f, 1f, 0.3f));
+        expandStyle.up   = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_square_gloss.png");
+        expandStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_square_gloss.png");
         skin.add("expand", expandStyle);
 
         TextButton expandBtn = new TextButton(trayOpen ? "▼" : "☰", skin, "expand");
@@ -193,22 +196,24 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         });
         hotbar.add(expandBtn).size(44f, HOTBAR_H).padRight(6f);
 
-        // --- 9 slot hotbar ---
         for(int i = 0; i < HOTBAR_SLOTS; i++) {
             final int idx = i;
 
-            // Stack sovrappone: sfondo + icona centrata + numero in overlay
             Stack cellStack = new Stack();
             cellStack.setName("slot_" + i);
 
-            // 1. Sfondo cella (Image drawable, aggiornabile via listener)
-            final Image bg = new Image(makeColorDrawable(
-                i == activeSlot
-                    ? new Color(1f, 0.7f, 0.28f, 0.35f)
-                    : new Color(0.09f, 0.10f, 0.14f, 1f)));
+            TextureRegion normalBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_flat.png"));
+            TextureRegion selectedBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"));
+            TextureRegion hoverBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_gloss.png"));
+            TextureRegion emptyBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Grey/Default/button_square_flat.png"));
+
+            final Image bg = new Image(
+                i == activeSlot 
+                    ? new TextureRegionDrawable(selectedBg) 
+                    : new TextureRegionDrawable(emptyBg));
+            slotBackgrounds[i] = bg;
             cellStack.add(bg);
 
-            // 2. Icona centrata — padding simmetrico per allineamento visivo
             if(hotbarIds[i] != null) {
                 Texture icon = itemIcons.get(hotbarIds[i]);
                 if(icon != null) {
@@ -219,14 +224,12 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                 }
             }
 
-            // 3. Numero shortcut in overlay, angolo alto-sinistra, semitrasparente
             Table numOverlay = new Table();
             numOverlay.top().left();
             Label numLabel = new Label(String.valueOf(i + 1), skin, "small");
             numOverlay.add(numLabel).top().left().pad(3f, 4f, 0f, 0f);
             cellStack.add(numOverlay);
 
-            // Listener sull'intero Stack: copre TUTTA l'area della cella (vuota o piena)
             cellStack.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent e, float x, float y, int ptr, int btn) {
@@ -254,19 +257,25 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                 @Override
                 public void enter(InputEvent e, float x, float y, int ptr, Actor from) {
                     hoverSlot = idx;
-                    bg.setDrawable(makeColorDrawable(
-                        draggingId != null
-                            ? new Color(0.29f, 0.92f, 0.74f, 0.30f)
-                            : new Color(0.22f, 0.24f, 0.34f, 1f)));
+                    if(hoverSlot >= 0 && slotBackgrounds[hoverSlot] != null) {
+                        if(draggingId != null) {
+                            slotBackgrounds[hoverSlot].setDrawable(new TextureRegionDrawable(
+                                new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Green/Default/button_square_flat.png"))));
+                        } else {
+                            slotBackgrounds[hoverSlot].setDrawable(new TextureRegionDrawable(hoverBg));
+                        }
+                    }
                 }
 
                 @Override
                 public void exit(InputEvent e, float x, float y, int ptr, Actor to) {
                     if(hoverSlot == idx) hoverSlot = -1;
-                    bg.setDrawable(makeColorDrawable(
-                        idx == activeSlot
-                            ? new Color(1f, 0.7f, 0.28f, 0.35f)
-                            : new Color(0.09f, 0.10f, 0.14f, 1f)));
+                    if(idx >= 0 && idx < HOTBAR_SLOTS && slotBackgrounds[idx] != null) {
+                        slotBackgrounds[idx].setDrawable(
+                            idx == activeSlot 
+                                ? new TextureRegionDrawable(selectedBg)
+                                : new TextureRegionDrawable(emptyBg));
+                    }
                 }
             });
 
@@ -283,7 +292,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
         trayGroup = new Group();
         trayGroup.setSize(totalW, TRAY_H);
-        trayGroup.setPosition(trayX, -TRAY_H); // nascosto sotto
+        trayGroup.setPosition(trayX, -TRAY_H);
 
         Image trayBg = new Image(makeColorDrawable(new Color(0.10f, 0.11f, 0.17f, 0.97f)));
         trayBg.setSize(totalW, TRAY_H);
@@ -307,8 +316,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             final String filter = tabFilter[i];
             TextButton.TextButtonStyle ts = new TextButton.TextButtonStyle();
             ts.font = font;
-            ts.up   = makeColorDrawable(new Color(0.14f, 0.16f, 0.23f, 1f));
-            ts.over = makeColorDrawable(new Color(0.42f, 0.55f, 1f, 0.2f));
+            ts.up   = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_rectangle_flat.png");
+            ts.over = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_rectangle_gloss.png");
             skin.add("tray_tab_" + i, ts);
             TextButton tb = new TextButton(tabNames[i], skin, "tray_tab_" + i);
             tb.addListener(new ChangeListener() {
@@ -335,7 +344,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             final int    cost  = (Integer) item[2];
 
             Table card = new Table();
-            card.setBackground(makeColorDrawable(new Color(0.14f, 0.16f, 0.22f, 1f)));
+            card.setBackground(new TextureRegionDrawable(
+                new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"))));
             card.pad(8f);
 
             Texture icon = itemIcons.get(id);
@@ -345,7 +355,6 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             }
             Label nameLabel = new Label(label, skin);
             card.add(nameLabel).center().row();
-            // Costo con smallFont in giallo — distinguibile dal nome
             Label costLabel = new Label(cost + " \u00a5", skin, "small");
             costLabel.setColor(new Color(1f, 0.85f, 0.3f, 1f));
             card.add(costLabel).center();
@@ -356,10 +365,14 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                     draggingId    = id;
                     draggingLabel = label;
                     draggingCost  = cost;
+                    card.setBackground(new TextureRegionDrawable(
+                        new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Green/Default/button_square_depth_flat.png"))));
                     return true;
                 }
                 @Override
                 public void touchUp(InputEvent e, float x, float y, int ptr, int btn) {
+                    card.setBackground(new TextureRegionDrawable(
+                        new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"))));
                     if(draggingId != null) {
                         int targetSlot = hoverSlot >= 0 ? hoverSlot : activeSlot;
                         hotbarIds[targetSlot]    = id;
@@ -492,5 +505,15 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         if(font  != null) font.dispose();
         if(smallFont != null) smallFont.dispose();
         for(Texture t : itemIcons.values()) { if(t != null) t.dispose(); }
+        if(slotBackgrounds != null) {
+            for(Image img : slotBackgrounds) {
+                if(img != null && img.getDrawable() instanceof TextureRegionDrawable) {
+                    TextureRegionDrawable trd = (TextureRegionDrawable) img.getDrawable();
+                    if(trd.getRegion().getTexture() != null) {
+                        trd.getRegion().getTexture().dispose();
+                    }
+                }
+            }
+        }
     }
 }

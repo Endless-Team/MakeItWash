@@ -1,12 +1,43 @@
 PS C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
 
 > Task :desktop:run FAILED
-Exception in thread "main" com.badlogic.gdx.utils.GdxRuntimeException: File not found: assets\fonts\Roboto-Regular.ttf (Internal)
-        at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:142)
-        at com.badlogic.gdx.graphics.g2d.freetype.FreeType$Library.newFace(FreeType.java:90)
-        at com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.<init>(FreeTypeFontGenerator.java:96)
-        at com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.<init>(FreeTypeFontGenerator.java:87)
-        at com.makeitwash.screens.MenuScreen.show(MenuScreen.java:52)
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_flat.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_gloss.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_depth_flat.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_square_depth_gloss.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_round_flat.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_round_gloss.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_flat.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_gloss.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_depth_flat.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/button_rectangle_depth_gloss.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_horizontal_grey.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_horizontal_color.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_vertical_grey.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/slide_vertical_color.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_square_grey.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_square_color.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_round_grey.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/check_round_color.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_checkmark.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_cross.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_circle.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/icon_square.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_arrow_up_light.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_arrow_down_light.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_play_light.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/icon_repeat_light.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/star.png
+[UISkin] Failed to load: assets/ui/PNG/Blue/Default/star_outline.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/divider.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/input_rectangle.png
+[UISkin] Failed to load: assets/ui/PNG/Extra/Default/input_square.png
+Exception in thread "main" java.lang.IllegalArgumentException: texture cannot be null.
+        at com.badlogic.gdx.graphics.g2d.TextureRegion.<init>(TextureRegion.java:37)
+        at com.makeitwash.ui.UISkin.createTextButtonStyles(UISkin.java:130)
+        at com.makeitwash.ui.UISkin.<init>(UISkin.java:113)
+        at com.makeitwash.ui.UISkin.get(UISkin.java:233)
+        at com.makeitwash.screens.MenuScreen.show(MenuScreen.java:45)
         at com.badlogic.gdx.Game.setScreen(Game.java:63)
         at com.makeitwash.MainGame.create(MainGame.java:9)
         at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
@@ -35,5 +66,6 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 5s
-5 actionable tasks: 1 executed, 4 up-to-date
+BUILD FAILED in 6s
+5 actionable tasks: 3 executed, 2 up-to-date
+PS C:\Users\VGit\Documents\GitHub\MakeItWash>

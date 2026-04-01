@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -16,10 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Economy;
+import com.makeitwash.ui.UISkin;
 
 public class DayResultScreen extends ScreenAdapter {
     private final MainGame game;
@@ -29,6 +27,7 @@ public class DayResultScreen extends ScreenAdapter {
     private Stage stage;
     private SpriteBatch batch;
     private BitmapFont font;
+    private UISkin uiSkin;
 
     public DayResultScreen(MainGame game, Economy economy, int dayNumber, float earnedYen) {
         this.game = game;
@@ -37,18 +36,10 @@ public class DayResultScreen extends ScreenAdapter {
         this.earnedYen = earnedYen;
     }
 
-    private TextureRegionDrawable createColorDrawable(Color color) {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture));
-    }
-
     @Override
     public void show() {
         batch = new SpriteBatch();
+        uiSkin = UISkin.get();
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -63,14 +54,22 @@ public class DayResultScreen extends ScreenAdapter {
         
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
+        labelStyle.fontColor = Color.WHITE;
         skin.add("default", labelStyle);
         
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.font = font;
-        buttonStyle.up = createColorDrawable(Color.DARK_GRAY);
-        buttonStyle.down = createColorDrawable(Color.GRAY);
-        buttonStyle.over = createColorDrawable(Color.LIGHT_GRAY);
-        skin.add("default", buttonStyle);
+        TextButtonStyle greenButtonStyle = new TextButtonStyle();
+        greenButtonStyle.font = font;
+        greenButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_depth_gloss.png");
+        greenButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_gloss.png");
+        greenButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_flat.png");
+        skin.add("green_button", greenButtonStyle);
+
+        TextButtonStyle greyButtonStyle = new TextButtonStyle();
+        greyButtonStyle.font = font;
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_flat.png");
+        skin.add("grey_button", greyButtonStyle);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -78,13 +77,19 @@ public class DayResultScreen extends ScreenAdapter {
 
         Label titleLabel = new Label("FINE GIORNATA " + dayNumber, skin);
         titleLabel.setStyle(labelStyle);
+        titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
         Label earningsLabel = new Label(String.format("Guadagno: %.0f Yen", earnedYen), skin);
+        earningsLabel.setColor(new Color(1.00f, 0.88f, 0.25f, 1f));
+        
         Label totalLabel = new Label(String.format("Totale: %.0f Yen", economy.getYen()), skin);
+        totalLabel.setColor(new Color(1.00f, 0.88f, 0.25f, 1f));
+        
         Label reputationLabel = new Label(String.format("Reputazione: %.0f%%", economy.getReputation()), skin);
+        reputationLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
-        TextButton nextDayBtn = new TextButton("Giorno Successivo", skin);
-        TextButton mainMenuBtn = new TextButton("Menu Principale", skin);
+        TextButton nextDayBtn = new TextButton("Giorno Successivo", skin, "green_button");
+        TextButton mainMenuBtn = new TextButton("Menu Principale", skin, "grey_button");
 
         nextDayBtn.addListener(new ChangeListener() {
             @Override

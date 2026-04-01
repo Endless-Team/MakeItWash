@@ -1,7 +1,5 @@
 package com.makeitwash.screens;
 
-import javax.swing.event.ListDataListener;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -24,6 +22,7 @@ import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Day;
 import com.makeitwash.world.Economy;
+import com.makeitwash.ui.UISkin;
 
 public class PauseScreen extends ScreenAdapter {
     private final MainGame game;
@@ -33,6 +32,7 @@ public class PauseScreen extends ScreenAdapter {
     private Stage stage;
     private SpriteBatch batch;
     private BitmapFont font;
+    private UISkin uiSkin;
 
     public PauseScreen(MainGame game, Grid grid, Day day, Economy economy) {
         this.game = game;
@@ -41,18 +41,10 @@ public class PauseScreen extends ScreenAdapter {
         this.economy = economy;
     }
 
-    private TextureRegionDrawable createColorDrawable(Color color) {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture));
-    }
-
     @Override
     public void show() {
         batch = new SpriteBatch();
+        uiSkin = UISkin.get();
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -67,14 +59,22 @@ public class PauseScreen extends ScreenAdapter {
         
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
+        labelStyle.fontColor = Color.WHITE;
         skin.add("default", labelStyle);
         
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.font = font;
-        buttonStyle.up = createColorDrawable(Color.DARK_GRAY);
-        buttonStyle.down = createColorDrawable(Color.GRAY);
-        buttonStyle.over = createColorDrawable(Color.LIGHT_GRAY);
-        skin.add("default", buttonStyle);
+        TextButtonStyle greenButtonStyle = new TextButtonStyle();
+        greenButtonStyle.font = font;
+        greenButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_depth_gloss.png");
+        greenButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_gloss.png");
+        greenButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_flat.png");
+        skin.add("green_button", greenButtonStyle);
+
+        TextButtonStyle greyButtonStyle = new TextButtonStyle();
+        greyButtonStyle.font = font;
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_flat.png");
+        skin.add("grey_button", greyButtonStyle);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -82,9 +82,10 @@ public class PauseScreen extends ScreenAdapter {
 
         Label titleLabel = new Label("PAUSA", skin);
         titleLabel.setStyle(labelStyle);
+        titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
-        TextButton resumeBtn = new TextButton("Riprendi", skin);
-        TextButton mainMenuBtn = new TextButton("Menu Principale", skin);
+        TextButton resumeBtn = new TextButton("Riprendi", skin, "green_button");
+        TextButton mainMenuBtn = new TextButton("Menu Principale", skin, "grey_button");
 
         resumeBtn.addListener(new ChangeListener() {
             @Override
