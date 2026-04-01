@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.makeitwash.MainGame;
 import com.makeitwash.entities.*;
@@ -56,6 +57,9 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private Map<String, Texture> itemIcons = new HashMap<>();
 
     private Image[] slotBackgrounds;
+    private Label errorLabel;
+    private String purchaseErrorMessage = null;
+    private float purchaseErrorTimer = 0f;
 
     private static final Object[][] ALL_ITEMS = {
         {"lavatrice",   "Lavatrice",     100, "machines"},
@@ -101,6 +105,14 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
         Label.LabelStyle lsSmall = new Label.LabelStyle(smallFont, new Color(1f, 1f, 1f, 0.65f));
         skin.add("small", lsSmall);
+
+        errorLabel = new Label("", skin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+        errorLabel.setWidth(Gdx.graphics.getWidth());
+        errorLabel.setAlignment(Align.center);
+        errorLabel.setPosition(0, HOTBAR_H + 12f);
+        stage.addActor(errorLabel);
 
         slotBackgrounds = new Image[HOTBAR_SLOTS];
 
@@ -188,7 +200,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         expandStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_square_gloss.png");
         skin.add("expand", expandStyle);
 
-        TextButton expandBtn = new TextButton(trayOpen ? "▼" : "☰", skin, "expand");
+        TextButton expandBtn = new TextButton("[B]", skin, "expand");
         expandBtn.setName("expandBtn");
         expandBtn.setSize(44f, HOTBAR_H);
         expandBtn.addListener(new ChangeListener() {
@@ -402,6 +414,15 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
     public Grid getGrid() { return grid; }
 
+    private void showInsufficientFundsMessage() {
+        purchaseErrorMessage = "Soldi insufficienti per effettuare l'acquisto";
+        purchaseErrorTimer = 2.0f;
+        if(errorLabel != null) {
+            errorLabel.setText(purchaseErrorMessage);
+            errorLabel.setVisible(true);
+        }
+    }
+
     private void placeFromActiveSlot(float screenX, float screenY) {
         if(hotbarIds[activeSlot] == null) return;
 
@@ -411,21 +432,20 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         if(!grid.isValid(gx, gy) || !grid.isEmpty(gx, gy)) return;
 
         int cost = hotbarCosts[activeSlot];
-        if(economy.getYen() < cost) return;
+        if(economy.getYen() < cost) {
+            showInsufficientFundsMessage();
+            return;
+        }
         if(!economy.spendYen(cost)) return;
 
         String id = hotbarIds[activeSlot];
-        PlaceableEntity entity = null;
-
-        if(id.equals("lavatrice")) {
-            entity = new WashingMachine();
-        } else if(id.equals("asciugatrice")) {
-            entity = new WashingMachine();
-        } else if(id.equals("nastro") || id.equals("nastro_curve")) {
-            entity = new ConveyorBelt(id.equals("nastro_curve"));
-        } else if(id.equals("robot") || id.equals("drone")) {
-            entity = new Robot();
-        }
+        PlaceableEntity entity = switch (id) {
+            case "lavatrice" -> new WashingMachine();
+            case "asciugatrice" -> new WashingMachine();
+            case "nastro", "nastro_curve" -> new ConveyorBelt(id.equals("nastro_curve"));
+            case "robot", "drone" -> new Robot();
+            default -> null;
+        };
 
         if(entity != null) {
             grid.place(entity, gx, gy);
@@ -458,7 +478,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private void updateExpandButton() {
         Actor btn = hotbar.findActor("expandBtn");
         if(btn instanceof TextButton) {
-            ((TextButton) btn).setText(trayOpen ? "\u25bc" : "\u2630");
+            ((TextButton) btn).setText(trayOpen ? "[B]" : "[B]");
         }
     }
 
@@ -477,7 +497,20 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     @Override
     public void render(float delta) {
         if(stage == null) return;
+
         stage.act(delta);
+
+        if(purchaseErrorTimer > 0f) {
+            purchaseErrorTimer -= delta;
+            if(purchaseErrorTimer <= 0f) {
+                purchaseErrorMessage = null;
+                if(errorLabel != null) {
+                    errorLabel.setVisible(false);
+                    errorLabel.setText("");
+                }
+            }
+        }
+
         stage.draw();
 
         if(draggingId != null && batch != null && font != null) {
