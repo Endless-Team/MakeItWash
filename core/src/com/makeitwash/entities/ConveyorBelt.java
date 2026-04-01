@@ -1,5 +1,6 @@
 package com.makeitwash.entities;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -8,9 +9,20 @@ public class ConveyorBelt extends PlaceableEntity {
     private float progress;
     private boolean curved;
     private static final float MAX_PROGRESS = 1f;
+    private static Texture conveyorTexture;
+    private static Texture conveyorCurveTexture;
+
+    private static void ensureTexturesLoaded() {
+        if (conveyorTexture == null) {
+            conveyorTexture = new Texture("isometric_buildings/PNG/conveyor-stripe-sides.png");
+            conveyorCurveTexture = new Texture("isometric_buildings/PNG/conveyor-stripe.png");
+        }
+    }
 
     public ConveyorBelt() {
         super();
+        ensureTexturesLoaded();
+        this.texture = new TextureRegion(conveyorTexture);
         this.speed = 1f;
         this.progress = 0f;
         this.curved = false;
@@ -18,6 +30,8 @@ public class ConveyorBelt extends PlaceableEntity {
 
     public ConveyorBelt(boolean curved) {
         super();
+        ensureTexturesLoaded();
+        this.texture = new TextureRegion(curved ? conveyorCurveTexture : conveyorTexture);
         this.speed = 1f;
         this.progress = 0f;
         this.curved = curved;
@@ -25,6 +39,8 @@ public class ConveyorBelt extends PlaceableEntity {
 
     public ConveyorBelt(int gridX, int gridY) {
         super();
+        ensureTexturesLoaded();
+        this.texture = new TextureRegion(conveyorTexture);
         setGridPosition(gridX, gridY);
         this.speed = 1f;
         this.progress = 0f;

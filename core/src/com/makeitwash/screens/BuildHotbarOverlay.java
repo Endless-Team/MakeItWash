@@ -177,8 +177,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         try {
             itemIcons.put("lavatrice",    new Texture("isometric_buildings/PNG/buildingTiles_128.png"));
             itemIcons.put("asciugatrice", new Texture("isometric_buildings/PNG/buildingTiles_127.png"));
-            itemIcons.put("nastro",       new Texture("isometric_buildings/PNG/buildingTiles_064.png"));
-            itemIcons.put("nastro_curve", new Texture("isometric_buildings/PNG/buildingTiles_063.png"));
+            itemIcons.put("nastro",       new Texture("isometric_buildings/PNG/conveyor-stripe-sides.png"));
+            itemIcons.put("nastro_curve", new Texture("isometric_buildings/PNG/conveyor-stripe.png"));
             itemIcons.put("robot",        new Texture("isometric_buildings/PNG/buildingTiles_080.png"));
             itemIcons.put("drone",        new Texture("isometric_buildings/PNG/buildingTiles_081.png"));
             Gdx.app.log("BuildHotbar", "Icons loaded: " + itemIcons.size());
