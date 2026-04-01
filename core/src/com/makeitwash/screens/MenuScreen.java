@@ -54,7 +54,8 @@ public class MenuScreen extends ScreenAdapter {
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = font;
         skin.add("default", labelStyle);
-        
+
+        // Start button
         TextButtonStyle greenButtonStyle = new TextButtonStyle();
         greenButtonStyle.font = font;
         greenButtonStyle.up = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
@@ -62,12 +63,22 @@ public class MenuScreen extends ScreenAdapter {
         greenButtonStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
         skin.add("green_button", greenButtonStyle);
 
+        // Exit button
         TextButtonStyle redButtonStyle = new TextButtonStyle();
         redButtonStyle.font = font;
         redButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
         redButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
         redButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
         skin.add("red_button", redButtonStyle);
+
+        // Settings button
+        TextButtonStyle greyButtonStyle = new TextButtonStyle();
+        greyButtonStyle.font = font;
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
+        skin.add("grey_button", greyButtonStyle);
+
 
         Table table = new Table();
         table.setFillParent(true);
@@ -79,6 +90,7 @@ public class MenuScreen extends ScreenAdapter {
 
         TextButton playButton = new TextButton("Inizia Partita", skin, "green_button");
         TextButton quitButton = new TextButton("Esci", skin, "red_button");
+        //TextButton
 
         playButton.addListener(new ChangeListener() {
             @Override
