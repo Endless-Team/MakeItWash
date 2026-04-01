@@ -184,8 +184,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
         TextButton.TextButtonStyle expandStyle = new TextButton.TextButtonStyle();
         expandStyle.font = font;
-        expandStyle.up   = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_square_gloss.png");
-        expandStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_square_gloss.png");
+        expandStyle.up   = uiSkin.getDrawable("assets/ui/Blue/Default/button_square_gloss.png");
+        expandStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_square_gloss.png");
         skin.add("expand", expandStyle);
 
         TextButton expandBtn = new TextButton(trayOpen ? "▼" : "☰", skin, "expand");
@@ -202,10 +202,10 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             Stack cellStack = new Stack();
             cellStack.setName("slot_" + i);
 
-            TextureRegion normalBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_flat.png"));
-            TextureRegion selectedBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"));
-            TextureRegion hoverBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_gloss.png"));
-            TextureRegion emptyBg = new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Grey/Default/button_square_flat.png"));
+            TextureRegion normalBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_flat.png"));
+            TextureRegion selectedBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_depth_flat.png"));
+            TextureRegion hoverBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_gloss.png"));
+            TextureRegion emptyBg = new TextureRegion(uiSkin.getTexture("assets/ui/Grey/Default/button_square_flat.png"));
 
             final Image bg = new Image(
                 i == activeSlot 
@@ -260,7 +260,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                     if(hoverSlot >= 0 && slotBackgrounds[hoverSlot] != null) {
                         if(draggingId != null) {
                             slotBackgrounds[hoverSlot].setDrawable(new TextureRegionDrawable(
-                                new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Green/Default/button_square_flat.png"))));
+                                new TextureRegion(uiSkin.getTexture("assets/ui/Green/Default/button_square_flat.png"))));
                         } else {
                             slotBackgrounds[hoverSlot].setDrawable(new TextureRegionDrawable(hoverBg));
                         }
@@ -316,8 +316,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             final String filter = tabFilter[i];
             TextButton.TextButtonStyle ts = new TextButton.TextButtonStyle();
             ts.font = font;
-            ts.up   = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_rectangle_flat.png");
-            ts.over = uiSkin.getDrawable("assets/ui/PNG/Blue/Default/button_rectangle_gloss.png");
+            ts.up   = uiSkin.getDrawable("assets/ui/Blue/Default/button_rectangle_flat.png");
+            ts.over = uiSkin.getDrawable("assets/ui/Blue/Default/button_rectangle_gloss.png");
             skin.add("tray_tab_" + i, ts);
             TextButton tb = new TextButton(tabNames[i], skin, "tray_tab_" + i);
             tb.addListener(new ChangeListener() {
@@ -345,7 +345,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
             Table card = new Table();
             card.setBackground(new TextureRegionDrawable(
-                new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"))));
+                new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_depth_flat.png"))));
             card.pad(8f);
 
             Texture icon = itemIcons.get(id);
@@ -366,13 +366,13 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                     draggingLabel = label;
                     draggingCost  = cost;
                     card.setBackground(new TextureRegionDrawable(
-                        new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Green/Default/button_square_depth_flat.png"))));
+                        new TextureRegion(uiSkin.getTexture("assets/ui/Green/Default/button_square_depth_flat.png"))));
                     return true;
                 }
                 @Override
                 public void touchUp(InputEvent e, float x, float y, int ptr, int btn) {
                     card.setBackground(new TextureRegionDrawable(
-                        new TextureRegion(uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_square_depth_flat.png"))));
+                        new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_depth_flat.png"))));
                     if(draggingId != null) {
                         int targetSlot = hoverSlot >= 0 ? hoverSlot : activeSlot;
                         hotbarIds[targetSlot]    = id;

@@ -5,6 +5,9 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
+        resources {
+            srcDirs = ['../assets']
+        }
     }
 }
 
@@ -13,9 +16,14 @@ application {
 }
 
 run {
+    workingDir = rootProject.projectDir
     if (System.getProperty("os.name").toLowerCase().contains("mac")) {
         jvmArgs = ["-XstartOnFirstThread"]
     }
+}
+
+tasks.withType(Copy).configureEach {
+    duplicatesStrategy = 'exclude'
 }
 
 dependencies {

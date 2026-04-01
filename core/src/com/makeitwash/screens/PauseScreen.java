@@ -64,16 +64,16 @@ public class PauseScreen extends ScreenAdapter {
         
         TextButtonStyle greenButtonStyle = new TextButtonStyle();
         greenButtonStyle.font = font;
-        greenButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_depth_gloss.png");
-        greenButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_gloss.png");
-        greenButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Green/Default/button_rectangle_flat.png");
+        greenButtonStyle.up = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
+        greenButtonStyle.down = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_gloss.png");
+        greenButtonStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
         skin.add("green_button", greenButtonStyle);
 
         TextButtonStyle greyButtonStyle = new TextButtonStyle();
         greyButtonStyle.font = font;
-        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_depth_gloss.png");
-        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_gloss.png");
-        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/PNG/Grey/Default/button_rectangle_flat.png");
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
         skin.add("grey_button", greyButtonStyle);
 
         Table table = new Table();

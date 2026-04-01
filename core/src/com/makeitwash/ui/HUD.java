@@ -63,7 +63,7 @@ public class HUD {
         table.top().left();
         table.pad(16);
 
-        Texture bgTexture = uiSkin.getTexture("assets/ui/PNG/Blue/Default/button_rectangle_flat.png");
+        Texture bgTexture = uiSkin.getTexture("assets/ui/Blue/Default/button_rectangle_flat.png");
         if(bgTexture != null) {
             backgroundPanel = new Image(new TextureRegionDrawable(bgTexture));
             backgroundPanel.setSize(160f, 100f);

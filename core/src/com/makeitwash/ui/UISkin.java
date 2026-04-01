@@ -71,7 +71,7 @@ public class UISkin {
     private UISkin() {
         skin = new Skin();
 
-        String basePath = "assets/ui/PNG/";
+        String basePath = "assets/ui/";
 
         buttonSquareFlat = loadTexture(basePath + "Blue/Default/button_square_flat.png");
         buttonSquareGloss = loadTexture(basePath + "Blue/Default/button_square_gloss.png");
@@ -120,7 +120,7 @@ public class UISkin {
         try {
             String cwd = new java.io.File(".").getCanonicalPath();
             Gdx.app.log("UISkin", "CWD: " + cwd);
-            java.io.File testFile = new java.io.File("assets/ui/PNG/Blue/Default/button_square_flat.png");
+            java.io.File testFile = new java.io.File("assets/ui/Blue/Default/button_square_flat.png");
             Gdx.app.log("UISkin", "Test file exists: " + testFile.exists() + " at " + testFile.getAbsolutePath());
             return new Texture(Gdx.files.internal(path));
         } catch (Exception e) {
@@ -276,7 +276,7 @@ public class UISkin {
     }
 
     public TextButtonStyle createColoredButtonStyle(ColorScheme scheme, String baseStyle) {
-        String basePath = "assets/ui/PNG/" + scheme.folder + "/Default/";
+        String basePath = "assets/ui/" + scheme.folder + "/Default/";
         TextButtonStyle style = new TextButtonStyle();
         
         String upPath = basePath + baseStyle + ".png";
