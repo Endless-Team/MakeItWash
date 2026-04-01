@@ -64,10 +64,10 @@ public class MenuScreen extends ScreenAdapter {
 
         TextButtonStyle greyButtonStyle = new TextButtonStyle();
         greyButtonStyle.font = font;
-        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
-        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
-        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
-        skin.add("grey_button", greyButtonStyle);
+        greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
+        greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
+        greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
+        skin.add("red_button", greyButtonStyle);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -78,7 +78,7 @@ public class MenuScreen extends ScreenAdapter {
         titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
         TextButton playButton = new TextButton("Inizia Partita", skin, "green_button");
-        TextButton quitButton = new TextButton("Esci", skin, "grey_button");
+        TextButton quitButton = new TextButton("Esci", skin, "red_button");
 
         playButton.addListener(new ChangeListener() {
             @Override
