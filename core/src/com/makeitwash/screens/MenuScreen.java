@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -16,13 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.makeitwash.MainGame;
 import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
 import com.makeitwash.ui.UISkin;
+
+import java.lang.classfile.ClassFile;
 
 public class MenuScreen extends ScreenAdapter {
     private final MainGame game;
@@ -58,6 +56,7 @@ public class MenuScreen extends ScreenAdapter {
         // Start button
         TextButtonStyle greenButtonStyle = new TextButtonStyle();
         greenButtonStyle.font = font;
+        greenButtonStyle.fontColor = Color.BLACK;
         greenButtonStyle.up = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
         greenButtonStyle.down = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_gloss.png");
         greenButtonStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
@@ -66,6 +65,7 @@ public class MenuScreen extends ScreenAdapter {
         // Exit button
         TextButtonStyle redButtonStyle = new TextButtonStyle();
         redButtonStyle.font = font;
+        redButtonStyle.fontColor = Color.BLACK;
         redButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
         redButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
         redButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
@@ -74,6 +74,7 @@ public class MenuScreen extends ScreenAdapter {
         // Settings button
         TextButtonStyle greyButtonStyle = new TextButtonStyle();
         greyButtonStyle.font = font;
+        greyButtonStyle.fontColor = Color.BLACK;
         greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
         greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
         greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
@@ -90,7 +91,7 @@ public class MenuScreen extends ScreenAdapter {
 
         TextButton playButton = new TextButton("Inizia Partita", skin, "green_button");
         TextButton quitButton = new TextButton("Esci", skin, "red_button");
-        //TextButton
+        TextButton settingsButton = new TextButton("Impostazioni", skin, "grey_button");
 
         playButton.addListener(new ChangeListener() {
             @Override
@@ -106,9 +107,18 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                game.setScreen(new SettingsScreen(game, grid, economy));
+            }
+        });
+
         table.add(titleLabel).padBottom(50);
         table.row();
         table.add(playButton).width(250).height(60).padBottom(15);
+        table.row();
+        table.add(settingsButton).width(250).height(60).padBottom(15);
         table.row();
         table.add(quitButton).width(250).height(60);
 
