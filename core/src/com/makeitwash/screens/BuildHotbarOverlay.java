@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class BuildHotbarOverlay extends ScreenAdapter {
 
-    private final MainGame game;
     private final Grid grid;
     private final Economy economy;
 
@@ -34,9 +33,9 @@ public class BuildHotbarOverlay extends ScreenAdapter {
 
     // Hotbar state
     private static final int HOTBAR_SLOTS = 9;
-    private String[]  hotbarIds    = new String[HOTBAR_SLOTS];
-    private String[]  hotbarLabels = new String[HOTBAR_SLOTS];
-    private int[]     hotbarCosts  = new int[HOTBAR_SLOTS];
+    private final String[]  hotbarIds    = new String[HOTBAR_SLOTS];
+    private final String[]  hotbarLabels = new String[HOTBAR_SLOTS];
+    private final int[]     hotbarCosts  = new int[HOTBAR_SLOTS];
     private int activeSlot = 0;
 
     // tray
@@ -70,8 +69,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         {"drone",       "Drone",         300, "robots"},
     };
 
-    public BuildHotbarOverlay(MainGame game, Grid grid, Economy economy) {
-        this.game = game;
+    public BuildHotbarOverlay(Grid grid, Economy economy) {
         this.grid = grid;
         this.economy = economy;
     }

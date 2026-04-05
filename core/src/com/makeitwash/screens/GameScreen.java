@@ -63,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
         hud = new HUD();
 
-        buildHud = new BuildHotbarOverlay(game, grid, economy);
+        buildHud = new BuildHotbarOverlay(grid, economy);
         buildHud.show();
 
         InputMultiplexer mux = new InputMultiplexer();
