@@ -123,6 +123,14 @@ public class GameScreen extends ScreenAdapter {
                 }
             }
         }
+
+        batch.setColor(com.badlogic.gdx.graphics.Color.WHITE);
+
+        // Renderizza anteprima del modello trascinato sulla griglia
+        if (buildHud != null) {
+            buildHud.renderPreviewOnGrid(batch, camera);
+        }
+
         batch.end();
 
         hud.update(economy.getYen(), economy.getReputation(), day.getDayNumber(), day.getTimeRemaining());

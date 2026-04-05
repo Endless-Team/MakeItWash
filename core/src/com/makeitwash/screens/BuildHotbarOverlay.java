@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -53,12 +54,20 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private int    draggingCost  = 0;
     private int hoverSlot = -1;
     private float lastMouseY = 0;
+    private float lastMouseScreenX = 0;
+    private float lastMouseScreenY = 0;
     private Map<String, Texture> itemIcons = new HashMap<>();
+    private Map<String, Texture> previewModels = new HashMap<>();
 
     private Image[] slotBackgrounds;
     private Label errorLabel;
     private String purchaseErrorMessage = null;
     private float purchaseErrorTimer = 0f;
+
+    // Placeholder textures per oggetti senza icone
+    private static Texture placeholderWashing;
+    private static Texture placeholderRobot;
+    private static boolean placeholdersInitialized = false;
 
     private static final Object[][] ALL_ITEMS = {
         {"lavatrice",   "Lavatrice",     100, "machines"},
@@ -132,6 +141,8 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             @Override
             public boolean mouseMoved(int sx, int sy) {
                 lastMouseY = sy;
+                lastMouseScreenX = sx;
+                lastMouseScreenY = sy;
                 return false;
             }
             @Override
@@ -183,6 +194,36 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         } catch(Exception e) {
             Gdx.app.log("BuildHotbar", "Error loading icons: " + e.getMessage());
         }
+        ensurePlaceholdersLoaded();
+    }
+
+    private static void ensurePlaceholdersLoaded() {
+        if (placeholdersInitialized) return;
+        placeholdersInitialized = true;
+
+        // Placeholder per lavatrice/asciugatrice - blu scuro
+        Pixmap washPixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
+        washPixmap.setColor(0.3f, 0.4f, 0.6f, 1f);
+        washPixmap.fill();
+        washPixmap.setColor(0.5f, 0.7f, 1f, 1f);
+        washPixmap.drawRectangle(8, 8, 48, 48);
+        placeholderWashing = new Texture(washPixmap);
+        washPixmap.dispose();
+
+        // Placeholder per robot/drone - arancione
+        Pixmap robotPixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
+        robotPixmap.setColor(0.6f, 0.4f, 0.2f, 1f);
+        robotPixmap.fill();
+        robotPixmap.setColor(1f, 0.7f, 0.3f, 1f);
+        robotPixmap.drawRectangle(8, 8, 48, 48);
+        placeholderRobot = new Texture(robotPixmap);
+        robotPixmap.dispose();
+    }
+
+    public static void disposePlaceholders() {
+        if (placeholderWashing != null) { placeholderWashing.dispose(); placeholderWashing = null; }
+        if (placeholderRobot != null) { placeholderRobot.dispose(); placeholderRobot = null; }
+        placeholdersInitialized = false;
     }
 
     private void buildHotbar() {
@@ -362,6 +403,10 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             if(icon != null) {
                 Image iconImg = new Image(icon);
                 card.add(iconImg).size(40f, 40f).center().row();
+            } else {
+                // Placeholder se l'icona non è disponibile
+                Image placeholder = new Image(makeColorDrawable(new Color(0.4f, 0.4f, 0.5f, 0.8f)));
+                card.add(placeholder).size(40f, 40f).center().row();
             }
             Label nameLabel = new Label(label, skin);
             card.add(nameLabel).center().row();
@@ -536,6 +581,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         if(font  != null) font.dispose();
         if(smallFont != null) smallFont.dispose();
         for(Texture t : itemIcons.values()) { if(t != null) t.dispose(); }
+        disposePlaceholders();
         if(slotBackgrounds != null) {
             for(Image img : slotBackgrounds) {
                 if(img != null && img.getDrawable() instanceof TextureRegionDrawable) {
@@ -545,6 +591,53 @@ public class BuildHotbarOverlay extends ScreenAdapter {
                     }
                 }
             }
+        }
+    }
+
+    private Texture getPlaceholderForItem(String itemId) {
+        return switch (itemId) {
+            case "lavatrice", "asciugatrice" -> placeholderWashing;
+            case "robot", "drone" -> placeholderRobot;
+            case "nastro", "nastro_curve" -> itemIcons.get("nastro"); // Usa sempre il nastro dritto per la preview
+            default -> null;
+        };
+    }
+
+    public void renderPreviewOnGrid(SpriteBatch batch, com.badlogic.gdx.graphics.OrthographicCamera camera) {
+        if (draggingId == null || batch == null || camera == null) return;
+
+        // Usa la posizione del mouse
+        float mouseScreenX = Gdx.input.getX();
+        float mouseScreenY = Gdx.input.getY();
+
+        // Converti le coordinate dello schermo a coordinate di mondo usando la camera
+        Vector3 screenCoords = new Vector3(mouseScreenX, mouseScreenY, 0);
+        camera.unproject(screenCoords);
+
+        int gridX = grid.toGridX(screenCoords.x);
+        int gridY = grid.toGridY(screenCoords.y);
+
+        if (!grid.isValid(gridX, gridY)) {
+            return;
+        }
+
+        float pixelX = grid.toPixelX(gridX);
+        float pixelY = grid.toPixelY(gridY);
+
+        // Prova prima l'icona dalla hotbar, poi il placeholder
+        Texture previewTexture = itemIcons.get(draggingId);
+        if (previewTexture == null) {
+            previewTexture = getPlaceholderForItem(draggingId);
+        }
+
+        if (previewTexture != null) {
+            // Determina il colore in base alla disponibilità della cella
+            Color previewColor = grid.isEmpty(gridX, gridY) ? new Color(0.2f, 1f, 0.2f, 0.5f) : new Color(1f, 0.2f, 0.2f, 0.5f);
+
+            Color originalColor = batch.getColor().cpy();
+            batch.setColor(previewColor);
+            batch.draw(previewTexture, pixelX, pixelY, Grid.CELL_SIZE, Grid.CELL_SIZE);
+            batch.setColor(originalColor);
         }
     }
 }
