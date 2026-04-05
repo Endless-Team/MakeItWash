@@ -110,7 +110,7 @@ public class MenuScreen extends ScreenAdapter {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new SettingsScreen(game, grid, economy));
+                game.setScreen(new SettingsScreen(game));
             }
         });
 

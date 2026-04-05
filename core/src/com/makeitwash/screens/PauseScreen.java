@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -64,6 +65,7 @@ public class PauseScreen extends ScreenAdapter {
         
         TextButtonStyle greenButtonStyle = new TextButtonStyle();
         greenButtonStyle.font = font;
+        greenButtonStyle.fontColor = Color.BLACK;
         greenButtonStyle.up = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
         greenButtonStyle.down = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_gloss.png");
         greenButtonStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
@@ -71,10 +73,19 @@ public class PauseScreen extends ScreenAdapter {
 
         TextButtonStyle greyButtonStyle = new TextButtonStyle();
         greyButtonStyle.font = font;
+        greyButtonStyle.fontColor = Color.BLACK;
         greyButtonStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
         greyButtonStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
         greyButtonStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
         skin.add("grey_button", greyButtonStyle);
+
+        TextButtonStyle redButtonStyle = new TextButtonStyle();
+        redButtonStyle.font = font;
+        redButtonStyle.fontColor = Color.BLACK;
+        redButtonStyle.up = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_depth_gloss.png");
+        redButtonStyle.down = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_gloss.png");
+        redButtonStyle.over = uiSkin.getDrawable("assets/ui/Red/Default/button_rectangle_flat.png");
+        skin.add("red_button", redButtonStyle);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -85,12 +96,21 @@ public class PauseScreen extends ScreenAdapter {
         titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 
         TextButton resumeBtn = new TextButton("Riprendi", skin, "green_button");
-        TextButton mainMenuBtn = new TextButton("Menu Principale", skin, "grey_button");
+        TextButton settingsBtn = new TextButton("Impostazioni", skin, "grey_button");
+        TextButton mainMenuBtn = new TextButton("Menu Principale", skin, "red_button");
 
         resumeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
                 game.setScreen(new GameScreen(game, grid, day, economy));
+            }
+        });
+
+        settingsBtn.addListener(new ChangeListener(){
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SettingsScreen(game));
             }
         });
 
@@ -104,6 +124,8 @@ public class PauseScreen extends ScreenAdapter {
         table.add(titleLabel).padBottom(30);
         table.row();
         table.add(resumeBtn).width(250).height(60).padBottom(15);
+        table.row();
+        table.add(settingsBtn).width(250).height(60).padBottom(15);
         table.row();
         table.add(mainMenuBtn).width(250).height(60);
 

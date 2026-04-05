@@ -31,8 +31,6 @@ import com.makeitwash.world.GameSettings;
 
 public class SettingsScreen extends ScreenAdapter {
     private final MainGame game;
-    private final Grid grid;
-    private final Economy economy;
 
     private Stage stage;
     private BitmapFont font;
@@ -49,10 +47,8 @@ public class SettingsScreen extends ScreenAdapter {
     private boolean showHints = true;
     private boolean lowPowerMode = false;
 
-    public SettingsScreen(MainGame game, Grid grid, Economy economy){
+    public SettingsScreen(MainGame game){
         this.game = game;
-        this.grid = grid;
-        this.economy = economy;
     }
 
     @Override
@@ -72,29 +68,29 @@ public class SettingsScreen extends ScreenAdapter {
 
         // LabelStyle di default con font → risolve "Missing LabelStyle font"
         LabelStyle defaultLabel = new LabelStyle();
-        defaultLabel.font      = font;
+        defaultLabel.font = font;
         defaultLabel.fontColor = Color.WHITE;
         skin.add("default", defaultLabel);
 
         // Header label (colore diverso)
         LabelStyle headerLabel = new LabelStyle();
-        headerLabel.font      = font;
+        headerLabel.font = font;
         headerLabel.fontColor = new Color(0.35f, 0.90f, 0.80f, 1f);
         skin.add("header", headerLabel);
 
         // TextButtons
         TextButtonStyle greenStyle = new TextButtonStyle();
-        greenStyle.font      = font;
+        greenStyle.font = font;
         greenStyle.fontColor = Color.BLACK;
-        greenStyle.up   = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
+        greenStyle.up = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_depth_gloss.png");
         greenStyle.down = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_gloss.png");
         greenStyle.over = uiSkin.getDrawable("assets/ui/Green/Default/button_rectangle_flat.png");
         skin.add("green_button", greenStyle);
 
         TextButtonStyle greyStyle = new TextButtonStyle();
-        greyStyle.font      = font;
+        greyStyle.font = font;
         greyStyle.fontColor = Color.BLACK;
-        greyStyle.up   = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
+        greyStyle.up = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_depth_gloss.png");
         greyStyle.down = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_gloss.png");
         greyStyle.over = uiSkin.getDrawable("assets/ui/Grey/Default/button_rectangle_flat.png");
         skin.add("grey_button", greyStyle);
