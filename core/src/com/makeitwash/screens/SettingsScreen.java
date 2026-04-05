@@ -47,6 +47,8 @@ public class SettingsScreen extends ScreenAdapter {
     private boolean showHints = true;
     private boolean lowPowerMode = false;
 
+    private CheckBox fullscreenBox;
+
     public SettingsScreen(MainGame game){
         this.game = game;
     }
@@ -54,6 +56,18 @@ public class SettingsScreen extends ScreenAdapter {
     @Override
     public void show() {
         uiSkin = UISkin.get();
+
+        // Carica le impostazioni attuali da GameSettings
+        GameSettings s = GameSettings.get();
+        masterVolume = s.getMasterVolume();
+        musicVolume = s.getMusicVolume();
+        sfxVolume = s.getSfxVolume();
+        uiScale = s.getUiScale();
+        fullscreen = s.isFullscreen();
+        showGrid = s.isShowGrid();
+        pauseOnFocusLost = s.isPauseOnFocusLost();
+        showHints = s.isShowHints();
+        lowPowerMode = s.isLowPowerMode();
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
             Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
@@ -157,7 +171,7 @@ public class SettingsScreen extends ScreenAdapter {
         Label uiScaleValue = new Label(String.format("%.2fx", uiScale), skin);
         uiScaleSlider.addListener(e -> { uiScale = uiScaleSlider.getValue(); uiScaleValue.setText(String.format("%.2fx", uiScale)); return false; });
 
-        CheckBox fullscreenBox = new CheckBox("  Schermo intero", skin);
+        fullscreenBox = new CheckBox("  Schermo intero", skin);
         fullscreenBox.setChecked(fullscreen);
         fullscreenBox.addListener(e -> { fullscreen = fullscreenBox.isChecked(); return false; });
 
@@ -303,6 +317,7 @@ public class SettingsScreen extends ScreenAdapter {
             game.setScreen(new MenuScreen(game));
             return;
         }
+
         Gdx.gl.glClearColor(0.08f, 0.10f, 0.13f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
@@ -313,5 +328,12 @@ public class SettingsScreen extends ScreenAdapter {
     public void dispose() {
         if (stage != null) stage.dispose();
         if (font  != null) font.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (stage != null) {
+            stage.getViewport().update(width, height, true);
+        }
     }
 }

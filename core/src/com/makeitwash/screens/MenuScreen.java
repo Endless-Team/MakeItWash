@@ -43,6 +43,7 @@ public class MenuScreen extends ScreenAdapter {
         uiSkin = UISkin.get();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/Roboto-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
         font = generator.generateFont(parameter);
         stage = new Stage();
         
@@ -85,7 +86,7 @@ public class MenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.center();
 
-        Label titleLabel = new Label("MakeItWash", skin);
+        Label titleLabel = new Label("Make It Wash", skin);
         titleLabel.setStyle(labelStyle);
         titleLabel.setColor(new Color(0.35f, 0.90f, 0.80f, 1f));
 

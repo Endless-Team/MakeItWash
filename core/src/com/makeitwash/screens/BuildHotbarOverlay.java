@@ -188,7 +188,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     }
 
     private void buildHotbar() {
-        float sw = Gdx.graphics.getWidth();
+        float sw = stage.getViewport().getScreenWidth();
         hotbar = new Table();
         hotbar.setBackground(makeColorDrawable(new Color(0.11f, 0.12f, 0.18f, 0.95f)));
         float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
@@ -298,7 +298,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     }
 
     private void buildTray() {
-        float sw     = Gdx.graphics.getWidth();
+        float sw     = stage.getViewport().getScreenWidth();
         float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
         float trayX  = (sw - totalW) / 2f;
 
@@ -403,7 +403,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     }
 
     private int calculateSlotFromX(float screenX) {
-        float sw     = Gdx.graphics.getWidth();
+        float sw     = stage.getViewport().getScreenWidth();
         float totalW = HOTBAR_SLOTS * SLOT_W + 50f;
         float hotbarX = (sw - totalW) / 2f + 50f; // offset del bottone espandi (44 + 6 pad)
         if(screenX >= hotbarX && screenX < hotbarX + HOTBAR_SLOTS * SLOT_W) {

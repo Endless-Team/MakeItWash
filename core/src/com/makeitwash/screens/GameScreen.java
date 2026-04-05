@@ -29,6 +29,9 @@ public class GameScreen extends ScreenAdapter {
     private HUD hud;
     private BuildHotbarOverlay buildHud;
 
+    private static final float VIRTUAL_WIDTH  = Grid.WIDTH  * Grid.CELL_SIZE;  // 1280
+    private static final float VIRTUAL_HEIGHT = Grid.HEIGHT * Grid.CELL_SIZE;  // 768
+
     public GameScreen(MainGame game, Grid grid, Day day, Economy economy) {
         this.game = game;
         this.grid = grid;
@@ -46,11 +49,8 @@ public class GameScreen extends ScreenAdapter {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
-        viewport = new FitViewport(1280, 720, camera);
-        viewport.apply();
-
-        camera.setToOrtho(false, 1280, 720);
+        viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+        viewport.apply(true); // centra la camera subito
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.3f, 0.3f, 0.3f, 1f);
@@ -133,10 +133,9 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, 1280, 720);
+        viewport.update(width, height, true); // true = centra la camera nel viewport
+        camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         hud.resize(width, height);
-        viewport.update(width, height, true);
-        camera.setToOrtho(false, 1280, 720);
         if (buildHud != null) buildHud.resize(width, height);
     }
 
