@@ -3,7 +3,7 @@ package com.makeitwash.world;
 public class Economy {
     private float yen;
     private float reputation;
-    private static final float STARTING_YEN = 500f;
+    private static final float STARTING_YEN = 5000f;
     private static final float STARTING_REPUTATION = 50f;
 
     public Economy() {

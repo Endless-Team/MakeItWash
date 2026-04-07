@@ -1,97 +1,46 @@
-PS C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
+S C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
 
-> Task :desktop:run FAILED
-WARNING: A restricted method in java.lang.System has been called
-WARNING: java.lang.System::load has been called by com.badlogic.gdx.utils.SharedLibraryLoader in an unnamed module (file:/C:/Users/VGit/scoop/persist/gradle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-jnigen-loader/2.3.1/2d472f69243631fbcb3d4c3f93dd2e137a6cb084/gdx-jnigen-loader-2.3.1.jar)
-WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
-WARNING: Restricted methods will be blocked in a future release unless native access is enabled
-
-WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
-WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryUtil (file:/C:/Users/VGit/scoop/persist/gradle/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar)
-WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryUtil
-WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
-[LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_square_flat.png - Couldn't load file: assets/ui/Blue/Default/button_square_flat.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_square_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_square_gloss.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_square_depth_flat.png - Couldn't load file: assets/ui/Blue/Default/button_square_depth_flat.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_square_depth_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_square_depth_gloss.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_round_flat.png - Couldn't load file: assets/ui/Blue/Default/button_round_flat.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_round_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_round_gloss.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_flat.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_flat.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_gloss.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_depth_flat.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_depth_flat.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_depth_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_depth_gloss.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/slide_horizontal_grey.png - Couldn't load file: assets/ui/Blue/Default/slide_horizontal_grey.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/slide_horizontal_color.png - Couldn't load file: assets/ui/Blue/Default/slide_horizontal_color.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/slide_vertical_grey.png - Couldn't load file: assets/ui/Blue/Default/slide_vertical_grey.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/slide_vertical_color.png - Couldn't load file: assets/ui/Blue/Default/slide_vertical_color.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/check_square_grey.png - Couldn't load file: assets/ui/Blue/Default/check_square_grey.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/check_square_color.png - Couldn't load file: assets/ui/Blue/Default/check_square_color.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/check_round_grey.png - Couldn't load file: assets/ui/Blue/Default/check_round_grey.png
-[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
-[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
-[UISkin] Failed to load: assets/ui/Blue/Default/check_round_color.png - Couldn't load file: assets/ui/Blue/Default/check_round_color.png
-Exception in thread "main" java.lang.IllegalArgumentException: texture cannot be null.
-        at com.badlogic.gdx.graphics.g2d.TextureRegion.<init>(TextureRegion.java:37)
-        at com.makeitwash.ui.UISkin.createTextButtonStyles(UISkin.java:101)
-        at com.makeitwash.ui.UISkin.<init>(UISkin.java:80)
-        at com.makeitwash.ui.UISkin.get(UISkin.java:204)
-        at com.makeitwash.screens.MenuScreen.show(MenuScreen.java:41)
-        at com.badlogic.gdx.Game.setScreen(Game.java:63)
-        at com.makeitwash.MainGame.create(MainGame.java:9)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:366)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:193)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:167)
-        at com.makeitwash.DesktopLauncher.main(DesktopLauncher.java:13)
+> Task :core:compileJava FAILED
+C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\world\Grid.java:73: error: method updateConnections in class ConveyorBelt cannot be applied to given types;
+            cb.updateConnections(this, fromDirection);
+              ^
+  required: Grid
+  found:    Grid,Direction
+  reason: actual and formal argument lists differ in length
+C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\screens\BuildHotbarOverlay.java:478: error: no suitable constructor found for ConveyorBelt(boolean)
+            case "nastro", "nastro_curve" -> new ConveyorBelt(id.equals("nastro_curve"));
+                                             ^
+    constructor ConveyorBelt.ConveyorBelt() is not applicable
+      (actual and formal argument lists differ in length)
+    constructor ConveyorBelt.ConveyorBelt(int,int) is not applicable
+      (actual and formal argument lists differ in length)
+2 errors
 
 [Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Execution failed for task ':desktop:run'.
-> Process 'command 'C:\Users\VGit\scoop\apps\temurin-lts-jdk\25.0.2-10.0.LTS\bin\java.exe'' finished with non-zero exit value 1
+Execution failed for task ':core:compileJava'.
+> Compilation failed; see the compiler output below.
+  C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\world\Grid.java:73: error: method updateConnections in class ConveyorBelt cannot be applied to given types;
+              cb.updateConnections(this, fromDirection);
+                ^
+    required: Grid
+    found:    Grid,Direction
+    reason: actual and formal argument lists differ in length
+  C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\screens\BuildHotbarOverlay.java:478: error: no suitable constructor found for ConveyorBelt(boolean)
+              case "nastro", "nastro_curve" -> new ConveyorBelt(id.equals("nastro_curve"));
+                                               ^
+      constructor ConveyorBelt.ConveyorBelt() is not applicable
+        (actual and formal argument lists differ in length)
+      constructor ConveyorBelt.ConveyorBelt(int,int) is not applicable
+        (actual and formal argument lists differ in length)
+  2 errors
 
 * Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
+> Check your code and dependencies to fix the compilation error(s)
 > Run with --scan to generate a Build Scan (Powered by Develocity).
-> Get more help at https://help.gradle.org.
 
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
 
@@ -99,5 +48,5 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 2s
-6 actionable tasks: 5 executed, 1 up-to-date
+BUILD FAILED in 753ms
+1 actionable task: 1 executed
