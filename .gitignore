@@ -1,7 +1,12 @@
 .opencode/
 .gradle/
 build/
+*/build/
+*/*/build/
 out/
+bin/
+*/bin/
+*/*/bin/
 *.class
 .DS_Store
 .idea/

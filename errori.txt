@@ -1,12 +1,49 @@
-$ cd C:\Users\VGit\Documents\GitHub\MakeItWash; .\gradlew.bat compileJava 2>&1 | Select-Object -First 15
-Starting a Gradle Daemon, 1 busy and 2 incompatible and 1 stopped Daemons could not be reused, use --status for details
-> Task :compileJava NO-SOURCE
-> Task :core:compileJava
-> Task :core:processResources UP-TO-DATE
-> Task :core:classes
-> Task :core:jar
-> Task :desktop:compileJava
+PS C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
+
+> Task :desktop:run FAILED
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.badlogic.gdx.utils.SharedLibraryLoader in an unnamed module (file:/C:/Users/VGit/scoop/persist/gradle/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-jnigen-loader/2.3.1/2d472f69243631fbcb3d4c3f93dd2e137a6cb084/gdx-jnigen-loader-2.3.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.MemoryUtil (file:/C:/Users/VGit/scoop/persist/gradle/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar)
+WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryUtil
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
+Exception in thread "main" com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: core/assets/icon/icon.png
+        at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:190)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.setIcon(Lwjgl3Window.java:285)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createGlfwWindow(Lwjgl3Application.java:558)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createWindow(Lwjgl3Application.java:463)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createWindow(Lwjgl3Application.java:449)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:163)
+        at com.makeitwash.DesktopLauncher.main(DesktopLauncher.java:13)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: core\assets\icon\icon.png (Internal)
+        at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:142)
+        at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:228)
+        at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:187)
+        ... 6 more
+
 [Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':desktop:run'.
+> Process 'command 'C:\Users\VGit\scoop\apps\temurin-lts-jdk\25.0.2-10.0.LTS\bin\java.exe'' finished with non-zero exit value -1073740791
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
 Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
 You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 2s
+6 actionable tasks: 1 executed, 5 up-to-date
