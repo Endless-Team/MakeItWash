@@ -364,7 +364,14 @@ public class ConveyorBelt extends PlaceableEntity {
     public void applyFlow(Direction from) {
         this.inputDirection = from;
         if (isCurveConnection()) {
-            Direction phys = from.opposite();
+            // Esclude il lato di INGRESSO (= from) dalla ricerca del lato di uscita.
+            // VECCHIO ERRORE: phys = from.opposite() escludeva il lato OPPOSTO all'ingresso
+            // invece del lato d'ingresso stesso. Per alcune curve questo causava
+            // outputDirection = lato d'ingresso (loop su se stesso).
+            // Esempio: curve connectedSouth+connectedWest, applyFlow(SOUTH):
+            //   OLD phys=NORTH  → trova SOUTH (l'entry!) → outputDir=SOUTH ✗
+            //   NEW phys=SOUTH  → salta SOUTH, trova WEST → outputDir=WEST ✓
+            Direction phys = from;  // ← era from.opposite(), SBAGLIATO
             for (Direction d : Direction.values())
                 if (isConnectedIn(d) && d != phys) { outputDirection = d; return; }
         } else {
@@ -437,13 +444,16 @@ public class ConveyorBelt extends PlaceableEntity {
             // applyFlow(EAST) per "viene da ovest"), basta invertire in/out qui sotto.
             Direction in  = inputDirection;  // ← NIENTE .opposite()
             Direction out = outputDirection;
-            if (in == Direction.WEST  && out == Direction.NORTH) return   0f;
-            if (in == Direction.SOUTH && out == Direction.WEST)  return  90f;
-            if (in == Direction.EAST  && out == Direction.SOUTH) return 180f;
-            if (in == Direction.NORTH && out == Direction.EAST)  return 270f;
-            // Fallback: non usare le connessioni fisiche (ambigue: SOUTH+EAST
-            // potrebbe essere SOUTH→EAST 90° oppure EAST→SOUTH 180°).
-            // Restituisce 0° in attesa che propagateFlow() imposti il flusso.
+            // Ogni forma fisica ha 2 direzioni di flusso possibili (forward/reverse).
+            // Tutte e 8 le combinazioni devono essere coperte.
+            if ((in == Direction.WEST  && out == Direction.NORTH) ||
+                (in == Direction.NORTH && out == Direction.WEST))  return   0f;
+            if ((in == Direction.SOUTH && out == Direction.WEST)  ||
+                (in == Direction.WEST  && out == Direction.SOUTH)) return  90f;
+            if ((in == Direction.EAST  && out == Direction.SOUTH) ||
+                (in == Direction.SOUTH && out == Direction.EAST))  return 180f;
+            if ((in == Direction.NORTH && out == Direction.EAST)  ||
+                (in == Direction.EAST  && out == Direction.NORTH)) return 270f;
             return 0f;
         }
         switch (outputDirection) {
