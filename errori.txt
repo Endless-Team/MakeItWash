@@ -1,52 +1,413 @@
-S C:\Users\VGit\Documents\GitHub\MakeItWash> .\gradlew.bat desktop:run
-
-> Task :core:compileJava FAILED
-C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\world\Grid.java:73: error: method updateConnections in class ConveyorBelt cannot be applied to given types;
-            cb.updateConnections(this, fromDirection);
-              ^
-  required: Grid
-  found:    Grid,Direction
-  reason: actual and formal argument lists differ in length
-C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\screens\BuildHotbarOverlay.java:478: error: no suitable constructor found for ConveyorBelt(boolean)
-            case "nastro", "nastro_curve" -> new ConveyorBelt(id.equals("nastro_curve"));
-                                             ^
-    constructor ConveyorBelt.ConveyorBelt() is not applicable
-      (actual and formal argument lists differ in length)
-    constructor ConveyorBelt.ConveyorBelt(int,int) is not applicable
-      (actual and formal argument lists differ in length)
-2 errors
-
-[Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
-
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Execution failed for task ':core:compileJava'.
-> Compilation failed; see the compiler output below.
-  C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\world\Grid.java:73: error: method updateConnections in class ConveyorBelt cannot be applied to given types;
-              cb.updateConnections(this, fromDirection);
-                ^
-    required: Grid
-    found:    Grid,Direction
-    reason: actual and formal argument lists differ in length
-  C:\Users\VGit\Documents\GitHub\MakeItWash\core\src\com\makeitwash\screens\BuildHotbarOverlay.java:478: error: no suitable constructor found for ConveyorBelt(boolean)
-              case "nastro", "nastro_curve" -> new ConveyorBelt(id.equals("nastro_curve"));
-                                               ^
-      constructor ConveyorBelt.ConveyorBelt() is not applicable
-        (actual and formal argument lists differ in length)
-      constructor ConveyorBelt.ConveyorBelt(int,int) is not applicable
-        (actual and formal argument lists differ in length)
-  2 errors
-
-* Try:
-> Check your code and dependencies to fix the compilation error(s)
-> Run with --scan to generate a Build Scan (Powered by Develocity).
-
-Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
-
-You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-
-For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
-
-BUILD FAILED in 753ms
-1 actionable task: 1 executed
+[{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toGridX(float) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 462,
+	"startColumn": 23,
+	"endLineNumber": 462,
+	"endColumn": 30,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toGridY(float) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 463,
+	"startColumn": 23,
+	"endLineNumber": 463,
+	"endColumn": 30,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method isValid(int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 465,
+	"startColumn": 18,
+	"endLineNumber": 465,
+	"endColumn": 25,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method isEmpty(int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 465,
+	"startColumn": 43,
+	"endLineNumber": 465,
+	"endColumn": 50,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "134217858",
+	"severity": 8,
+	"message": "The constructor ConveyorBelt(boolean) is undefined",
+	"source": "Java",
+	"startLineNumber": 478,
+	"startColumn": 46,
+	"endLineNumber": 478,
+	"endColumn": 89,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method place(PlaceableEntity, int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 484,
+	"startColumn": 18,
+	"endLineNumber": 484,
+	"endColumn": 23,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toGridX(float) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 607,
+	"startColumn": 26,
+	"endLineNumber": 607,
+	"endColumn": 33,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toGridY(float) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 608,
+	"startColumn": 26,
+	"endLineNumber": 608,
+	"endColumn": 33,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method isValid(int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 610,
+	"startColumn": 19,
+	"endLineNumber": 610,
+	"endColumn": 26,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toPixelX(int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 614,
+	"startColumn": 29,
+	"endLineNumber": 614,
+	"endColumn": 37,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method toPixelY(int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 615,
+	"startColumn": 29,
+	"endLineNumber": 615,
+	"endColumn": 37,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method isEmpty(int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 625,
+	"startColumn": 39,
+	"endLineNumber": 625,
+	"endColumn": 46,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 629,
+	"startColumn": 61,
+	"endLineNumber": 629,
+	"endColumn": 70,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/BuildHotbarOverlay.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 629,
+	"startColumn": 77,
+	"endLineNumber": 629,
+	"endColumn": 86,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "WIDTH cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 32,
+	"startColumn": 54,
+	"endLineNumber": 32,
+	"endColumn": 59,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 32,
+	"startColumn": 68,
+	"endLineNumber": 32,
+	"endColumn": 77,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "HEIGHT cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 33,
+	"startColumn": 54,
+	"endLineNumber": 33,
+	"endColumn": 60,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 33,
+	"startColumn": 68,
+	"endLineNumber": 33,
+	"endColumn": 77,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "WIDTH cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 111,
+	"startColumn": 35,
+	"endLineNumber": 111,
+	"endColumn": 40,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 112,
+	"startColumn": 50,
+	"endLineNumber": 112,
+	"endColumn": 59,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "HEIGHT cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 112,
+	"startColumn": 72,
+	"endLineNumber": 112,
+	"endColumn": 78,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 112,
+	"startColumn": 86,
+	"endLineNumber": 112,
+	"endColumn": 95,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "HEIGHT cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 114,
+	"startColumn": 35,
+	"endLineNumber": 114,
+	"endColumn": 41,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 115,
+	"startColumn": 53,
+	"endLineNumber": 115,
+	"endColumn": 62,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "WIDTH cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 115,
+	"startColumn": 69,
+	"endLineNumber": 115,
+	"endColumn": 74,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "CELL_SIZE cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 115,
+	"startColumn": 82,
+	"endLineNumber": 115,
+	"endColumn": 91,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "WIDTH cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 118,
+	"startColumn": 34,
+	"endLineNumber": 118,
+	"endColumn": 39,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554502",
+	"severity": 8,
+	"message": "HEIGHT cannot be resolved or is not a field",
+	"source": "Java",
+	"startLineNumber": 119,
+	"startColumn": 38,
+	"endLineNumber": 119,
+	"endColumn": 44,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method get(int, int) is undefined for the type Grid",
+	"source": "Java",
+	"startLineNumber": 120,
+	"startColumn": 35,
+	"endLineNumber": 120,
+	"endColumn": 38,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/GameScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "67108964",
+	"severity": 8,
+	"message": "The method render(SpriteBatch) is undefined for the type Object",
+	"source": "Java",
+	"startLineNumber": 122,
+	"startColumn": 28,
+	"endLineNumber": 122,
+	"endColumn": 34,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/screens/MenuScreen.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "134217858",
+	"severity": 8,
+	"message": "The constructor Grid() is undefined",
+	"source": "Java",
+	"startLineNumber": 34,
+	"startColumn": 21,
+	"endLineNumber": 34,
+	"endColumn": 31,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/world/Grid.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554503",
+	"severity": 8,
+	"message": "The field ConveyorBelt.TILE is not visible",
+	"source": "Java",
+	"startLineNumber": 87,
+	"startColumn": 47,
+	"endLineNumber": 87,
+	"endColumn": 51,
+	"modelVersionId": 2,
+	"origin": "extHost1"
+},{
+	"resource": "/C:/Users/VGit/Documents/GitHub/MakeItWash/core/src/com/makeitwash/world/Grid.java",
+	"owner": "_generated_diagnostic_collection_name_#6",
+	"code": "33554503",
+	"severity": 8,
+	"message": "The field ConveyorBelt.TILE is not visible",
+	"source": "Java",
+	"startLineNumber": 87,
+	"startColumn": 74,
+	"endLineNumber": 87,
+	"endColumn": 78,
+	"modelVersionId": 2,
+	"origin": "extHost1"
+}]

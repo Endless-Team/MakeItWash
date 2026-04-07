@@ -31,7 +31,7 @@ public class MenuScreen extends ScreenAdapter {
 
     public MenuScreen(MainGame game) {
         this.game = game;
-        this.grid = new Grid();
+        this.grid = new Grid(Grid.WIDTH, Grid.HEIGHT);
         this.economy = new Economy();
     }
 

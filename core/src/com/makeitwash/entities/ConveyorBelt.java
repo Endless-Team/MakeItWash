@@ -12,26 +12,31 @@ import com.makeitwash.world.Grid;
  *
  * ── SISTEMA DI COORDINATE ──────────────────────────────────────────────────
  * LibGDX world space: Y verso l'ALTO.
- * Pixmap: Y verso il BASSO (coordinate "screen").
- * SpriteBatch.draw() con rotation: angoli in gradi CCW in world space.
- * Il Pixmap viene flippato automaticamente su Y al momento del rendering.
- *
- * Trasformazione Pixmap → World:
- *   world_x = px
- *   world_y = TILE - 1 - py
- * Quindi un angolo in Pixmap-space a_p corrisponde a world angle a_w = -a_p.
+ * Pixmap: Y verso il BASSO.
+ * SpriteBatch.draw() con rotation: angoli CCW in world space.
+ * Il Pixmap viene flippato su Y al rendering => a_pixmap = -a_world.
  *
  * ── ATLAS CURVO ────────────────────────────────────────────────────────────
- * Centro arco in Pixmap: (0, 0) = angolo top-left
- *   0°  in Pixmap → punto (r, 0)  = bordo NORTH del tile (top Pixmap = top World)
- *   90° in Pixmap → punto (0, r)  = bordo WEST  del tile (left Pixmap = left World)
- * → Flusso atlas base: WEST ingresso, NORTH uscita
+ * Centro arco Pixmap: (0, 0) = angolo top-left
+ *   0°  → (r, 0)  = bordo NORTH (top Pixmap)   [uscita]
+ *   90° → (0, r)  = bordo WEST  (left Pixmap)   [ingresso]
+ * Flusso atlas base: WEST ingresso → NORTH uscita
  *
- * Rotazioni SpriteBatch (CCW in world):
+ * Rotazioni SpriteBatch CCW:
  *   0°   → WEST→NORTH
  *   90°  → SOUTH→WEST
  *   180° → EAST→SOUTH
  *   270° → NORTH→EAST
+ *
+ * ── ALLINEAMENTO VISIVO ────────────────────────────────────────────────────
+ * BELT_INNER = beltTop = 10   (stessa quota per curva e dritto)
+ * BELT_OUTER = beltBot = 54   (stessa quota per curva e dritto)
+ * Questo garantisce che la fascia del nastro sia continua ai giunti.
+ *
+ * ── SISTEMA FLUSSI ─────────────────────────────────────────────────────────
+ * Ogni nastro ha inputDirection e outputDirection espliciti.
+ * Al piazzamento, Grid.propagateFlow() fa BFS dalla sorgente per propagare
+ * il flusso a tutti i nastri connessi nella catena.
  */
 public class ConveyorBelt extends PlaceableEntity {
 
@@ -39,48 +44,75 @@ public class ConveyorBelt extends PlaceableEntity {
     // ANIMAZIONE GLOBALE SINCRONIZZATA
     // =========================================================================
     private static float globalProgress = 0f;
-    private static float globalSpeed    = 1.2f; // cicli/secondo
+    private static float globalSpeed    = 1.2f;
 
     public static void tickGlobal(float delta) {
         globalProgress = (globalProgress + delta * globalSpeed) % 1f;
     }
-    public static void setGlobalSpeed(float s)  { globalSpeed = s; }
-    public static float getGlobalProgress()     { return globalProgress; }
+    public static void setGlobalSpeed(float s) { globalSpeed = s; }
+    public static float getGlobalProgress()    { return globalProgress; }
 
     // =========================================================================
-    // Stato connessioni
+    // Direzioni
     // =========================================================================
-    private boolean   curved          = false;
-    private boolean   connectedNorth  = false;
-    private boolean   connectedSouth  = false;
-    private boolean   connectedEast   = false;
-    private boolean   connectedWest   = false;
+    public enum Direction { NORTH, SOUTH, EAST, WEST;
+
+        public Direction opposite() {
+            switch (this) {
+                case NORTH: return SOUTH;
+                case SOUTH: return NORTH;
+                case EAST:  return WEST;
+                case WEST:  return EAST;
+                default:    return EAST;
+            }
+        }
+
+        /** Offset griglia nella direzione data (LibGDX Y up). */
+        public int dx() {
+            switch (this) { case EAST: return 1; case WEST: return -1; default: return 0; }
+        }
+        public int dy() {
+            switch (this) { case NORTH: return 1; case SOUTH: return -1; default: return 0; }
+        }
+    }
+
+    // =========================================================================
+    // Stato flusso
+    // =========================================================================
+    /** Da dove arriva il nastro (direzione da cui entra il flusso). */
+    private Direction inputDirection  = Direction.WEST;
+    /** Dove va il flusso (direzione verso cui esce). */
     private Direction outputDirection = Direction.EAST;
 
-    public enum Direction { NORTH, SOUTH, EAST, WEST }
+    // Connessioni fisiche con i vicini
+    private boolean connectedNorth = false;
+    private boolean connectedSouth = false;
+    private boolean connectedEast  = false;
+    private boolean connectedWest  = false;
+    private boolean curved         = false;
 
     // =========================================================================
     // Costanti texture
     // =========================================================================
-    static final int TILE      = 64;
+    static final int TILE = 64;
     private static final int S_FRAMES = 8;
     private static final int C_FRAMES = 8;
 
-    // Fascia nastro (pixel del bordo al tile, inner/outer radius)
-    private static final int BELT_INNER = 16;
-    private static final int BELT_OUTER = 48;
-    private static final int BELT_MID   = (BELT_INNER + BELT_OUTER) / 2;
+    // Fascia nastro — STESSI valori per dritto e curvo per continuità visiva
+    private static final int BELT_INNER = 10;  // = beltTop nastro dritto
+    private static final int BELT_OUTER = 54;  // = beltBot nastro dritto
+    private static final int BELT_MID   = (BELT_INNER + BELT_OUTER) / 2; // 32
 
     // ── Palette ──────────────────────────────────────────────────────────────
-    private static final int COL_BASE   = rgba(0.20f, 0.22f, 0.27f, 1f); // sfondo tile
-    private static final int COL_BELT   = rgba(0.27f, 0.30f, 0.35f, 1f); // fascia nastro
-    private static final int COL_EDGE   = rgba(0.12f, 0.13f, 0.16f, 1f); // bordi nastro
-    private static final int COL_STRIPE = rgba(0.44f, 0.48f, 0.55f, 1f); // strisce animate
-    private static final int COL_ARROW  = rgba(0.70f, 0.76f, 0.85f, 1f); // freccia
-    private static final int COL_SHADOW = rgba(0.09f, 0.10f, 0.12f, 1f); // ombra bordo tile
+    private static final int COL_BASE   = rgba(0.20f, 0.22f, 0.27f, 1f);
+    private static final int COL_BELT   = rgba(0.27f, 0.30f, 0.35f, 1f);
+    private static final int COL_EDGE   = rgba(0.12f, 0.13f, 0.16f, 1f);
+    private static final int COL_STRIPE = rgba(0.44f, 0.48f, 0.55f, 1f);
+    private static final int COL_ARROW  = rgba(0.70f, 0.76f, 0.85f, 1f);
+    private static final int COL_SHADOW = rgba(0.09f, 0.10f, 0.12f, 1f);
 
     // =========================================================================
-    // Texture (statiche, condivise tra tutte le istanze)
+    // Texture statiche condivise
     // =========================================================================
     private static Texture       straightTex;
     private static Texture       curveTex;
@@ -90,7 +122,7 @@ public class ConveyorBelt extends PlaceableEntity {
 
     public static void ensureTexturesLoaded() {
         if (loaded) return;
-        loaded     = true;
+        loaded      = true;
         straightTex = buildStraightAtlas();
         curveTex    = buildCurveAtlas();
         straightReg = new TextureRegion(straightTex, 0, 0, TILE, TILE);
@@ -107,35 +139,26 @@ public class ConveyorBelt extends PlaceableEntity {
     // =========================================================================
     // ATLAS NASTRO DRITTO
     // =========================================================================
-    /**
-     * S_FRAMES tile affiancati orizzontalmente, orientati EAST (→).
-     * Le strisce diagonali si spostano di TILE/S_FRAMES pixel per frame.
-     */
     private static Texture buildStraightAtlas() {
         Pixmap p = new Pixmap(TILE * S_FRAMES, TILE, Format.RGBA8888);
         p.setBlending(Pixmap.Blending.None);
 
-        final int beltTop    = 10;
-        final int beltBot    = TILE - 10;
+        final int beltTop    = BELT_INNER;
+        final int beltBot    = BELT_OUTER;
         final int stripeStep = 10;
         final int stripeW    = 3;
 
         for (int f = 0; f < S_FRAMES; f++) {
             int ox = f * TILE;
 
-            // Sfondo + ombre bordi tile
             fillRect(p, ox, 0,        TILE, TILE, COL_BASE);
             fillRect(p, ox, 0,        TILE, 2,    COL_SHADOW);
             fillRect(p, ox, TILE - 2, TILE, 2,    COL_SHADOW);
 
-            // Fascia
             fillRect(p, ox, beltTop, TILE, beltBot - beltTop, COL_BELT);
-
-            // Bordi nastro
             fillRect(p, ox, beltTop,     TILE, 3, COL_EDGE);
             fillRect(p, ox, beltBot - 3, TILE, 3, COL_EDGE);
 
-            // Strisce diagonali animate
             int offset = (f * TILE) / S_FRAMES;
             for (int row = beltTop + 3; row < beltBot - 3; row++) {
                 int diagShift = offset + (row - beltTop) / 2;
@@ -148,7 +171,6 @@ public class ConveyorBelt extends PlaceableEntity {
                 }
             }
 
-            // Freccia →
             drawArrowH(p, ox + TILE / 2, TILE / 2, 12, COL_ARROW, beltTop + 4, beltBot - 4);
         }
 
@@ -162,52 +184,43 @@ public class ConveyorBelt extends PlaceableEntity {
     // ATLAS NASTRO CURVO
     // =========================================================================
     /**
-     * Geometria (coordinate Pixmap, Y verso il basso):
-     *   Centro arco: (0, 0) = angolo top-left del tile
-     *   Arco: 0° → 90°
-     *     0°  → (r, 0)  = bordo superiore (NORTH in world)   [uscita]
-     *     90° → (0, r)  = bordo sinistro  (WEST  in world)   [ingresso]
-     *
-     * Dopo il flip Y di LibGDX:
-     *   world NORTH = py=0      → uscita verso il nastro sopra  ✓
-     *   world WEST  = px=0      → ingresso dal nastro a sinistra ✓
-     *   Flusso: WEST → NORTH
+     * Centro Pixmap (0,0), arco 0°→90°.
+     * BELT_INNER/BELT_OUTER identici al nastro dritto per allineamento perfetto.
      */
     private static Texture buildCurveAtlas() {
         Pixmap p = new Pixmap(TILE * C_FRAMES, TILE, Format.RGBA8888);
         p.setBlending(Pixmap.Blending.None);
 
-        final double START_DEG  =  0.0;
-        final double END_DEG    = 90.0;
-        final double TOTAL_ARC  = END_DEG - START_DEG;
-        final int    N_STRIPES  = 6;
+        final double START_DEG = 0.0;
+        final double END_DEG   = 90.0;
+        final double TOTAL_ARC = END_DEG - START_DEG;
+        final int    N_STRIPES = 6;
 
         for (int f = 0; f < C_FRAMES; f++) {
             int ox = f * TILE;
 
-            // Sfondo + ombre
             fillRect(p, ox, 0, TILE, TILE, COL_BASE);
             fillRect(p, ox, 0, 2,    TILE, COL_SHADOW);
             fillRect(p, ox, 0, TILE, 2,    COL_SHADOW);
 
-            // ── Fascia dell'arco ─────────────────────────────────────────────
+            // Fascia arco
             for (double deg = START_DEG; deg <= END_DEG; deg += 0.25) {
                 double rad  = Math.toRadians(deg);
                 double cosA = Math.cos(rad);
                 double sinA = Math.sin(rad);
                 for (int r = BELT_INNER; r <= BELT_OUTER; r++) {
-                    int px = ox + (int)Math.round(r * cosA); // cx=0
-                    int py =      (int)Math.round(r * sinA); // cy=0
+                    int px = ox + (int) Math.round(r * cosA);
+                    int py =      (int) Math.round(r * sinA);
                     if (px >= ox && px < ox + TILE && py >= 0 && py < TILE)
                         p.drawPixel(px, py, COL_BELT);
                 }
             }
 
-            // ── Bordi inner / outer ──────────────────────────────────────────
+            // Bordi inner/outer
             drawArcLine(p, ox, 0, 0, BELT_INNER, 3, START_DEG, END_DEG, COL_EDGE);
             drawArcLine(p, ox, 0, 0, BELT_OUTER, 3, START_DEG, END_DEG, COL_EDGE);
 
-            // ── Strisce animate ──────────────────────────────────────────────
+            // Strisce animate
             double degPerStripe   = TOTAL_ARC / N_STRIPES;
             double frameOffsetDeg = ((double) f / C_FRAMES) * degPerStripe;
 
@@ -220,21 +233,19 @@ public class ConveyorBelt extends PlaceableEntity {
                 drawArcLine(p, ox, 0, 0, BELT_MID, 6, sd, ed, COL_STRIPE);
             }
 
-            // ── Freccia a metà arco (45°), tangente al moto ──────────────────
+            // Freccia a 45° (metà arco), tangente verso uscita NORTH
             double midRad = Math.toRadians(45.0);
             int arrowX = ox + (int)(BELT_MID * Math.cos(midRad));
             int arrowY =      (int)(BELT_MID * Math.sin(midRad));
-            // Tangente CCW nella direzione del flusso (da 90° verso 0°, cioè CW in Pixmap)
-            // Il flusso va da 90° a 0° (WEST→NORTH), quindi tangente a 45° punta verso ~-45°
-            double tanDeg = 45.0 - 90.0; // = -45°
+            double tanDeg = 45.0 - 90.0; // tangente CW verso uscita
             double tx = Math.cos(Math.toRadians(tanDeg));
             double ty = Math.sin(Math.toRadians(tanDeg));
             drawArrowPixmap(p, arrowX, arrowY, tx, ty, 7, COL_ARROW, ox, TILE);
 
-            // ── Continuità bordi per allineamento visivo ─────────────────────
-            // Bordo NORTH (py=0, top del Pixmap): striscia orizzontale
+            // Continuità bordi — stessa posizione della fascia del dritto
+            // NORTH (py=0): allinea con beltTop del nastro dritto sopra
             fillRect(p, ox + BELT_INNER, 0, BELT_OUTER - BELT_INNER, 2, COL_EDGE);
-            // Bordo WEST (px=ox, sinistra del tile): striscia verticale
+            // WEST (px=ox): allinea con beltTop del nastro dritto a sinistra
             fillRect(p, ox, BELT_INNER, 2, BELT_OUTER - BELT_INNER, COL_EDGE);
         }
 
@@ -245,101 +256,19 @@ public class ConveyorBelt extends PlaceableEntity {
     }
 
     // =========================================================================
-    // Helper: disegna una linea ad arco (anello)
-    // =========================================================================
-    private static void drawArcLine(Pixmap p, int ox,
-                                    double cx, double cy,
-                                    int radius, int thickness,
-                                    double startDeg, double endDeg,
-                                    int color) {
-        p.setColor(color);
-        int half = thickness / 2;
-        double step = Math.max(0.2, Math.toDegrees(0.5 / radius)); // passo adattivo
-        for (double deg = startDeg; deg <= endDeg; deg += step) {
-            double rad  = Math.toRadians(deg);
-            double cosA = Math.cos(rad);
-            double sinA = Math.sin(rad);
-            for (int t = -half; t <= half; t++) {
-                int px = ox + (int)Math.round(cx + (radius + t) * cosA);
-                int py =      (int)Math.round(cy + (radius + t) * sinA);
-                if (px >= ox && px < ox + TILE && py >= 0 && py < TILE)
-                    p.drawPixel(px, py);
-            }
-        }
-    }
-
-    // =========================================================================
-    // Helper: disegna freccia orizzontale (per nastro dritto)
-    // =========================================================================
-    private static void drawArrowH(Pixmap p, int cx, int cy, int len,
-                                   int color, int clipTop, int clipBot) {
-        // Corpo
-        for (int ax = cx - len; ax <= cx + len / 3; ax++)
-            for (int ay = cy - 1; ay <= cy + 1; ay++)
-                if (ay >= clipTop && ay < clipBot) p.drawPixel(ax, ay, color);
-        // Punta
-        for (int tip = 0; tip < 7; tip++) {
-            int tx = cx + len / 3 + tip;
-            for (int dy = -tip; dy <= tip; dy++) {
-                int ay = cy + dy;
-                if (ay >= clipTop && ay < clipBot) p.drawPixel(tx, ay, color);
-            }
-        }
-    }
-
-    // =========================================================================
-    // Helper: disegna freccia direzionale su Pixmap
-    // =========================================================================
-    private static void drawArrowPixmap(Pixmap p, int cx, int cy,
-                                        double tx, double ty, int len,
-                                        int color, int ox, int tileSize) {
-        // Corpo
-        for (int i = -len; i <= len; i++) {
-            int px = ox + cx + (int)(tx * i);
-            int py =      cy + (int)(ty * i);
-            if (px >= ox && px < ox + tileSize && py >= 0 && py < tileSize)
-                p.drawPixel(px, py, color);
-        }
-        // Punta (triangolino)
-        for (int tip = 1; tip <= 5; tip++) {
-            int bx = ox + cx + (int)(tx * len) + (int)(-ty * tip);
-            int by =      cy + (int)(ty * len) + (int)( tx * tip);
-            if (bx >= ox && bx < ox + tileSize && by >= 0 && by < tileSize)
-                p.drawPixel(bx, by, color);
-            bx = ox + cx + (int)(tx * len) + (int)(ty * tip);
-            by =      cy + (int)(ty * len) + (int)(-tx * tip);
-            if (bx >= ox && bx < ox + tileSize && by >= 0 && by < tileSize)
-                p.drawPixel(bx, by, color);
-        }
-    }
-
-    // =========================================================================
-    // Helper: colore RGBA packed
-    // =========================================================================
-    private static int rgba(float r, float g, float b, float a) {
-        return (((int)(r * 255) & 0xFF) << 24)
-             | (((int)(g * 255) & 0xFF) << 16)
-             | (((int)(b * 255) & 0xFF) <<  8)
-             |  ((int)(a * 255) & 0xFF);
-    }
-
-    private static void fillRect(Pixmap p, int x, int y, int w, int h, int color) {
-        p.setColor(color);
-        p.fillRectangle(x, y, w, h);
-    }
-
-    // =========================================================================
     // Costruttori
     // =========================================================================
     public ConveyorBelt() {
         super();
         ensureTexturesLoaded();
     }
+
     public ConveyorBelt(boolean curved) {
         super();
         ensureTexturesLoaded();
         this.curved = curved;
     }
+
     public ConveyorBelt(int gridX, int gridY) {
         super();
         ensureTexturesLoaded();
@@ -347,52 +276,60 @@ public class ConveyorBelt extends PlaceableEntity {
     }
 
     // =========================================================================
-    // Connessioni
+    // Connessioni fisiche
     // =========================================================================
     public void updateConnections(Grid grid) {
-        updateConnections(grid, null);
-    }
-
-    public void updateConnections(Grid grid, Direction fromDirection) {
         connectedNorth = grid.hasConveyorAt(gridX, gridY + 1);
         connectedSouth = grid.hasConveyorAt(gridX, gridY - 1);
         connectedEast  = grid.hasConveyorAt(gridX + 1, gridY);
         connectedWest  = grid.hasConveyorAt(gridX - 1, gridY);
-        this.curved    = isCurveConnection();
-        this.outputDirection = inferOutputDirection(fromDirection);
     }
 
-    private Direction inferOutputDirection(Direction from) {
-        int count = countConnections();
-        if (count == 0) return Direction.EAST;
-        if (count == 1) {
-            if (connectedEast)  return Direction.EAST;
-            if (connectedNorth) return Direction.NORTH;
-            if (connectedWest)  return Direction.WEST;
-            return Direction.SOUTH;
+    // =========================================================================
+    // SISTEMA FLUSSI
+    // =========================================================================
+
+    /**
+     * Imposta la direzione di ingresso e calcola automaticamente quella di uscita.
+     * Per i nastri dritti: uscita = opposto dell'ingresso (scorrimento lineare).
+     * Per le curve: uscita = la connessione disponibile che NON è l'ingresso.
+     *
+     * @param from direzione da cui arriva il flusso (es. WEST = il flusso viene da ovest)
+     */
+    public void applyFlow(Direction from) {
+        this.inputDirection = from;
+        if (isCurveConnection()) {
+            // Uscita = l'unica connessione diversa dall'ingresso
+            Direction incomingFrom = from.opposite(); // lato fisico da cui entra
+            for (Direction d : Direction.values()) {
+                if (isConnectedIn(d) && d != incomingFrom) {
+                    this.outputDirection = d;
+                    return;
+                }
+            }
+        } else {
+            // Nastro dritto: uscita opposta all'ingresso
+            this.outputDirection = from.opposite();
         }
-        if (count == 2 && from != null) {
-            Direction opp = opposite(from);
-            if (connectedEast  && opp != Direction.EAST)  return Direction.EAST;
-            if (connectedNorth && opp != Direction.NORTH) return Direction.NORTH;
-            if (connectedWest  && opp != Direction.WEST)  return Direction.WEST;
-            if (connectedSouth && opp != Direction.SOUTH) return Direction.SOUTH;
-        }
-        if (connectedEast)  return Direction.EAST;
-        if (connectedNorth) return Direction.NORTH;
-        if (connectedSouth) return Direction.SOUTH;
-        return Direction.WEST;
     }
 
-    private static Direction opposite(Direction d) {
+    /** @return true se questo nastro ha un vicino fisico nella direzione d */
+    private boolean isConnectedIn(Direction d) {
         switch (d) {
-            case NORTH: return Direction.SOUTH;
-            case SOUTH: return Direction.NORTH;
-            case EAST:  return Direction.WEST;
-            case WEST:  return Direction.EAST;
-            default:    return Direction.EAST;
+            case NORTH: return connectedNorth;
+            case SOUTH: return connectedSouth;
+            case EAST:  return connectedEast;
+            case WEST:  return connectedWest;
+            default:    return false;
         }
     }
+
+    /**
+     * Restituisce la cella successiva nella catena del flusso.
+     * Usato da Grid.propagateFlow() e dal movimento degli item.
+     */
+    public int nextGridX() { return gridX + outputDirection.dx(); }
+    public int nextGridY() { return gridY + outputDirection.dy(); }
 
     // =========================================================================
     // Update / Render
@@ -404,13 +341,12 @@ public class ConveyorBelt extends PlaceableEntity {
     public void render(SpriteBatch batch) {
         if (straightTex == null) return;
 
-        boolean curve  = isCurveConnection();
+        boolean curve   = isCurveConnection();
         int totalFrames = curve ? C_FRAMES : S_FRAMES;
-        int frame = (int)(globalProgress * totalFrames) % totalFrames;
-
-        float rotation = getRotation();
-        float cx = TILE / 2f;
-        float cy = TILE / 2f;
+        int frame       = (int)(globalProgress * totalFrames) % totalFrames;
+        float rotation  = getRotation();
+        float cx        = TILE / 2f;
+        float cy        = TILE / 2f;
 
         if (curve) {
             curveReg.setRegionX(frame * TILE);
@@ -427,29 +363,28 @@ public class ConveyorBelt extends PlaceableEntity {
     // Rotazione visiva
     // =========================================================================
     /**
-     * NASTRI DRITTI:
-     *   0°   → EAST  (atlas base, strisce → destra)
-     *   90°  → NORTH
-     *   180° → WEST
-     *   270° → SOUTH
+     * NASTRI DRITTI — basati su outputDirection:
+     *   0°   → EAST   90°  → NORTH   180° → WEST   270° → SOUTH
      *
-     * NASTRI CURVI (atlas base: ingresso WEST, uscita NORTH):
-     *   0°   → WEST→NORTH
-     *   90°  → SOUTH→WEST
-     *   180° → EAST→SOUTH
-     *   270° → NORTH→EAST
-     *
-     * Nota: SpriteBatch.draw() ruota CCW in world space (Y up).
-     * Il flip Y del Pixmap è già incluso nel sistema di coordinate dell'atlas.
+     * NASTRI CURVI — atlas base: WEST ingresso, NORTH uscita
+     *   Rotazione derivata dalla coppia (input, output) del flusso reale:
+     *   WEST→NORTH   0°     SOUTH→WEST  90°
+     *   EAST→SOUTH  180°   NORTH→EAST  270°
      */
     private float getRotation() {
         if (isCurveConnection()) {
-            // Ogni combinazione corrisponde a una e una sola rotazione
+            Direction in  = inputDirection.opposite(); // lato fisico ingresso
+            Direction out = outputDirection;
+            // Confronta con le 4 varianti dell'atlas
+            if (in == Direction.WEST  && out == Direction.NORTH) return   0f;
+            if (in == Direction.SOUTH && out == Direction.WEST)  return  90f;
+            if (in == Direction.EAST  && out == Direction.SOUTH) return 180f;
+            if (in == Direction.NORTH && out == Direction.EAST)  return 270f;
+            // Fallback: usa connessioni fisiche
             if (connectedWest  && connectedNorth) return   0f;
             if (connectedSouth && connectedWest)  return  90f;
             if (connectedEast  && connectedSouth) return 180f;
             if (connectedNorth && connectedEast)  return 270f;
-            // Fallback per connessioni incomplete
             return 0f;
         }
         switch (outputDirection) {
@@ -462,13 +397,11 @@ public class ConveyorBelt extends PlaceableEntity {
     }
 
     // =========================================================================
-    // Helpers
+    // Helpers geometria
     // =========================================================================
     public boolean isCurveConnection() {
         if (countConnections() != 2) return false;
-        boolean straight = (connectedNorth && connectedSouth)
-                        || (connectedEast  && connectedWest);
-        return !straight;
+        return !((connectedNorth && connectedSouth) || (connectedEast && connectedWest));
     }
 
     private int countConnections() {
@@ -480,10 +413,79 @@ public class ConveyorBelt extends PlaceableEntity {
         return c;
     }
 
-    // ── Getters ───────────────────────────────────────────────────────────────
-    public Direction getOutputDirection()  { return outputDirection; }
-    public boolean   isConnectedNorth()    { return connectedNorth; }
-    public boolean   isConnectedSouth()    { return connectedSouth; }
-    public boolean   isConnectedEast()     { return connectedEast; }
-    public boolean   isConnectedWest()     { return connectedWest; }
+    private static void drawArcLine(Pixmap p, int ox, double cx, double cy,
+                                    int radius, int thickness,
+                                    double startDeg, double endDeg, int color) {
+        p.setColor(color);
+        int half = thickness / 2;
+        double step = Math.max(0.2, Math.toDegrees(0.5 / radius));
+        for (double deg = startDeg; deg <= endDeg; deg += step) {
+            double rad  = Math.toRadians(deg);
+            double cosA = Math.cos(rad);
+            double sinA = Math.sin(rad);
+            for (int t = -half; t <= half; t++) {
+                int px = ox + (int) Math.round(cx + (radius + t) * cosA);
+                int py =      (int) Math.round(cy + (radius + t) * sinA);
+                if (px >= ox && px < ox + TILE && py >= 0 && py < TILE)
+                    p.drawPixel(px, py);
+            }
+        }
+    }
+
+    private static void drawArrowH(Pixmap p, int cx, int cy, int len,
+                                   int color, int clipTop, int clipBot) {
+        for (int ax = cx - len; ax <= cx + len / 3; ax++)
+            for (int ay = cy - 1; ay <= cy + 1; ay++)
+                if (ay >= clipTop && ay < clipBot) p.drawPixel(ax, ay, color);
+        for (int tip = 0; tip < 7; tip++) {
+            int tx = cx + len / 3 + tip;
+            for (int dy = -tip; dy <= tip; dy++) {
+                int ay = cy + dy;
+                if (ay >= clipTop && ay < clipBot) p.drawPixel(tx, ay, color);
+            }
+        }
+    }
+
+    private static void drawArrowPixmap(Pixmap p, int cx, int cy,
+                                        double tx, double ty, int len,
+                                        int color, int ox, int tileSize) {
+        for (int i = -len; i <= len; i++) {
+            int px = ox + cx + (int)(tx * i);
+            int py =      cy + (int)(ty * i);
+            if (px >= ox && px < ox + tileSize && py >= 0 && py < tileSize)
+                p.drawPixel(px, py, color);
+        }
+        for (int tip = 1; tip <= 5; tip++) {
+            int bx = ox + cx + (int)(tx * len) + (int)(-ty * tip);
+            int by =      cy + (int)(ty * len) + (int)( tx * tip);
+            if (bx >= ox && bx < ox + tileSize && by >= 0 && by < tileSize)
+                p.drawPixel(bx, by, color);
+            bx = ox + cx + (int)(tx * len) + (int)(ty * tip);
+            by =      cy + (int)(ty * len) + (int)(-tx * tip);
+            if (bx >= ox && bx < ox + tileSize && by >= 0 && by < tileSize)
+                p.drawPixel(bx, by, color);
+        }
+    }
+
+    private static void fillRect(Pixmap p, int x, int y, int w, int h, int color) {
+        p.setColor(color);
+        p.fillRectangle(x, y, w, h);
+    }
+
+    private static int rgba(float r, float g, float b, float a) {
+        return (((int)(r * 255) & 0xFF) << 24)
+             | (((int)(g * 255) & 0xFF) << 16)
+             | (((int)(b * 255) & 0xFF) <<  8)
+             |  ((int)(a * 255) & 0xFF);
+    }
+
+    // =========================================================================
+    // Getters
+    // =========================================================================
+    public Direction getInputDirection()  { return inputDirection; }
+    public Direction getOutputDirection() { return outputDirection; }
+    public boolean isConnectedNorth()     { return connectedNorth; }
+    public boolean isConnectedSouth()     { return connectedSouth; }
+    public boolean isConnectedEast()      { return connectedEast; }
+    public boolean isConnectedWest()      { return connectedWest; }
 }
