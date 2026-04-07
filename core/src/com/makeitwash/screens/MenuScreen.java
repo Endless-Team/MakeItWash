@@ -20,8 +20,6 @@ import com.makeitwash.world.Grid;
 import com.makeitwash.world.Economy;
 import com.makeitwash.ui.UISkin;
 
-import java.lang.classfile.ClassFile;
-
 public class MenuScreen extends ScreenAdapter {
     private final MainGame game;
     private final Grid grid;

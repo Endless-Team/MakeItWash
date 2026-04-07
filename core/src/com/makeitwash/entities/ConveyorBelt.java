@@ -98,7 +98,6 @@ public class ConveyorBelt extends PlaceableEntity {
         int stripeW       = 3;  // larghezza striscia
         int beltTop       = 6;  // inizio nastro (bordo superiore)
         int beltBot       = TILE - 6; // fine nastro (bordo inferiore)
-        int beltH         = beltBot - beltTop;
 
         for (int f = 0; f < S_FRAMES; f++) {
             int ox = f * TILE;

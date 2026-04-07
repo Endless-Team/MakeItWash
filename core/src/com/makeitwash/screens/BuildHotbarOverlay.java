@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.makeitwash.MainGame;
 import com.makeitwash.entities.*;
 import com.makeitwash.world.*;
 import com.makeitwash.ui.UISkin;
@@ -53,11 +52,7 @@ public class BuildHotbarOverlay extends ScreenAdapter {
     private String draggingLabel = null;
     private int    draggingCost  = 0;
     private int hoverSlot = -1;
-    private float lastMouseY = 0;
-    private float lastMouseScreenX = 0;
-    private float lastMouseScreenY = 0;
     private Map<String, Texture> itemIcons = new HashMap<>();
-    private Map<String, Texture> previewModels = new HashMap<>();
 
     private Image[] slotBackgrounds;
     private Label errorLabel;
@@ -140,14 +135,10 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             }
             @Override
             public boolean mouseMoved(int sx, int sy) {
-                lastMouseY = sy;
-                lastMouseScreenX = sx;
-                lastMouseScreenY = sy;
                 return false;
             }
             @Override
             public boolean touchDown(int sx, int sy, int ptr, int btn) {
-                lastMouseY = sy;
                 float wy = Gdx.graphics.getHeight() - sy;
                 if(wy > HOTBAR_H + (trayOpen ? TRAY_H : 0)) {
                     placeFromActiveSlot(sx, wy);
@@ -253,7 +244,6 @@ public class BuildHotbarOverlay extends ScreenAdapter {
             Stack cellStack = new Stack();
             cellStack.setName("slot_" + i);
 
-            TextureRegion normalBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_flat.png"));
             TextureRegion selectedBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_depth_flat.png"));
             TextureRegion hoverBg = new TextureRegion(uiSkin.getTexture("assets/ui/Blue/Default/button_square_gloss.png"));
             TextureRegion emptyBg = new TextureRegion(uiSkin.getTexture("assets/ui/Grey/Default/button_square_flat.png"));

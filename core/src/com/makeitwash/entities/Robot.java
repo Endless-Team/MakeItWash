@@ -1,7 +1,6 @@
 package com.makeitwash.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Robot extends PlaceableEntity {
     private int targetX;

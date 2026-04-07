@@ -11,19 +11,73 @@ WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.lwjgl.system.
 WARNING: Please consider reporting this to the maintainers of class org.lwjgl.system.MemoryUtil
 WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
 [LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
-Exception in thread "main" com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: core/assets/icon/icon.png
-        at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:190)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.setIcon(Lwjgl3Window.java:285)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createGlfwWindow(Lwjgl3Application.java:558)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createWindow(Lwjgl3Application.java:463)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.createWindow(Lwjgl3Application.java:449)
-        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:163)
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_square_flat.png - Couldn't load file: assets/ui/Blue/Default/button_square_flat.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_square_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_square_gloss.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_square_depth_flat.png - Couldn't load file: assets/ui/Blue/Default/button_square_depth_flat.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_square_depth_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_square_depth_gloss.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_round_flat.png - Couldn't load file: assets/ui/Blue/Default/button_round_flat.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_round_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_round_gloss.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_flat.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_flat.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_gloss.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_depth_flat.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_depth_flat.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/button_rectangle_depth_gloss.png - Couldn't load file: assets/ui/Blue/Default/button_rectangle_depth_gloss.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/slide_horizontal_grey.png - Couldn't load file: assets/ui/Blue/Default/slide_horizontal_grey.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/slide_horizontal_color.png - Couldn't load file: assets/ui/Blue/Default/slide_horizontal_color.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/slide_vertical_grey.png - Couldn't load file: assets/ui/Blue/Default/slide_vertical_grey.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/slide_vertical_color.png - Couldn't load file: assets/ui/Blue/Default/slide_vertical_color.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/check_square_grey.png - Couldn't load file: assets/ui/Blue/Default/check_square_grey.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/check_square_color.png - Couldn't load file: assets/ui/Blue/Default/check_square_color.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/check_round_grey.png - Couldn't load file: assets/ui/Blue/Default/check_round_grey.png
+[UISkin] CWD: C:\Users\VGit\Documents\GitHub\MakeItWash
+[UISkin] Test file exists: false at C:\Users\VGit\Documents\GitHub\MakeItWash\assets\ui\Blue\Default\button_square_flat.png
+[UISkin] Failed to load: assets/ui/Blue/Default/check_round_color.png - Couldn't load file: assets/ui/Blue/Default/check_round_color.png
+Exception in thread "main" java.lang.IllegalArgumentException: texture cannot be null.
+        at com.badlogic.gdx.graphics.g2d.TextureRegion.<init>(TextureRegion.java:37)
+        at com.makeitwash.ui.UISkin.createTextButtonStyles(UISkin.java:101)
+        at com.makeitwash.ui.UISkin.<init>(UISkin.java:80)
+        at com.makeitwash.ui.UISkin.get(UISkin.java:204)
+        at com.makeitwash.screens.MenuScreen.show(MenuScreen.java:41)
+        at com.badlogic.gdx.Game.setScreen(Game.java:63)
+        at com.makeitwash.MainGame.create(MainGame.java:9)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.initializeListener(Lwjgl3Window.java:416)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window.update(Lwjgl3Window.java:366)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.loop(Lwjgl3Application.java:193)
+        at com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.<init>(Lwjgl3Application.java:167)
         at com.makeitwash.DesktopLauncher.main(DesktopLauncher.java:13)
-Caused by: com.badlogic.gdx.utils.GdxRuntimeException: File not found: core\assets\icon\icon.png (Internal)
-        at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:142)
-        at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:228)
-        at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:187)
-        ... 6 more
 
 [Incubating] Problems report is available at: file:///C:/Users/VGit/Documents/GitHub/MakeItWash/build/reports/problems/problems-report.html
 
@@ -31,7 +85,7 @@ FAILURE: Build failed with an exception.
 
 * What went wrong:
 Execution failed for task ':desktop:run'.
-> Process 'command 'C:\Users\VGit\scoop\apps\temurin-lts-jdk\25.0.2-10.0.LTS\bin\java.exe'' finished with non-zero exit value -1073740791
+> Process 'command 'C:\Users\VGit\scoop\apps\temurin-lts-jdk\25.0.2-10.0.LTS\bin\java.exe'' finished with non-zero exit value 1
 
 * Try:
 > Run with --stacktrace option to get the stack trace.
@@ -46,4 +100,4 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 For more on this, please refer to https://docs.gradle.org/9.0.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
 BUILD FAILED in 2s
-6 actionable tasks: 1 executed, 5 up-to-date
+6 actionable tasks: 5 executed, 1 up-to-date

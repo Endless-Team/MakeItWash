@@ -25,8 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Graphics;
 import com.makeitwash.MainGame;
 import com.makeitwash.ui.UISkin;
-import com.makeitwash.world.Economy;
-import com.makeitwash.world.Grid;
 import com.makeitwash.world.GameSettings;
 
 public class SettingsScreen extends ScreenAdapter {

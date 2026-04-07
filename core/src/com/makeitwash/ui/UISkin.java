@@ -7,13 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -54,19 +50,6 @@ public class UISkin {
     private final Texture checkSquareColor;
     private final Texture checkRoundGrey;
     private final Texture checkRoundColor;
-    private final Texture iconCheckmark;
-    private final Texture iconCross;
-    private final Texture iconCircle;
-    private final Texture iconSquare;
-    private final Texture iconArrowUp;
-    private final Texture iconArrowDown;
-    private final Texture iconPlay;
-    private final Texture iconRepeat;
-    private final Texture star;
-    private final Texture starOutline;
-    private final Texture divider;
-    private final Texture inputRectangle;
-    private final Texture inputSquare;
 
     private UISkin() {
         skin = new Skin();
@@ -93,22 +76,6 @@ public class UISkin {
         checkSquareColor = loadTexture(basePath + "Blue/Default/check_square_color.png");
         checkRoundGrey = loadTexture(basePath + "Blue/Default/check_round_grey.png");
         checkRoundColor = loadTexture(basePath + "Blue/Default/check_round_color.png");
-
-        iconCheckmark = loadTexture(basePath + "Blue/Default/icon_checkmark.png");
-        iconCross = loadTexture(basePath + "Blue/Default/icon_cross.png");
-        iconCircle = loadTexture(basePath + "Blue/Default/icon_circle.png");
-        iconSquare = loadTexture(basePath + "Blue/Default/icon_square.png");
-        iconArrowUp = loadTexture(basePath + "Extra/Default/icon_arrow_up_light.png");
-        iconArrowDown = loadTexture(basePath + "Extra/Default/icon_arrow_down_light.png");
-        iconPlay = loadTexture(basePath + "Extra/Default/icon_play_light.png");
-        iconRepeat = loadTexture(basePath + "Extra/Default/icon_repeat_light.png");
-
-        star = loadTexture(basePath + "Blue/Default/star.png");
-        starOutline = loadTexture(basePath + "Blue/Default/star_outline.png");
-        divider = loadTexture(basePath + "Extra/Default/divider.png");
-
-        inputRectangle = loadTexture(basePath + "Extra/Default/input_rectangle.png");
-        inputSquare = loadTexture(basePath + "Extra/Default/input_square.png");
 
         createTextButtonStyles();
         createLabelStyles();
