@@ -422,17 +422,28 @@ public class ConveyorBelt extends PlaceableEntity {
      */
     private float getRotation() {
         if (isCurveConnection()) {
-            Direction in  = inputDirection.opposite(); // lato fisico di ingresso
+            // ── CONVEZIONE inputDirection ──────────────────────────────────────
+            // applyFlow(from): "from" = lato fisico da cui ENTRA il flusso.
+            //   applyFlow(WEST) → inputDirection=WEST → il flusso arriva dal lato WEST.
+            // Per la rotazione vogliamo il lato fisico di ingresso = inputDirection (NO .opposite()).
+            //
+            // ── TABELLA ROTAZIONI (CCW SpriteBatch, zona attiva = SW dell'atlas) ──
+            //   0°   → zona SW world → entry WEST,  exit NORTH  ← atlas base
+            //   90°  → zona SE world → entry SOUTH, exit WEST
+            //   180° → zona NE world → entry EAST,  exit SOUTH
+            //   270° → zona NW world → entry NORTH, exit EAST
+            //
+            // Se il tuo Grid chiama applyFlow con la direzione OPPOSTA (cioè
+            // applyFlow(EAST) per "viene da ovest"), basta invertire in/out qui sotto.
+            Direction in  = inputDirection;  // ← NIENTE .opposite()
             Direction out = outputDirection;
             if (in == Direction.WEST  && out == Direction.NORTH) return   0f;
             if (in == Direction.SOUTH && out == Direction.WEST)  return  90f;
             if (in == Direction.EAST  && out == Direction.SOUTH) return 180f;
             if (in == Direction.NORTH && out == Direction.EAST)  return 270f;
-            // Fallback fisico (quando il flusso non è ancora propagato)
-            if (connectedWest  && connectedNorth) return   0f;
-            if (connectedSouth && connectedWest)  return  90f;
-            if (connectedEast  && connectedSouth) return 180f;
-            if (connectedNorth && connectedEast)  return 270f;
+            // Fallback: non usare le connessioni fisiche (ambigue: SOUTH+EAST
+            // potrebbe essere SOUTH→EAST 90° oppure EAST→SOUTH 180°).
+            // Restituisce 0° in attesa che propagateFlow() imposti il flusso.
             return 0f;
         }
         switch (outputDirection) {
