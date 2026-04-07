@@ -65,6 +65,7 @@ public class GameScreen extends ScreenAdapter {
 
         buildHud = new BuildHotbarOverlay(grid, economy);
         buildHud.show();
+        buildHud.setGameCamera(camera);
 
         InputMultiplexer mux = new InputMultiplexer();
         mux.addProcessor(buildHud.getStage());
