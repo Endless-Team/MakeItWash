@@ -84,7 +84,7 @@ public class GameScreen extends ScreenAdapter {
         hud      = new HUD();
         buildHud = new BuildHotbarOverlay(grid, economy);
         buildHud.show();
-        buildHud.setGameCamera(camera); // ← necessario per screenToGrid preciso
+        buildHud.setGameCamera(camera); // <- necessario per screenToGrid preciso
 
         // ── Input ─────────────────────────────────────────────────────────────
         InputMultiplexer mux = new InputMultiplexer();

@@ -260,10 +260,10 @@ public class BuildHotbarOverlay extends ScreenAdapter {
         if (lastPlacedGridX < 0) return ConveyorBelt.Direction.WEST;
         int dx = gx - lastPlacedGridX;
         int dy = gy - lastPlacedGridY;
-        if (dx == 1  && dy == 0) return ConveyorBelt.Direction.WEST;  // stiamo andando →
-        if (dx == -1 && dy == 0) return ConveyorBelt.Direction.EAST;  // stiamo andando ←
-        if (dx == 0  && dy == 1) return ConveyorBelt.Direction.SOUTH; // stiamo andando ↑
-        if (dx == 0  && dy ==-1) return ConveyorBelt.Direction.NORTH; // stiamo andando ↓
+        if (dx == 1  && dy == 0) return ConveyorBelt.Direction.WEST;  // stiamo andando ->
+        if (dx == -1 && dy == 0) return ConveyorBelt.Direction.EAST;  // stiamo andando <-
+        if (dx == 0  && dy == 1) return ConveyorBelt.Direction.SOUTH; // stiamo andando ^
+        if (dx == 0  && dy ==-1) return ConveyorBelt.Direction.NORTH; // stiamo andando v
         return ConveyorBelt.Direction.WEST;
     }
 

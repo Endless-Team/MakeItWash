@@ -168,7 +168,8 @@ public class Grid {
             // Trova il vicino già visitato che alimenta questo nastro
             Direction inputFrom = findInputFrom(belt, visited);
             if (inputFrom != null) {
-                belt.applyFlow(inputFrom);
+                Direction actualInput = inputFrom;
+                belt.applyFlow(actualInput);
             }
 
             // Propaga al successore
@@ -195,7 +196,10 @@ public class Grid {
                     if (visited.contains(bk)) continue;
                     visited.add(bk);
                     Direction inp = findInputFrom(b, visited);
-                    if (inp != null) b.applyFlow(inp);
+                    if (inp != null) {
+                        Direction actualInput = inp;
+                        b.applyFlow(actualInput);
+                    }
                     ConveyorBelt nx = belts.get(key(b.nextGridX(), b.nextGridY()));
                     if (nx != null && !visited.contains(key(nx.getGridX(), nx.getGridY())))
                         queue.add(nx);
@@ -212,11 +216,7 @@ public class Grid {
     private Direction inferSourceInput(ConveyorBelt belt, Direction defaultInput) {
         for (Direction d : Direction.values()) {
             if (isConnectedIn(belt, d)) {
-                // L'unica connessione è in direzione d: il flusso ENTRA da d.opposite()
-                // (il nastro a sinistra manda il flusso verso di noi da ovest → noi riceviamo da WEST)
-                // Ma vogliamo inputDirection = la direzione da cui ARRIVA il flusso nel sistema
-                // = opposto della nostra uscita verso il vicino
-                return d.opposite();
+                return d;
             }
         }
         return defaultInput;
@@ -233,10 +233,8 @@ public class Grid {
             if (!visited.contains(key(nx, ny))) continue;
             ConveyorBelt neighbor = belts.get(key(nx, ny));
             if (neighbor == null) continue;
-            // Il vicino nella direzione d punta verso di noi?
             if (neighbor.nextGridX() == belt.getGridX() &&
                 neighbor.nextGridY() == belt.getGridY()) {
-                // Il flusso arriva da direzione d (dal lato d)
                 return d;
             }
         }

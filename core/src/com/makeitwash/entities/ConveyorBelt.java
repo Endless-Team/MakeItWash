@@ -36,7 +36,7 @@ import com.makeitwash.world.Grid;
  * Dentro la zona attiva, la diagonale a 45° (relX + py = TILE) separa:
  *   relX + py < TILE  → vicino a NORTH-WEST: banda orizzontale py=[BELT_INNER..BELT_OUTER]
  *                        Lato di uscita: NORTH (top del tile, py=0)
- *                        → strisce orizzontali che scorrono ← verso sinistra (verso NORTH)
+ *                        -> strisce orizzontali che scorrono <- verso sinistra (verso NORTH)
  *                          NO: le strisce mostrano il flusso. Il flusso esce da NORTH.
  *                          Banda in py=[BELT_INNER..BELT_OUTER] = fascia che tocca il lato WEST.
  *                          In world: lato WEST. Quindi questa è la zona di INGRESSO da WEST.
@@ -371,7 +371,7 @@ public class ConveyorBelt extends PlaceableEntity {
             // Esempio: curve connectedSouth+connectedWest, applyFlow(SOUTH):
             //   OLD phys=NORTH  → trova SOUTH (l'entry!) → outputDir=SOUTH ✗
             //   NEW phys=SOUTH  → salta SOUTH, trova WEST → outputDir=WEST ✓
-            Direction phys = from;  // ← era from.opposite(), SBAGLIATO
+            Direction phys = from;  // <- era from.opposite(), SBAGLIATO
             for (Direction d : Direction.values())
                 if (isConnectedIn(d) && d != phys) { outputDirection = d; return; }
         } else {
@@ -435,14 +435,14 @@ public class ConveyorBelt extends PlaceableEntity {
             // Per la rotazione vogliamo il lato fisico di ingresso = inputDirection (NO .opposite()).
             //
             // ── TABELLA ROTAZIONI (CCW SpriteBatch, zona attiva = SW dell'atlas) ──
-            //   0°   → zona SW world → entry WEST,  exit NORTH  ← atlas base
+            //   0°   -> zona SW world -> entry WEST,  exit NORTH  <- atlas base
             //   90°  → zona SE world → entry SOUTH, exit WEST
             //   180° → zona NE world → entry EAST,  exit SOUTH
             //   270° → zona NW world → entry NORTH, exit EAST
             //
             // Se il tuo Grid chiama applyFlow con la direzione OPPOSTA (cioè
             // applyFlow(EAST) per "viene da ovest"), basta invertire in/out qui sotto.
-            Direction in  = inputDirection;  // ← NIENTE .opposite()
+Direction in  = inputDirection;  // <- NIENTE .opposite()
             Direction out = outputDirection;
             // Ogni forma fisica ha 2 direzioni di flusso possibili (forward/reverse).
             // Tutte e 8 le combinazioni devono essere coperte.
