@@ -1,0 +1,34 @@
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+task run(dependsOn: classes, type: JavaExec) {
+    mainClass = 'com.sushidays.DesktopLauncher'
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = file('../assets')
+    ignoreExitValue = true
+}
+
+jar {
+    archiveBaseName.set('sushidays-desktop')
+    manifest {
+        attributes 'Main-Class': 'com.sushidays.DesktopLauncher'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from('../assets') { into '' }
+}
