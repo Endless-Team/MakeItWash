@@ -83,6 +83,8 @@ java -jar desktop/build/libs/sushidays-desktop.jar
 
 Su **Windows** usa `gradlew.bat` al posto di `./gradlew`.
 
+Su **Mac Apple Silicon (M1/M2/M3)** il gioco funziona automaticamente con i natives arm64. Il codice configura automaticamente `useGlfwAsync()` per evitare il problema del primo thread.
+
 ---
 
 ## Come buildare per Android
