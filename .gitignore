@@ -1,14 +1,6 @@
-.opencode/
-.gradle/
-build/
-*/build/
-*/*/build/
-out/
-bin/
-*/bin/
-*/*/bin/
-*.class
-.DS_Store
-.idea/
-.vscode/
-*.iml
+# Godot .gitignore
+.import/
+export.cfg
+export_presets.cfg
+*.translation
+.godot/
