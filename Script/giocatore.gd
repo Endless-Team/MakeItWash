@@ -7,7 +7,6 @@ const SPEED = 400.0
 @onready var sprite = $AnimatedSprite2D
 # Riferimento al pannello UI (inventario/bancone) nel CanvasLayer
 @onready var ui = $"../CanvasLayer/PanelContainer"
-#@onready var ui = get_node("/root/Node2D/CanvasLayer/PanelContainer")
 
 # Ultima direzione in cui il player si è mosso (usata per gli idle)
 var last_direction = Vector2.DOWN
@@ -17,8 +16,9 @@ var vicino_bancone = false
 var sta_tagliando = false
 
 # Decommentare per nascondere la GUI all'avvio della scena
-#func _ready():
-	#ui.visible = false
+func _ready():
+	add_to_group("player")
+	ui.visible = false
 
 # Chiamato ogni frame fisico — gestisce movimento e animazioni
 func _physics_process(_delta):

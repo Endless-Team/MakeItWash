@@ -1,6 +1,6 @@
 extends PanelContainer
 
-@onready var player = get_node("/root/Sushi/Player")
+@onready var player = get_tree().get_first_node_in_group("player")
 
 func _ready():
 	visible = false

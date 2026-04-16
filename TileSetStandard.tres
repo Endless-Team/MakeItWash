@@ -1,9 +1,9 @@
 [gd_resource type="TileSet" format=3 uid="uid://qg28og0hgoje"]
 
-[ext_resource type="Texture2D" path="res://Modern tiles_Free/Interiors_free/32x32/Interiors_free_32x32.png" id="1_hpsg1"]
-[ext_resource type="Texture2D" path="res://Modern tiles_Free/Interiors_free/32x32/Room_Builder_free_32x32.png" id="2_tp3vk"]
-[ext_resource type="Texture2D" path="res://professional_kitchen/professional_kitchen_withshadows.png" id="3_hpsg1"]
-[ext_resource type="Texture2D" path="res://CP_V1.1.0_nyknck/CP_V1.0.4_nyknck/CP_V1.0.4.png" id="3_tp3vk"]
+[ext_resource type="Texture2D" uid="uid://dnjnwcf6dt50g" path="res://Tiles/Modern tiles_Free/Interiors_free/32x32/Interiors_free_32x32.png" id="1_tp3vk"]
+[ext_resource type="Texture2D" uid="uid://bxvnrjnvksual" path="res://Tiles/Modern tiles_Free/Interiors_free/32x32/Room_Builder_free_32x32.png" id="2_sswww"]
+[ext_resource type="Texture2D" uid="uid://bgudbwsm1hqek" path="res://Tiles/CP_V1.1.0_nyknck/CP_V1.0.4_nyknck/CP_V1.0.4.png" id="3_u7qcj"]
+[ext_resource type="Texture2D" uid="uid://b12ns8etue3ic" path="res://Tiles/professional_kitchen/professional_kitchen_withshadows.png" id="4_tp3vk"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_r38da"]
 tile_data = PackedInt32Array(0, 0, 33, 65536, 0, 34, 131072, 0, 35, 196608, 0, 36, 262144, 0, 37, 327680, 0, 38)
@@ -18,7 +18,7 @@ tile_data = PackedInt32Array(0, 524288, 33, 65536, 524288, 34, 131072, 524288, 3
 tile_data = PackedInt32Array(0, 2162688, 15, 65536, 2162688, 16, 131072, 2162688, 17, 196608, 2162688, 18, 262144, 2162688, 19, 327680, 2162688, 20, 1, 2228224, 15, 65537, 2228224, 16, 131073, 2228224, 17, 196609, 2228224, 18, 262145, 2228224, 19, 327681, 2228224, 20, 2, 2293760, 15, 65538, 2293760, 16, 131074, 2293760, 17, 196610, 2293760, 18, 262146, 2293760, 19, 327682, 2293760, 20, 3, 2359296, 15, 65539, 2359296, 16, 131075, 2359296, 17, 196611, 2359296, 18, 262147, 2359296, 19, 327683, 2359296, 20, 4, 2424832, 15, 65540, 2424832, 16, 131076, 2424832, 17, 196612, 2424832, 18, 262148, 2424832, 19, 327684, 2424832, 20, 5, 2490368, 15, 65541, 2490368, 16, 131077, 2490368, 17, 196613, 2490368, 18, 262149, 2490368, 19, 327685, 2490368, 20, 6, 2555904, 15, 65542, 2555904, 16, 131078, 2555904, 17, 196614, 2555904, 18, 262150, 2555904, 19, 327686, 2555904, 20, 7, 2621440, 15, 65543, 2621440, 16, 131079, 2621440, 17, 196615, 2621440, 18, 262151, 2621440, 19, 327687, 2621440, 20, 8, 2686976, 15, 65544, 2686976, 16, 131080, 2686976, 17, 196616, 2686976, 18, 262152, 2686976, 19, 327688, 2686976, 20)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sswww"]
-texture = ExtResource("1_hpsg1")
+texture = ExtResource("1_tp3vk")
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
@@ -3610,7 +3610,7 @@ texture = ExtResource("1_hpsg1")
 31:176/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u7qcj"]
-texture = ExtResource("2_tp3vk")
+texture = ExtResource("2_sswww")
 11:0/0 = 0
 11:0/0/terrain_set = 0
 12:0/0 = 0
@@ -4704,7 +4704,7 @@ texture = ExtResource("2_tp3vk")
 19:41/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bcsry"]
-texture = ExtResource("3_tp3vk")
+texture = ExtResource("3_u7qcj")
 2:2/0 = 0
 3:2/0 = 0
 4:2/0 = 0
@@ -5360,7 +5360,7 @@ texture = ExtResource("3_tp3vk")
 9:56/0/terrains_peering_bit/top_left_corner = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tp3vk"]
-texture = ExtResource("3_hpsg1")
+texture = ExtResource("4_tp3vk")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
