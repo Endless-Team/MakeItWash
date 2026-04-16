@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dk0k1ay4w0som"]
+
+[ext_resource type="Script" uid="uid://d4i24onyp57k1" path="res://UI/Taglio/script.gd" id="1_d1005"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=532995143]
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=354749962]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_d1005")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=843049582]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=153606574]
+layout_mode = 2
+text = "Scegli ingrediente:"
+
+[node name="Salmone" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1302820537]
+layout_mode = 2
+text = "Salmone"
+
+[node name="Tonno" type="Button" parent="PanelContainer/VBoxContainer" unique_id=613243936]
+layout_mode = 2
+text = "Tonno"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Salmone" to="PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Tonno" to="PanelContainer" method="_on_tonno_pressed"]
