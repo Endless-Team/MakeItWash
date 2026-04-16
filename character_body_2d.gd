@@ -12,7 +12,7 @@ var sta_tagliando = false
 func _ready():
 	ui.visible = false  # la GUI parte nascosta
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if sta_tagliando:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -58,11 +58,13 @@ func _physics_process(delta):
 # non gira ogni frame. "unhandled" significa che lo riceve solo se
 # nessun altro nodo (es. un Button nella GUI) lo ha già consumato.
 func _unhandled_input(event):
-	# event.is_action_just_pressed controlla se in QUESTO frame è stato premuto E
-	if event.is_action_just_pressed("ui_accept") and vicino_bancone:
-		ui.visible = true   # mostra il PanelContainer
+	# Filtra solo eventi Key e MouseButton
+	if not (event is InputEventKey or event is InputEventMouseButton):
+			return
 	
-	# Chiudi la GUI con Escape
+	if event.is_action_just_pressed("ui_accept") and vicino_bancone:
+		ui.visible = true
+		
 	if event.is_action_just_pressed("ui_cancel") and ui.visible:
 		ui.visible = false
 

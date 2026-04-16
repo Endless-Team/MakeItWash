@@ -1,12 +1,11 @@
 [gd_scene format=4 uid="uid://b0tubxbulxm7i"]
 
-[ext_resource type="Script" uid="uid://bx2ywkhfec2v4" path="res://bancone.gd" id="1_gk4ay"]
 [ext_resource type="PackedScene" uid="uid://by1jfblcwry3u" path="res://player.tscn" id="1_jjtg1"]
 [ext_resource type="TileSet" uid="uid://qg28og0hgoje" path="res://TileSetStandard.tres" id="1_r38da"]
 [ext_resource type="PackedScene" uid="uid://bn4j3oit6de1y" path="res://guiTaglio.tscn" id="2_p22xn"]
+[ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://BanconeTaglio.tscn" id="4_gk4ay"]
 
 [node name="Sushi" type="Node2D" unique_id=1612649328]
-script = ExtResource("1_gk4ay")
 
 [node name="CanvasLayer" parent="." unique_id=532995143 instance=ExtResource("2_p22xn")]
 
@@ -24,3 +23,6 @@ tile_set = ExtResource("1_r38da")
 
 [node name="Elementi estetici" type="TileMapLayer" parent="TileMapLayer (Arredamento)" unique_id=239231649]
 tile_set = ExtResource("1_r38da")
+
+[node name="Area2D" parent="." unique_id=665746073 instance=ExtResource("4_gk4ay")]
+position = Vector2(1033, 253)

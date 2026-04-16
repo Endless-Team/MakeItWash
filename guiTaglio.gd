@@ -1,9 +1,9 @@
 extends PanelContainer
 
-@onready var player = $"../../CharacterBody2D"  # aggiusta il path
+@onready var player = get_node("/root/Sushi/Player")
 
 func _ready():
-	visible = false  # nascosta all'inizio
+	visible = false
 
 func _on_salmone_pressed():
 	player.taglia_ingrediente("Salmone")
