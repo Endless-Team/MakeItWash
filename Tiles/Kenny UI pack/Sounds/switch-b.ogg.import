@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://00gmuv2p3olh"
+path="res://.godot/imported/switch-b.ogg-d9783a01e3f23cf21e171be53dc3743f.oggvorbisstr"
+
+[deps]
+
+source_file="res://Tiles/Kenny UI pack/Sounds/switch-b.ogg"
+dest_files=["res://.godot/imported/switch-b.ogg-d9783a01e3f23cf21e171be53dc3743f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

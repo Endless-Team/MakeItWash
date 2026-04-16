@@ -91,7 +91,7 @@ func _unhandled_input(event):
 func taglia_ingrediente(nome: String):
 	ui.visible = false
 	sta_tagliando = true
-	sprite.play("chop")
+	#sprite.play("chop")
 	print("Stai tagliando: " + nome)
 	# Attende il completamento dell'animazione prima di sbloccare il movimento
 	await sprite.animation_finished

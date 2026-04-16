@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://drknoqs545fd1"
+path="res://.godot/imported/click-b.ogg-0f51878726c72b91aa50e7a60ef5984b.oggvorbisstr"
+
+[deps]
+
+source_file="res://Tiles/Kenny UI pack/Sounds/click-b.ogg"
+dest_files=["res://.godot/imported/click-b.ogg-0f51878726c72b91aa50e7a60ef5984b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
