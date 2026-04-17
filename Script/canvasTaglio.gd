@@ -9,7 +9,7 @@ func _ready():
 func _on_salmone_pressed():
 	player.taglia_ingrediente("Salmone")
 
-func _on_tonno_pressed():
+func _on_gambero_pressed():
 	player.taglia_ingrediente("Gambero")
 
 func _on_chiudi_pressed():

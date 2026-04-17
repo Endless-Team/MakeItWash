@@ -8,8 +8,8 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.has_method("set_vicino_bancone"):
+		body.set_vicino_bancone(true, "assemblaggio")
 
-		body.set_vicino_bancone(true)
 
 func _on_body_exited(body):
 	if body.has_method("set_vicino_bancone"):

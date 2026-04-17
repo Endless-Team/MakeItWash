@@ -84,3 +84,7 @@ func taglia_ingrediente(nome: String):
 	print("Stai tagliando: " + nome)
 	# await sprite.animation_finished
 	sta_tagliando = false
+	
+func assembla_piatto(nome: String):
+	ui_assemblaggio.visible = false
+	print("Stai assemblando: " + nome)

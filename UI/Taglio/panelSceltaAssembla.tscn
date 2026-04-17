@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ih8v8vtuyhw8"]
 
 [ext_resource type="Texture2D" uid="uid://kcy850kaxtyy" path="res://Tiles/Sushi/r_1653.png" id="1_6pjgg"]
+[ext_resource type="Script" uid="uid://dfamfni5nhs77" path="res://UI/Taglio/canvasAssemblo.gd" id="1_otmq6"]
 [ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://Tiles/Sushi/r_1643.png" id="2_otmq6"]
 
 [node name="PanelSceltaAssembla" type="CanvasLayer" unique_id=1209876604]
@@ -8,6 +9,7 @@
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1148439493]
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_otmq6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=15727425]
 layout_mode = 2
@@ -16,13 +18,13 @@ layout_mode = 2
 layout_mode = 2
 text = "Scegli piatto:"
 
-[node name="Button" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1934509143]
+[node name="Nigiri Salmone" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1934509143]
 layout_mode = 2
 text = "             Nigiri salmone"
 icon_alignment = 1
 vertical_icon_alignment = 2
 
-[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Button" unique_id=1579399988]
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Nigiri Salmone" unique_id=1579399988]
 layout_mode = 0
 offset_top = 12.0
 offset_right = 54.0
@@ -31,13 +33,13 @@ texture_normal = ExtResource("1_6pjgg")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Button2" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1919410303]
+[node name="Nigiri Tonno" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1919410303]
 layout_mode = 2
 text = "              Nigiri gambero"
 icon_alignment = 1
 vertical_icon_alignment = 2
 
-[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Button2" unique_id=177525729]
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Nigiri Tonno" unique_id=177525729]
 layout_mode = 0
 offset_top = 4.0
 offset_right = 52.0
@@ -45,3 +47,6 @@ offset_bottom = 51.0
 texture_normal = ExtResource("2_otmq6")
 ignore_texture_size = true
 stretch_mode = 0
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Nigiri Salmone" to="PanelContainer" method="_on_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Nigiri Tonno" to="PanelContainer" method="_on_button_2_pressed"]
