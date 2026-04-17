@@ -94,7 +94,7 @@ func taglia_ingrediente(nome: String):
 	#sprite.play("chop")
 	print("Stai tagliando: " + nome)
 	# Attende il completamento dell'animazione prima di sbloccare il movimento
-	await sprite.animation_finished
+	#await sprite.animation_finished
 	sta_tagliando = false
 
 # Setter chiamato da bancone.gd tramite Area2D

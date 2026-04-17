@@ -1,60 +1,10 @@
 [gd_scene format=3 uid="uid://dk0k1ay4w0som"]
 
 [ext_resource type="Script" uid="uid://d4i24onyp57k1" path="res://UI/Taglio/script.gd" id="1_d1005"]
-[ext_resource type="Texture2D" uid="uid://dxeh0w0ditjm4" path="res://Tiles/Kenny UI pack/PNG/Blue/Default/button_square_border.png" id="2_l1ld4"]
-[ext_resource type="Texture2D" uid="uid://dhifjaaolhyqp" path="res://Tiles/Kenny UI pack/PNG/Blue/Default/button_rectangle_border.png" id="3_twu6e"]
-[ext_resource type="Texture2D" uid="uid://dhq6oks1usoab" path="res://Tiles/Kenny UI pack/PNG/Blue/Default/button_rectangle_depth_gloss.png" id="4_twu6e"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=532995143]
-script = ExtResource("1_d1005")
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1434166498]
-offset_left = 479.0
-offset_top = 259.0
-offset_right = 673.0
-offset_bottom = 391.0
-texture = ExtResource("2_l1ld4")
-
-[node name="Domanda" type="TextureRect" parent="TextureRect" unique_id=180155598]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 17.0
-offset_right = 172.0
-offset_bottom = 50.0
-texture = ExtResource("3_twu6e")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="TextureRect/Domanda" unique_id=1288143703]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 5.0
-offset_right = 140.0
-offset_bottom = 28.0
-text = "Scegli ingrediente"
-horizontal_alignment = 1
-vertical_alignment = 1
-text_overrun_behavior = 1
-
-[node name="Salmone" type="TextureRect" parent="TextureRect" unique_id=255872066]
-layout_mode = 0
-offset_left = 26.0
-offset_top = 53.0
-offset_right = 168.0
-offset_bottom = 81.0
-texture = ExtResource("4_twu6e")
-expand_mode = 1
-
-[node name="Tonno" type="TextureRect" parent="TextureRect" unique_id=562894928]
-layout_mode = 0
-offset_left = 26.0
-offset_top = 85.0
-offset_right = 170.0
-offset_bottom = 111.0
-texture = ExtResource("4_twu6e")
-expand_mode = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=354749962]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -66,6 +16,7 @@ offset_right = 71.0
 offset_bottom = 46.5
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_d1005")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=843049582]
 layout_mode = 2
