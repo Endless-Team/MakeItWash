@@ -4,8 +4,7 @@ extends Area2D
 @export var tipo: String = "taglio"  # oppure "assemblaggio"
 
 func _ready():
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	pass
 
 func _on_body_entered(body):
 	if body.has_method("set_vicino_bancone"):

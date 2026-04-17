@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://57hplvnqdj3x" path="res://Script/sushi.gd" id="1_djc1h"]
 [ext_resource type="PackedScene" uid="uid://by1jfblcwry3u" path="res://Scene/Giocatore.tscn" id="1_jjtg1"]
 [ext_resource type="TileSet" uid="uid://qg28og0hgoje" path="res://TileSetStandard.tres" id="1_r38da"]
+[ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
@@ -11,7 +12,9 @@
 scale = Vector2(3, 3)
 script = ExtResource("1_djc1h")
 
-[node name="CanvasLayer" parent="." unique_id=532995143 instance=ExtResource("5_fpu6t")]
+[node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
+
+[node name="sceltaIngrediente" parent="." unique_id=532995143 instance=ExtResource("5_fpu6t")]
 scale = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 0, 0)
 
