@@ -15,5 +15,5 @@ func _on_body_exited(body):
 		body.set_vicino_bancone(false, "")
 
 
-func _on_area_entered(area: Area2D) -> void:
+func _on_area_entered(_area: Area2D) -> void:
 	pass # Replace with function body.

@@ -13,8 +13,8 @@ var sta_tagliando = false
 
 func _ready():
 	add_to_group("player")
-	get_node("../CanvasLayer").add_child(ui_taglio)
-	get_node("../CanvasLayer").add_child(ui_assemblaggio)
+	get_tree().root.find_child("CanvasLayer", true, false).add_child(ui_taglio)
+	get_tree().root.find_child("CanvasLayer", true, false).add_child(ui_assemblaggio)
 	ui_taglio.visible = false
 	ui_assemblaggio.visible = false
 
