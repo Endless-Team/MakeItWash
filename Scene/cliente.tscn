@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://gn8a1y0e6o5u"]
 
 [ext_resource type="Texture2D" uid="uid://bbdtf72rmecpj" path="res://Tiles/Modern tiles_Free/Characters_free/Amelia_run_16x16.png" id="1_kajl5"]
+[ext_resource type="Script" uid="uid://do7ubjswe6ika" path="res://Script/cliente.gd" id="1_lp84t"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lp84t"]
 radius = 5.0
@@ -198,6 +199,7 @@ animations = [{
 }]
 
 [node name="Cliente" type="CharacterBody2D" unique_id=760365552]
+script = ExtResource("1_lp84t")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1639952177]
 shape = SubResource("CapsuleShape2D_lp84t")
