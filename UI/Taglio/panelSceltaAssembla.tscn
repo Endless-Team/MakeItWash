@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://Tiles/Sushi/r_1643.png" id="2_otmq6"]
 
 [node name="PanelSceltaAssembla" type="CanvasLayer" unique_id=1209876604]
+scale = Vector2(3, 3)
+transform = Transform2D(3, 0, 0, 3, 0, 0)
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1148439493]
 offset_right = 40.0
@@ -38,7 +40,6 @@ layout_mode = 2
 text = "              Nigiri gambero"
 icon_alignment = 1
 vertical_icon_alignment = 2
-script = ExtResource("1_otmq6")
 
 [node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Nigiri Tonno" unique_id=177525729]
 layout_mode = 0
