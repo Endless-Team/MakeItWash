@@ -13,7 +13,7 @@ const ORDINI_DISPONIBILI = ["Nigiri salmone", "Nigiri gambero"]
 
 signal ordine_consegnato(nome: String)
 
-enum Stato { ENTRA, ATTENDE, RICEVE, ESCE }
+enum Stato { ENTRA, ATTENDE, ESCE }
 
 var stato := Stato.ENTRA
 var ordine := ""
@@ -23,8 +23,6 @@ var pos_uscita := Vector2.ZERO
 func _ready() -> void:
 	add_to_group("cliente")
 	icona_ordine.visible = false
-	# Posizione di uscita = fuori schermo in basso (stessa X del tavolo)
-	pos_uscita = Vector2(global_position.x, global_position.y + 400)
 
 func inizia(tavolo: Vector2, uscita: Vector2) -> void:
 	pos_tavolo = tavolo
@@ -37,15 +35,12 @@ func _physics_process(_delta: float) -> void:
 			_muoviti_verso(pos_tavolo)
 			if global_position.distance_to(pos_tavolo) < 6.0:
 				velocity = Vector2.ZERO
+				move_and_slide()
 				stato = Stato.ATTENDE
 				_scegli_ordine()
 		Stato.ATTENDE:
-			pass  # aspetta che il cameriere arrivi
-		Stato.RICEVE:
-			# Animazione breve "mangia" poi se ne va
-			icona_ordine.visible = false
-			await get_tree().create_timer(0.8).timeout
-			stato = Stato.ESCE
+			velocity = Vector2.ZERO
+			move_and_slide()
 		Stato.ESCE:
 			_muoviti_verso(pos_uscita)
 			if global_position.distance_to(pos_uscita) < 6.0:
@@ -59,10 +54,14 @@ func _scegli_ordine() -> void:
 	sprite.play("idle_down")
 	print("Cliente vuole: " + ordine)
 
+# Chiamato dal cameriere — usa await qui, fuori da _physics_process
 func consegna_piatto(nome: String) -> void:
 	if nome == ordine and stato == Stato.ATTENDE:
-		stato = Stato.RICEVE
 		emit_signal("ordine_consegnato", nome)
+		icona_ordine.visible = false
+		sprite.play("idle_down")
+		await get_tree().create_timer(0.8).timeout
+		stato = Stato.ESCE
 
 func _muoviti_verso(dest: Vector2) -> void:
 	var dir = (dest - global_position).normalized()

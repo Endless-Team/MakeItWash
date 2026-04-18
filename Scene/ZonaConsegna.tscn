@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://dhvxnha00c4q3"]
 
 [ext_resource type="Script" uid="uid://2fgn1ixje31w" path="res://Script/banconeConsegna.gd" id="1_68ojh"]
-[ext_resource type="Texture2D" uid="uid://kcy850kaxtyy" path="res://Tiles/Sushi/r_1653.png" id="2_8fskw"]
-[ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://Tiles/Sushi/r_1643.png" id="3_7vwq4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhs36"]
 size = Vector2(48, 57.5)
@@ -13,15 +11,10 @@ script = ExtResource("1_68ojh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1906707614]
 shape = SubResource("RectangleShape2D_dhs36")
 
-[node name="SpritePiattoNigiriSalmone" type="Sprite2D" parent="." unique_id=1507407388]
+[node name="SpritePiatto" type="Sprite2D" parent="." unique_id=1507407388]
+visible = false
 position = Vector2(0, -5)
 scale = Vector2(0.031, 0.03)
-texture = ExtResource("2_8fskw")
-
-[node name="SpritePiattoNigiriGambero" type="Sprite2D" parent="." unique_id=954665617]
-position = Vector2(0, 6)
-scale = Vector2(0.033, 0.033)
-texture = ExtResource("3_7vwq4")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
 [ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://Scene/cameriere.tscn" id="4_74pey"]
+[ext_resource type="PackedScene" uid="uid://gn8a1y0e6o5u" path="res://Scene/cliente.tscn" id="4_e27gh"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
 [ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
@@ -62,6 +63,9 @@ position = Vector2(1000, 300)
 scale = Vector2(1.4, 1.4)
 collision_layer = 1
 
+[node name="Cliente" parent="." unique_id=760365552 instance=ExtResource("4_e27gh")]
+position = Vector2(558.8334, 441.1667)
+
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
 position = Vector2(731.8334, 273.33334)
 
@@ -90,6 +94,3 @@ scale = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
-
-[node name="Node2D" type="Node2D" parent="." unique_id=462551215]
-position = Vector2(723.99994, 232.66667)
