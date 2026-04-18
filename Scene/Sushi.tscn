@@ -6,32 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
 [ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://Scene/cameriere.tscn" id="4_74pey"]
-[ext_resource type="PackedScene" uid="uid://gn8a1y0e6o5u" path="res://Scene/cliente.tscn" id="4_e27gh"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
 [ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
-
-[sub_resource type="GDScript" id="GDScript_uuaqg"]
-script/source = "extends Area2D
-
-@export var tipo: String = \"assemblo\"
-
-func _ready():
-	pass
-
-func _on_body_entered(body):
-	if body.has_method(\"set_vicino_bancone\"):
-		body.set_vicino_bancone(true, \"assemblaggio\")
-
-
-func _on_body_exited(body):
-	if body.has_method(\"set_vicino_bancone\"):
-		body.set_vicino_bancone(false, \"\")
-
-
-func _on_area_entered(_area: Area2D) -> void:
-	pass # Replace with function body.
-"
 
 [node name="Sushi" type="Node2D" unique_id=2084916691]
 scale = Vector2(6, 6)
@@ -63,11 +40,10 @@ position = Vector2(1000, 300)
 scale = Vector2(1.4, 1.4)
 collision_layer = 1
 
-[node name="Cliente" parent="." unique_id=760365552 instance=ExtResource("4_e27gh")]
-position = Vector2(558.8334, 441.1667)
-
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
 position = Vector2(731.8334, 273.33334)
+bancone_consegna_path = NodePath("../ZonaConsegna")
+tavolo_cliente_path = NodePath("../TavoloCliente")
 
 [node name="Arredamento - layer 2" type="TileMapLayer" parent="." unique_id=943493]
 tile_map_data = PackedByteArray("AAA/AAkABAAYAAIAAAA/AAoABAAYAAMAAABAAAkABAAZAAIAAABAAAoABAAZAAMAAAA/AA8ABAAVAA4AAABAAA8ABAAWAA4AAABBAA8ABAAXAA4AAABCAA8ABAAWACEAAABDAA8ABAAOAAUAAABEAA8ABAAPAAUAAABGAB8AAwAiAAsAAABGACAAAwAmAAsAAABFACAAAwAkAAsAAABEACAAAwAiAAsAAABGACEAAwAkAAsAAABGACIAAwAkAAwAAABIAA4ABAAQABsAAABIAA8ABAAQABwAAAA2ABIAAQAaAAcAAAA2ABMAAQAaAAgAAAA2ABQAAQAaAAkAAAA3ABIAAQAbAAcAAAA3ABMAAQAbAAgAAAA3ABQAAQAbAAkAAAA4ABMAAQAWAAYAAAA4ABQAAQAWAAcAAAA5ABMAAQAXAAYAAAA5ABQAAQAXAAcAAAA6ABMAAQAWAAYAAAA6ABQAAQAWAAcAAAA7ABMAAQAXAAYAAAA7ABQAAQAXAAcAAAA0ABMAAQAVAAYAAAA0ABQAAQAVAAcAAAA1ABMAAQAXAAYAAAA1ABQAAQAXAAcAAAA8ABMAAQAXAAYAAAA=")
@@ -78,8 +54,7 @@ position = Vector2(1032.5, 246)
 
 [node name="ZonaAssemblo" parent="." unique_id=1919375133 instance=ExtResource("6_tibrt")]
 position = Vector2(1113, 220.00002)
-script = SubResource("GDScript_uuaqg")
-tipo = "assemblo"
+script = null
 
 [node name="ZonaConsegna" parent="." unique_id=548313305 instance=ExtResource("6_mpkty")]
 position = Vector2(835.50006, 239.33334)
@@ -94,3 +69,6 @@ scale = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
+
+[node name="TavoloCliente" type="Node2D" parent="." unique_id=1408878782]
+position = Vector2(724.8334, 233.33334)
