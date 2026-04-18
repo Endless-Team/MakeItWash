@@ -1,7 +1,7 @@
 extends Area2D
 
 func _ready() -> void:
-	add_to_group("bancone_assemblo") 
+	add_to_group("bancone_assemblo")
 	pass
 
 func _on_body_entered(body) -> void:

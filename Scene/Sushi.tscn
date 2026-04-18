@@ -75,6 +75,7 @@ position = Vector2(1032.5, 246)
 [node name="ZonaAssemblo" parent="." unique_id=1919375133 instance=ExtResource("6_tibrt")]
 position = Vector2(1113, 220.00002)
 script = SubResource("GDScript_uuaqg")
+tipo = "assemblo"
 
 [node name="ZonaConsegna" parent="." unique_id=548313305 instance=ExtResource("6_mpkty")]
 position = Vector2(835.50006, 239.33334)
