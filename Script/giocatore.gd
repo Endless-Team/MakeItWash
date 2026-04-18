@@ -30,6 +30,17 @@ func _setup_ui():
 	ui_assemblaggio.visible = false
 
 func _physics_process(_delta):
+	# Apri/chiudi UI
+	if Input.is_action_just_pressed("interagisci") and vicino_bancone:
+		if tipo_bancone == "taglio":
+			ui_taglio.visible = true
+		elif tipo_bancone == "assemblaggio":
+			ui_assemblaggio.visible = true
+	
+	if Input.is_action_just_pressed("ui_cancel"):
+		ui_taglio.visible = false
+		ui_assemblaggio.visible = false
+
 	if sta_tagliando:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -69,20 +80,6 @@ func _physics_process(_delta):
 
 	velocity = direction * SPEED
 	move_and_slide()
-
-func _unhandled_input(event):
-	if not (event is InputEventKey or event is InputEventMouseButton):
-		return
-
-	if event.is_action_pressed("ui_accept") and vicino_bancone:
-		if tipo_bancone == "taglio":
-			ui_taglio.visible = true
-		elif tipo_bancone == "assemblaggio":
-			ui_assemblaggio.visible = true
-
-	if event.is_action_pressed("ui_cancel"):
-		ui_taglio.visible = false
-		ui_assemblaggio.visible = false
 
 func set_vicino_bancone(valore: bool, tipo: String):
 	vicino_bancone = valore
