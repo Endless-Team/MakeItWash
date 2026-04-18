@@ -38,6 +38,7 @@ layout_mode = 2
 text = "              Nigiri gambero"
 icon_alignment = 1
 vertical_icon_alignment = 2
+script = ExtResource("1_otmq6")
 
 [node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Nigiri Tonno" unique_id=177525729]
 layout_mode = 0

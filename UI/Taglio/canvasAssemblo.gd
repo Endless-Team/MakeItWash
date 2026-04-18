@@ -5,6 +5,7 @@ var player
 func _ready():
 	visible = false
 	player = get_tree().get_first_node_in_group("player")
+	add_to_group("ui_assemblaggio")
 
 func _on_button_pressed():   # Nigiri salmone
 	player.assembla_piatto("Nigiri salmone")
