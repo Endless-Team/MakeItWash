@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://qg28og0hgoje" path="res://TileSetStandard.tres" id="1_r38da"]
 [ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
+[ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://Scene/cameriere.tscn" id="4_74pey"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
 [ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
@@ -60,6 +61,9 @@ z_index = 0
 position = Vector2(1000, 300)
 scale = Vector2(1.4, 1.4)
 collision_layer = 1
+
+[node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
+position = Vector2(731.8334, 273.33334)
 
 [node name="Arredamento - layer 2" type="TileMapLayer" parent="." unique_id=943493]
 tile_map_data = PackedByteArray("AAA/AAkABAAYAAIAAAA/AAoABAAYAAMAAABAAAkABAAZAAIAAABAAAoABAAZAAMAAAA/AA8ABAAVAA4AAABAAA8ABAAWAA4AAABBAA8ABAAXAA4AAABCAA8ABAAWACEAAABDAA8ABAAOAAUAAABEAA8ABAAPAAUAAABGAB8AAwAiAAsAAABGACAAAwAmAAsAAABFACAAAwAkAAsAAABEACAAAwAiAAsAAABGACEAAwAkAAsAAABGACIAAwAkAAwAAABIAA4ABAAQABsAAABIAA8ABAAQABwAAAA2ABIAAQAaAAcAAAA2ABMAAQAaAAgAAAA2ABQAAQAaAAkAAAA3ABIAAQAbAAcAAAA3ABMAAQAbAAgAAAA3ABQAAQAbAAkAAAA4ABMAAQAWAAYAAAA4ABQAAQAWAAcAAAA5ABMAAQAXAAYAAAA5ABQAAQAXAAcAAAA6ABMAAQAWAAYAAAA6ABQAAQAWAAcAAAA7ABMAAQAXAAYAAAA7ABQAAQAXAAcAAAA0ABMAAQAVAAYAAAA0ABQAAQAVAAcAAAA1ABMAAQAXAAYAAAA1ABQAAQAXAAcAAAA8ABMAAQAXAAYAAAA=")
