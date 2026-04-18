@@ -4,8 +4,6 @@ const SPEED = 500.0
 
 @onready var sprite = $AnimatedSprite2D
 
-# Le UI vengono aggiunte come figli del CanvasLayer nella scena Sushi
-# Il player non le gestisce direttamente — le cerca tramite group o get_node dal parent
 var ui_taglio: Node = null
 var ui_assemblaggio: Node = null
 
@@ -16,7 +14,6 @@ var sta_tagliando := false
 
 func _ready() -> void:
 	add_to_group("player")
-	# Aspetta che tutta la scena sia pronta prima di cercare i nodi UI
 	await get_tree().process_frame
 	ui_taglio = get_tree().get_first_node_in_group("ui_taglio")
 	ui_assemblaggio = get_tree().get_first_node_in_group("ui_assemblaggio")
@@ -26,7 +23,14 @@ func _physics_process(_delta: float) -> void:
 		if tipo_bancone == "taglio" and ui_taglio:
 			ui_taglio.visible = true
 		elif tipo_bancone == "assemblaggio" and ui_assemblaggio:
+			# Mostra solo le opzioni per cui hai l'ingrediente
+			ui_assemblaggio.aggiorna_bottoni()
 			ui_assemblaggio.visible = true
+		elif tipo_bancone == "consegna" and Inventario.piatti_pronti.size() > 0:
+			var bancone = get_tree().get_first_node_in_group("bancone_consegna")
+			if bancone:
+				var piatto = Inventario.ritira_piatto()
+				bancone.deposita_piatto(piatto)
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		if ui_taglio: ui_taglio.visible = false
@@ -36,6 +40,8 @@ func _physics_process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
+	
+	
 
 	var direction := Vector2.ZERO
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):    direction.y -= 1
@@ -67,9 +73,15 @@ func set_vicino_bancone(valore: bool, tipo: String) -> void:
 func taglia_ingrediente(nome: String) -> void:
 	if ui_taglio: ui_taglio.visible = false
 	sta_tagliando = true
-	print("Stai tagliando: " + nome)
+	Inventario.aggiungi_ingrediente(nome)
+	print("Tagliato: " + nome)
 	sta_tagliando = false
 
-func assembla_piatto(nome: String) -> void:
+func assembla_piatto(nome_piatto: String, ingrediente_richiesto: String) -> void:
+	if not Inventario.ha_ingrediente(ingrediente_richiesto):
+		print("Non hai: " + ingrediente_richiesto)
+		return
 	if ui_assemblaggio: ui_assemblaggio.visible = false
-	print("Stai assemblando: " + nome)
+	Inventario.rimuovi_ingrediente(ingrediente_richiesto)
+	Inventario.aggiungi_piatto(nome_piatto)
+	print("Assemblato: " + nome_piatto)

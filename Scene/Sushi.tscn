@@ -6,7 +6,30 @@
 [ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
+[ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
+
+[sub_resource type="GDScript" id="GDScript_uuaqg"]
+script/source = "extends Area2D
+
+@export var tipo: String = \"assemblo\"
+
+func _ready():
+	pass
+
+func _on_body_entered(body):
+	if body.has_method(\"set_vicino_bancone\"):
+		body.set_vicino_bancone(true, \"assemblaggio\")
+
+
+func _on_body_exited(body):
+	if body.has_method(\"set_vicino_bancone\"):
+		body.set_vicino_bancone(false, \"\")
+
+
+func _on_area_entered(_area: Area2D) -> void:
+	pass # Replace with function body.
+"
 
 [node name="Sushi" type="Node2D" unique_id=2084916691]
 scale = Vector2(6, 6)
@@ -47,6 +70,10 @@ position = Vector2(1032.5, 246)
 
 [node name="ZonaAssemblo" parent="." unique_id=1919375133 instance=ExtResource("6_tibrt")]
 position = Vector2(1113, 220.00002)
+script = SubResource("GDScript_uuaqg")
+
+[node name="ZonaConsegna" parent="." unique_id=548313305 instance=ExtResource("6_mpkty")]
+position = Vector2(835.50006, 239.33334)
 
 [node name="Bordi" type="TileMapLayer" parent="." unique_id=551022426]
 z_index = 10
@@ -58,3 +85,6 @@ scale = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=462551215]
+position = Vector2(723.99994, 232.66667)
