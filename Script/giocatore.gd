@@ -1,10 +1,10 @@
 extends CharacterBody2D
 
-const SPEED = 400.0
+const SPEED = 500.0
 
 @onready var sprite = $AnimatedSprite2D
-@onready var ui_taglio = preload("res://UI/Taglio/panelSceltaTaglio.tscn").instantiate()
-@onready var ui_assemblaggio = preload("res://UI/Taglio/panelSceltaAssembla.tscn").instantiate()
+var ui_taglio = preload("res://UI/Taglio/panelSceltaTaglio.tscn").instantiate()
+var ui_assemblaggio = preload("res://UI/Taglio/panelSceltaAssembla.tscn").instantiate()
 
 var last_direction = Vector2.DOWN
 var vicino_bancone = false
@@ -13,8 +13,19 @@ var sta_tagliando = false
 
 func _ready():
 	add_to_group("player")
-	get_tree().root.find_child("CanvasLayer", true, false).add_child(ui_taglio)
-	get_tree().root.find_child("CanvasLayer", true, false).add_child(ui_assemblaggio)
+	# Aspetta un frame che la scena sia pronta, poi cerca il CanvasLayer
+	call_deferred("_setup_ui")
+
+func _setup_ui():
+	var canvas = get_tree().root.find_child("CanvasLayer", true, false)
+	if canvas:
+		canvas.add_child(ui_taglio)
+		canvas.add_child(ui_assemblaggio)
+	else:
+		# fallback: aggiungili come figli del root
+		get_tree().root.add_child(ui_taglio)
+		get_tree().root.add_child(ui_assemblaggio)
+		
 	ui_taglio.visible = false
 	ui_assemblaggio.visible = false
 
