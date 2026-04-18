@@ -36,5 +36,10 @@ text = "Salmone"
 layout_mode = 2
 text = "Gambero"
 
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1928951414]
+layout_mode = 2
+text = "chiudi"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Salmone" to="PanelContainer" method="_on_salmone_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Gambero" to="PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Gambero" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Button" to="PanelContainer" method="_on_chiudi_pressed"]

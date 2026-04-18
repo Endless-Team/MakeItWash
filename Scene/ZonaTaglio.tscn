@@ -13,8 +13,6 @@ script = ExtResource("1_7urgv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2018858890]
 shape = SubResource("RectangleShape2D_7urgv")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=438853489]
-
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -208,6 +208,6 @@ shape = SubResource("CapsuleShape2D_lp84t")
 sprite_frames = SubResource("SpriteFrames_dgirl")
 animation = &"walk_down"
 
-[node name="icona" type="Sprite2D" parent="." unique_id=1034350555]
+[node name="IconaOrdine" type="Sprite2D" parent="." unique_id=1034350555]
 position = Vector2(0, -20)
 scale = Vector2(0.5, 0.5)

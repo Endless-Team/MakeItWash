@@ -9,8 +9,17 @@ scale = Vector2(3, 3)
 transform = Transform2D(3, 0, 0, 3, 0, 0)
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1148439493]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -91.0
+offset_top = -69.5
+offset_right = 91.0
+offset_bottom = 69.5
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_otmq6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=15727425]
@@ -50,5 +59,12 @@ texture_normal = ExtResource("2_otmq6")
 ignore_texture_size = true
 stretch_mode = 0
 
-[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriSalmone" to="PanelContainer" method="_on_button_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriGambero" to="PanelContainer" method="_on_button_2_pressed"]
+[node name="chiudi" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1316641657]
+layout_mode = 2
+text = "Chiudi"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriSalmone" to="PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriSalmone/TextureButton" to="PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriGambero" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriGambero/TextureButton" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/chiudi" to="PanelContainer" method="_on_chiudi_pressed"]
