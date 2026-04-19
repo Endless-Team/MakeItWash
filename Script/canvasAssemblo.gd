@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends PanelContainer
 
 var player
 
@@ -8,8 +8,8 @@ func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 
 func aggiorna_bottoni() -> void:
-	$PanelContainer/VBoxContainer/NigiriSalmone.disabled = not Inventario.ha_ingrediente("Salmone")
-	$PanelContainer/VBoxContainer/NigiriGambero.disabled = not Inventario.ha_ingrediente("Gambero")
+	$VBoxContainer/NigiriSalmone.disabled = not Inventario.ha_ingrediente("Salmone")
+	$VBoxContainer/NigiriGambero.disabled = not Inventario.ha_ingrediente("Gambero")
 
 func _on_salmone_pressed() -> void:
 	if player:

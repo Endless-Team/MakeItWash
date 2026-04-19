@@ -1,6 +1,5 @@
 extends Area2D
 
-# Esporta il tipo così lo setti dall'Ispettore per ogni bancone
 @export var tipo: String = "taglio"  # oppure "assemblaggio"
 
 func _ready():

@@ -36,7 +36,7 @@ tile_set = ExtResource("1_r38da")
 
 [node name="Player" parent="." unique_id=107051290 instance=ExtResource("1_jjtg1")]
 z_index = 0
-position = Vector2(1000, 300)
+position = Vector2(992.66656, 261.5)
 scale = Vector2(1.4, 1.4)
 collision_layer = 1
 
@@ -53,8 +53,7 @@ tile_set = ExtResource("1_r38da")
 position = Vector2(1032.5, 246)
 
 [node name="ZonaAssemblo" parent="." unique_id=1919375133 instance=ExtResource("6_tibrt")]
-position = Vector2(1113, 220.00002)
-script = null
+position = Vector2(1111.6666, 213.66667)
 
 [node name="ZonaConsegna" parent="." unique_id=548313305 instance=ExtResource("6_mpkty")]
 position = Vector2(835.50006, 239.33334)

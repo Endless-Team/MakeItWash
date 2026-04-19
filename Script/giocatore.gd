@@ -17,13 +17,15 @@ func _ready() -> void:
 	await get_tree().process_frame
 	ui_taglio = get_tree().get_first_node_in_group("ui_taglio")
 	ui_assemblaggio = get_tree().get_first_node_in_group("ui_assemblaggio")
+	print("ui_taglio:", ui_taglio)
+	print("ui_assemblaggio:", ui_assemblaggio)
 
 func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("interagisci") and vicino_bancone:
+		print("INTERAGISCI - tipo:", tipo_bancone, " ui_ass:", ui_assemblaggio)
 		if tipo_bancone == "taglio" and ui_taglio:
 			ui_taglio.visible = true
 		elif tipo_bancone == "assemblaggio" and ui_assemblaggio:
-			# Mostra solo le opzioni per cui hai l'ingrediente
 			ui_assemblaggio.aggiorna_bottoni()
 			ui_assemblaggio.visible = true
 		elif tipo_bancone == "consegna" and Inventario.piatti_pronti.size() > 0:
@@ -40,8 +42,6 @@ func _physics_process(_delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
-	
-	
 
 	var direction := Vector2.ZERO
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):    direction.y -= 1
@@ -67,6 +67,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func set_vicino_bancone(valore: bool, tipo: String) -> void:
+	print("set_vicino_bancone ->", valore, "/", tipo)
 	vicino_bancone = valore
 	tipo_bancone = tipo
 
