@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bj0y2ksf2sqtq" path="res://Tiles/Modern tiles_Free/Characters_free/Bob_run_16x16.png" id="3_nn6px"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xftlc"]
-radius = 4.0
-height = 8.0
+radius = 5.0
+height = 10.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7xofo"]
 atlas = ExtResource("2_8v2x8")
@@ -238,11 +238,10 @@ collision_layer = 3
 script = ExtResource("1_gsqkg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=505285471]
-position = Vector2(32, 42.19)
+position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_xftlc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1662964056]
 texture_filter = 1
-position = Vector2(32, 32)
 sprite_frames = SubResource("SpriteFrames_sqirv")
 animation = &"idle_down"

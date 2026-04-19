@@ -41,9 +41,10 @@ scale = Vector2(1.4, 1.4)
 collision_layer = 1
 
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
-position = Vector2(731.8334, 273.33334)
+position = Vector2(748.1666, 288.16666)
 bancone_consegna_path = NodePath("../ZonaConsegna")
-tavolo_cliente_path = NodePath("../TavoloCliente")
+punto_bancone_path = NodePath("../PuntoConsegnaCameriere")
+punto_tavolo_path = NodePath("../PuntoTavoloCameriere")
 
 [node name="Arredamento - layer 2" type="TileMapLayer" parent="." unique_id=943493]
 tile_map_data = PackedByteArray("AAA/AAkABAAYAAIAAAA/AAoABAAYAAMAAABAAAkABAAZAAIAAABAAAoABAAZAAMAAAA/AA8ABAAVAA4AAABAAA8ABAAWAA4AAABBAA8ABAAXAA4AAABCAA8ABAAWACEAAABDAA8ABAAOAAUAAABEAA8ABAAPAAUAAABGAB8AAwAiAAsAAABGACAAAwAmAAsAAABFACAAAwAkAAsAAABEACAAAwAiAAsAAABGACEAAwAkAAsAAABGACIAAwAkAAwAAABIAA4ABAAQABsAAABIAA8ABAAQABwAAAA2ABIAAQAaAAcAAAA2ABMAAQAaAAgAAAA2ABQAAQAaAAkAAAA3ABIAAQAbAAcAAAA3ABMAAQAbAAgAAAA3ABQAAQAbAAkAAAA4ABMAAQAWAAYAAAA4ABQAAQAWAAcAAAA5ABMAAQAXAAYAAAA5ABQAAQAXAAcAAAA6ABMAAQAWAAYAAAA6ABQAAQAWAAcAAAA7ABMAAQAXAAYAAAA7ABQAAQAXAAcAAAA0ABMAAQAVAAYAAAA0ABQAAQAVAAcAAAA1ABMAAQAXAAYAAAA1ABQAAQAXAAcAAAA8ABMAAQAXAAYAAAA=")
@@ -69,5 +70,11 @@ transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
 
-[node name="TavoloCliente" type="Node2D" parent="." unique_id=1408878782]
-position = Vector2(724.8334, 233.33334)
+[node name="PuntoConsegnaCameriere" type="Node2D" parent="." unique_id=1408878782]
+position = Vector2(813.8334, 238.83334)
+
+[node name="PuntoTavoloCameriere" type="Node2D" parent="." unique_id=340677079]
+position = Vector2(727.6667, 261.1667)
+
+[node name="TavoloCliente" type="Node2D" parent="." unique_id=1146753952]
+position = Vector2(728.6667, 232.83334)

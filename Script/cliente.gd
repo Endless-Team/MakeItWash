@@ -7,7 +7,7 @@ const SPEED = 120.0
 
 const TEXTURE_ORDINI = {
 	"Nigiri salmone": preload("res://Tiles/Sushi/r_1653.png"),
-	"Nigiri gambero":  preload("res://Tiles/Sushi/r_1643.png"),
+	"Nigiri gambero": preload("res://Tiles/Sushi/r_1643.png"),
 }
 const ORDINI_DISPONIBILI = ["Nigiri salmone", "Nigiri gambero"]
 
@@ -33,17 +33,19 @@ func _physics_process(_delta: float) -> void:
 	match stato:
 		Stato.ENTRA:
 			_muoviti_verso(pos_tavolo)
-			if global_position.distance_to(pos_tavolo) < 6.0:
+			if position.distance_to(pos_tavolo) < 3.0:
 				velocity = Vector2.ZERO
 				move_and_slide()
 				stato = Stato.ATTENDE
 				_scegli_ordine()
+
 		Stato.ATTENDE:
 			velocity = Vector2.ZERO
 			move_and_slide()
+
 		Stato.ESCE:
 			_muoviti_verso(pos_uscita)
-			if global_position.distance_to(pos_uscita) < 6.0:
+			if position.distance_to(pos_uscita) < 3.0:
 				queue_free()
 
 func _scegli_ordine() -> void:
@@ -52,9 +54,7 @@ func _scegli_ordine() -> void:
 		icona_ordine.texture = TEXTURE_ORDINI[ordine]
 	icona_ordine.visible = true
 	sprite.stop()
-	print("Cliente vuole: " + ordine)
 
-# Chiamato dal cameriere — usa await qui, fuori da _physics_process
 func consegna_piatto(nome: String) -> void:
 	if nome == ordine and stato == Stato.ATTENDE:
 		emit_signal("ordine_consegnato", nome)
@@ -64,9 +64,15 @@ func consegna_piatto(nome: String) -> void:
 		stato = Stato.ESCE
 
 func _muoviti_verso(dest: Vector2) -> void:
-	var dir = (dest - global_position).normalized()
+	var dir = (dest - position)
+	if dir.length() < 0.01:
+		velocity = Vector2.ZERO
+		return
+
+	dir = dir.normalized()
 	velocity = dir * SPEED
 	move_and_slide()
+
 	if abs(dir.x) > abs(dir.y):
 		sprite.play("walk_right" if dir.x > 0 else "walk_left")
 	else:

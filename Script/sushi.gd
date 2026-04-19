@@ -2,11 +2,13 @@ extends Node
 
 const ClienteScene = preload("res://Scene/cliente.tscn")
 
-@export var spawn_cliente: Vector2 = Vector2(200, -50)
-@export var pos_tavolo: Vector2 = Vector2(200, 150)
-@export var pos_uscita: Vector2 = Vector2(200, 500)
+@onready var tavolo_cliente: Node2D = $TavoloCliente
 
-var cliente_attivo: Node = null
+@export var spawn_cliente: Vector2 = Vector2(240, 210)
+@export var offset_tavolo: Vector2 = Vector2(0, 18)
+@export var offset_uscita: Vector2 = Vector2(210, 210)
+
+var cliente_attivo: CharacterBody2D = null
 
 func _ready() -> void:
 	await get_tree().create_timer(2.0).timeout
@@ -15,11 +17,18 @@ func _ready() -> void:
 func _spawna_cliente() -> void:
 	if cliente_attivo != null:
 		return
+
 	var c = ClienteScene.instantiate()
-	add_child(c)                        # ← era get_parent().add_child(c)
-	c.global_position = spawn_cliente
+	add_child(c)
+
+	c.position = spawn_cliente
+
+	var pos_tavolo := tavolo_cliente.position + offset_tavolo
+	var pos_uscita := offset_uscita
+
 	c.inizia(pos_tavolo, pos_uscita)
 	c.ordine_consegnato.connect(_on_ordine_consegnato)
+
 	cliente_attivo = c
 
 func _on_ordine_consegnato(_nome: String) -> void:
