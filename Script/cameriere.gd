@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 const SPEED = 180.0
-const DIST_STOP = 6.0
+const DIST_STOP = 10.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -21,11 +21,53 @@ var cliente_target: Node = null
 func _ready() -> void:
 	add_to_group("cameriere")
 	pos_iniziale = global_position
-	sprite.play("idle_down")
+	_set_idle()
 
 	var bancone = get_node_or_null(bancone_consegna_path)
 	if bancone:
 		bancone.piatto_depositato.connect(_on_piatto_depositato)
+
+
+func _physics_process(_delta: float) -> void:
+	match stato:
+		Stato.IDLE:
+			ferma()
+
+		Stato.VAI_BANCONE:
+			if _muoviti_verso(target):
+				var bancone = get_node_or_null(bancone_consegna_path)
+				if bancone and bancone.has_method("ritira_piatto_visivo"):
+					bancone.ritira_piatto_visivo()
+
+				if is_instance_valid(cliente_target):
+					target = cliente_target.global_position
+					stato = Stato.VAI_TAVOLO
+				else:
+					_reset_stato()
+
+		Stato.VAI_TAVOLO:
+			if not is_instance_valid(cliente_target):
+				_reset_stato()
+				return
+
+			target = cliente_target.global_position
+			if _muoviti_verso(target):
+				var consegna_ok := false
+
+				if cliente_target.has_method("consegna_piatto"):
+					consegna_ok = await cliente_target.consegna_piatto(piatto_in_mano)
+
+				if consegna_ok:
+					piatto_in_mano = ""
+
+				cliente_target = null
+				stato = Stato.TORNA
+				target = pos_iniziale
+
+		Stato.TORNA:
+			if _muoviti_verso(target):
+				stato = Stato.IDLE
+				ferma()
 
 
 func _on_piatto_depositato(nome: String) -> void:
@@ -46,63 +88,8 @@ func _on_piatto_depositato(nome: String) -> void:
 		target = global_position
 
 
-func _physics_process(_delta: float) -> void:
-	match stato:
-		Stato.IDLE:
-			velocity = Vector2.ZERO
-			move_and_slide()
-
-		Stato.VAI_BANCONE:
-			_muoviti_verso(target)
-			if global_position.distance_to(target) <= DIST_STOP:
-				var bancone = get_node_or_null(bancone_consegna_path)
-				if bancone and bancone.has_method("ritira_piatto_visivo"):
-					bancone.ritira_piatto_visivo()
-
-				if is_instance_valid(cliente_target):
-					target = cliente_target.global_position
-					stato = Stato.VAI_TAVOLO
-				else:
-					_reset_stato()
-
-		Stato.VAI_TAVOLO:
-			if not is_instance_valid(cliente_target):
-				_reset_stato()
-				return
-
-			target = cliente_target.global_position
-			_muoviti_verso(target)
-
-			if global_position.distance_to(target) <= DIST_STOP + 8.0:
-				var consegna_ok := false
-				if cliente_target.has_method("consegna_piatto"):
-					consegna_ok = await cliente_target.consegna_piatto(piatto_in_mano)
-
-				if consegna_ok:
-					piatto_in_mano = ""
-
-				cliente_target = null
-				stato = Stato.TORNA
-				target = pos_iniziale
-
-		Stato.TORNA:
-			_muoviti_verso(target)
-			if global_position.distance_to(target) <= DIST_STOP:
-				velocity = Vector2.ZERO
-				move_and_slide()
-				sprite.play("idle_down")
-				stato = Stato.IDLE
-
-
 func _trova_cliente_per_piatto(nome_piatto: String) -> Node:
 	var clienti = get_tree().get_nodes_in_group("cliente")
-	var migliore: Node = null
-	var distanza_migliore := INF
-	var punto_tavolo = get_node_or_null(punto_tavolo_path)
-	var riferimento := global_position
-
-	if punto_tavolo:
-		riferimento = punto_tavolo.global_position
 
 	for cliente in clienti:
 		if cliente == null:
@@ -117,13 +104,9 @@ func _trova_cliente_per_piatto(nome_piatto: String) -> Node:
 			continue
 		if cliente.get_ordine() != nome_piatto:
 			continue
+		return cliente
 
-		var distanza = riferimento.distance_to(cliente.global_position)
-		if distanza < distanza_migliore:
-			distanza_migliore = distanza
-			migliore = cliente
-
-	return migliore
+	return null
 
 
 func _reset_stato() -> void:
@@ -133,11 +116,12 @@ func _reset_stato() -> void:
 	target = pos_iniziale
 
 
-func _muoviti_verso(dest: Vector2) -> void:
+func _muoviti_verso(dest: Vector2) -> bool:
 	var dir := dest - global_position
+
 	if dir.length() <= DIST_STOP:
-		velocity = Vector2.ZERO
-		return
+		ferma()
+		return true
 
 	dir = dir.normalized()
 	velocity = dir * SPEED
@@ -147,3 +131,18 @@ func _muoviti_verso(dest: Vector2) -> void:
 		sprite.play("walk_right" if dir.x > 0 else "walk_left")
 	else:
 		sprite.play("walk_down" if dir.y > 0 else "walk_up")
+
+	return false
+
+
+func ferma() -> void:
+	velocity = Vector2.ZERO
+	move_and_slide()
+	_set_idle()
+
+
+func _set_idle() -> void:
+	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation("idle_down"):
+		sprite.play("idle_down")
+	else:
+		sprite.stop()

@@ -12,18 +12,6 @@ height = 10.0
 atlas = ExtResource("2_8v2x8")
 region = Rect2(48, 10, 16, 22)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yyxj1"]
-atlas = ExtResource("2_8v2x8")
-region = Rect2(32, 10, 16, 22)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bkaji"]
-atlas = ExtResource("2_8v2x8")
-region = Rect2(16, 10, 16, 22)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hvhn1"]
-atlas = ExtResource("2_8v2x8")
-region = Rect2(0, 10, 16, 22)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ydsf0"]
 atlas = ExtResource("3_nn6px")
 region = Rect2(288, 9, 16, 23)
@@ -125,15 +113,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7xofo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yyxj1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bkaji")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hvhn1")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -234,6 +213,7 @@ animations = [{
 
 [node name="Cameriere" type="CharacterBody2D" unique_id=107051290]
 z_index = 1
+scale = Vector2(1.4, 1.4)
 collision_layer = 3
 script = ExtResource("1_gsqkg")
 

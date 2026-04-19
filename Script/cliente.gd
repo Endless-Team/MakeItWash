@@ -38,8 +38,11 @@ func attiva(spawn_pos: Vector2, tavolo_pos: Vector2, uscita_pos: Vector2) -> voi
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
 	visible = true
+
 	if collision:
 		collision.disabled = false
+
+	_set_idle()
 
 
 func reset_cliente() -> void:
@@ -47,15 +50,18 @@ func reset_cliente() -> void:
 	ordine = ""
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
+
 	if collision:
 		collision.disabled = true
-	sprite.stop()
+
+	_set_idle()
 
 
 func _physics_process(_delta: float) -> void:
 	match stato:
 		Stato.INATTIVO:
 			velocity = Vector2.ZERO
+			_set_idle()
 			return
 
 		Stato.ENTRA:
@@ -65,9 +71,11 @@ func _physics_process(_delta: float) -> void:
 				velocity = Vector2.ZERO
 				stato = Stato.ATTENDE
 				_scegli_ordine()
+				_set_idle()
 
 		Stato.ATTENDE:
 			velocity = Vector2.ZERO
+			_set_idle()
 
 		Stato.ESCE:
 			_muoviti_verso(pos_uscita)
@@ -90,6 +98,7 @@ func consegna_piatto(nome: String) -> bool:
 	emit_signal("ordine_consegnato", nome)
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO
+	_set_idle()
 	await get_tree().create_timer(0.8).timeout
 	stato = Stato.ESCE
 	return true
@@ -103,10 +112,18 @@ func get_ordine() -> String:
 	return ordine
 
 
+func _set_idle() -> void:
+	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
+	else:
+		sprite.stop()
+
+
 func _muoviti_verso(dest: Vector2) -> void:
 	var dir := dest - global_position
 	if dir.length() <= DIST_STOP:
 		velocity = Vector2.ZERO
+		_set_idle()
 		return
 
 	dir = dir.normalized()

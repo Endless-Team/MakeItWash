@@ -2,10 +2,15 @@
 
 [ext_resource type="Texture2D" uid="uid://bbdtf72rmecpj" path="res://Tiles/Modern tiles_Free/Characters_free/Amelia_run_16x16.png" id="1_kajl5"]
 [ext_resource type="Script" uid="uid://do7ubjswe6ika" path="res://Script/cliente.gd" id="1_lp84t"]
+[ext_resource type="Texture2D" uid="uid://cyi1up55bw00c" path="res://Tiles/Modern tiles_Free/Characters_free/Amelia_idle_16x16.png" id="2_e8ksi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lp84t"]
 radius = 5.0
 height = 10.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgirl"]
+atlas = ExtResource("2_e8ksi")
+region = Rect2(48, 0, 16, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e8ksi"]
 atlas = ExtResource("1_kajl5")
@@ -107,6 +112,14 @@ region = Rect2(176, 0, 16, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_dgirl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_e8ksi")
 }, {
 "duration": 1.0,
@@ -205,8 +218,10 @@ script = ExtResource("1_lp84t")
 shape = SubResource("CapsuleShape2D_lp84t")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=959101283]
+texture_filter = 1
+scale = Vector2(1.4, 1.4)
 sprite_frames = SubResource("SpriteFrames_dgirl")
-animation = &"walk_down"
+animation = &"idle"
 
 [node name="IconaOrdine" type="Sprite2D" parent="." unique_id=1034350555]
 position = Vector2(0, -20)
