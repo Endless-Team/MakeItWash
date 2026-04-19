@@ -38,7 +38,6 @@ func attiva(spawn_pos: Vector2, tavolo_pos: Vector2, uscita_pos: Vector2) -> voi
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
 	visible = true
-
 	if collision:
 		collision.disabled = false
 
@@ -48,14 +47,9 @@ func reset_cliente() -> void:
 	ordine = ""
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
-
 	if collision:
 		collision.disabled = true
-
-	if sprite.sprite_frames and sprite.sprite_frames.has_animation("idle_down"):
-		sprite.play("idle_down")
-	else:
-		sprite.stop()
+	sprite.stop()
 
 
 func _physics_process(_delta: float) -> void:
@@ -69,15 +63,11 @@ func _physics_process(_delta: float) -> void:
 			if global_position.distance_to(pos_tavolo) <= DIST_STOP:
 				global_position = pos_tavolo
 				velocity = Vector2.ZERO
-				move_and_slide()
 				stato = Stato.ATTENDE
 				_scegli_ordine()
 
 		Stato.ATTENDE:
 			velocity = Vector2.ZERO
-			move_and_slide()
-			if sprite.sprite_frames and sprite.sprite_frames.has_animation("idle_down"):
-				sprite.play("idle_down")
 
 		Stato.ESCE:
 			_muoviti_verso(pos_uscita)
@@ -91,7 +81,6 @@ func _scegli_ordine() -> void:
 	if TEXTURE_ORDINI.has(ordine):
 		icona_ordine.texture = TEXTURE_ORDINI[ordine]
 	icona_ordine.visible = true
-	sprite.stop()
 
 
 func consegna_piatto(nome: String) -> bool:
@@ -101,7 +90,6 @@ func consegna_piatto(nome: String) -> bool:
 	emit_signal("ordine_consegnato", nome)
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO
-	sprite.stop()
 	await get_tree().create_timer(0.8).timeout
 	stato = Stato.ESCE
 	return true

@@ -1,11 +1,9 @@
 extends Node
 
-@onready var tavolo_cliente: Node2D = $TavoloCliente
 @onready var cliente: CharacterBody2D = $Cliente
-
-@export var spawn_cliente: Vector2 = Vector2(240, 210)
-@export var offset_tavolo: Vector2 = Vector2(0, 18)
-@export var offset_uscita: Vector2 = Vector2(210, 210)
+@onready var spawn_cliente: Node2D = $SpawnCliente
+@onready var punto_tavolo_cliente: Node2D = $PuntoTavoloCliente
+@onready var uscita_cliente: Node2D = $UscitaCliente
 
 var cliente_attivo := false
 
@@ -25,25 +23,20 @@ func _spawna_cliente() -> void:
 	if cliente_attivo:
 		return
 
-	var pos_tavolo := tavolo_cliente.global_position + offset_tavolo
-	var pos_uscita := offset_uscita
-
 	cliente_attivo = true
 	cliente.visible = true
 	cliente.process_mode = Node.PROCESS_MODE_INHERIT
-
-	if cliente.has_method("attiva"):
-		cliente.attiva(spawn_cliente, pos_tavolo, pos_uscita)
-	else:
-		cliente.global_position = spawn_cliente
+	cliente.attiva(
+		spawn_cliente.global_position,
+		punto_tavolo_cliente.global_position,
+		uscita_cliente.global_position
+	)
 
 
 func _on_ordine_consegnato(_nome: String) -> void:
 	await get_tree().create_timer(3.0).timeout
 
-	if cliente.has_method("reset_cliente"):
-		cliente.reset_cliente()
-
+	cliente.reset_cliente()
 	cliente.visible = false
 	cliente.process_mode = Node.PROCESS_MODE_DISABLED
 	cliente_attivo = false

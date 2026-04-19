@@ -43,7 +43,9 @@ scale = Vector2(1.4, 1.4)
 collision_layer = 1
 
 [node name="Cliente" parent="." unique_id=760365552 instance=ExtResource("4_u6yaq")]
-position = Vector2(751.6667, 409.1667)
+z_index = 1
+position = Vector2(524, 333)
+collision_mask = 3
 
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
 position = Vector2(748.1666, 288.16666)
@@ -85,3 +87,12 @@ position = Vector2(727.6667, 261.1667)
 position = Vector2(728.6667, 232.83334)
 
 [node name="MoneyLabel" parent="." unique_id=1856258133 instance=ExtResource("10_e27gh")]
+
+[node name="SpawnCliente" type="Node2D" parent="." unique_id=605042856]
+position = Vector2(524, 332.8333)
+
+[node name="PuntoTavoloCliente" type="Node2D" parent="." unique_id=799501414]
+position = Vector2(726, 230.66667)
+
+[node name="UscitaCliente" type="Node2D" parent="." unique_id=2109054276]
+position = Vector2(494.5, 301.50003)
