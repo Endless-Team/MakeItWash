@@ -51,7 +51,7 @@ func _scegli_ordine() -> void:
 	if TEXTURE_ORDINI.has(ordine):
 		icona_ordine.texture = TEXTURE_ORDINI[ordine]
 	icona_ordine.visible = true
-	sprite.play("idle_down")
+	sprite.stop()
 	print("Cliente vuole: " + ordine)
 
 # Chiamato dal cameriere — usa await qui, fuori da _physics_process
@@ -59,7 +59,7 @@ func consegna_piatto(nome: String) -> void:
 	if nome == ordine and stato == Stato.ATTENDE:
 		emit_signal("ordine_consegnato", nome)
 		icona_ordine.visible = false
-		sprite.play("idle_down")
+		sprite.stop()
 		await get_tree().create_timer(0.8).timeout
 		stato = Stato.ESCE
 
