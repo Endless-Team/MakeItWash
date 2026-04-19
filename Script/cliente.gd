@@ -1,39 +1,73 @@
 extends CharacterBody2D
 
 const SPEED = 120.0
+const DIST_STOP = 4.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var icona_ordine: Sprite2D = $IconaOrdine
+@onready var collision: CollisionShape2D = $CollisionShape2D
 
 const TEXTURE_ORDINI = {
 	"Nigiri salmone": preload("res://Tiles/Sushi/r_1653.png"),
 	"Nigiri gambero": preload("res://Tiles/Sushi/r_1643.png"),
 }
+
 const ORDINI_DISPONIBILI = ["Nigiri salmone", "Nigiri gambero"]
 
 signal ordine_consegnato(nome: String)
 
-enum Stato { ENTRA, ATTENDE, ESCE }
+enum Stato { INATTIVO, ENTRA, ATTENDE, ESCE }
 
-var stato := Stato.ENTRA
+var stato := Stato.INATTIVO
 var ordine := ""
 var pos_tavolo := Vector2.ZERO
 var pos_uscita := Vector2.ZERO
 
+
 func _ready() -> void:
 	add_to_group("cliente")
+	reset_cliente()
+
+
+func attiva(spawn_pos: Vector2, tavolo_pos: Vector2, uscita_pos: Vector2) -> void:
+	global_position = spawn_pos
+	pos_tavolo = tavolo_pos
+	pos_uscita = uscita_pos
+	ordine = ""
+	stato = Stato.ENTRA
+	velocity = Vector2.ZERO
+	icona_ordine.visible = false
+	visible = true
+
+	if collision:
+		collision.disabled = false
+
+
+func reset_cliente() -> void:
+	stato = Stato.INATTIVO
+	ordine = ""
+	velocity = Vector2.ZERO
 	icona_ordine.visible = false
 
-func inizia(tavolo: Vector2, uscita: Vector2) -> void:
-	pos_tavolo = tavolo
-	pos_uscita = uscita
-	stato = Stato.ENTRA
+	if collision:
+		collision.disabled = true
+
+	if sprite.sprite_frames and sprite.sprite_frames.has_animation("idle_down"):
+		sprite.play("idle_down")
+	else:
+		sprite.stop()
+
 
 func _physics_process(_delta: float) -> void:
 	match stato:
+		Stato.INATTIVO:
+			velocity = Vector2.ZERO
+			return
+
 		Stato.ENTRA:
 			_muoviti_verso(pos_tavolo)
-			if position.distance_to(pos_tavolo) < 3.0:
+			if global_position.distance_to(pos_tavolo) <= DIST_STOP:
+				global_position = pos_tavolo
 				velocity = Vector2.ZERO
 				move_and_slide()
 				stato = Stato.ATTENDE
@@ -42,11 +76,15 @@ func _physics_process(_delta: float) -> void:
 		Stato.ATTENDE:
 			velocity = Vector2.ZERO
 			move_and_slide()
+			if sprite.sprite_frames and sprite.sprite_frames.has_animation("idle_down"):
+				sprite.play("idle_down")
 
 		Stato.ESCE:
 			_muoviti_verso(pos_uscita)
-			if position.distance_to(pos_uscita) < 3.0:
-				queue_free()
+			if global_position.distance_to(pos_uscita) <= DIST_STOP:
+				reset_cliente()
+				visible = false
+
 
 func _scegli_ordine() -> void:
 	ordine = ORDINI_DISPONIBILI[randi() % ORDINI_DISPONIBILI.size()]
@@ -55,17 +93,31 @@ func _scegli_ordine() -> void:
 	icona_ordine.visible = true
 	sprite.stop()
 
-func consegna_piatto(nome: String) -> void:
-	if nome == ordine and stato == Stato.ATTENDE:
-		emit_signal("ordine_consegnato", nome)
-		icona_ordine.visible = false
-		sprite.stop()
-		await get_tree().create_timer(0.8).timeout
-		stato = Stato.ESCE
+
+func consegna_piatto(nome: String) -> bool:
+	if nome != ordine or stato != Stato.ATTENDE:
+		return false
+
+	emit_signal("ordine_consegnato", nome)
+	icona_ordine.visible = false
+	velocity = Vector2.ZERO
+	sprite.stop()
+	await get_tree().create_timer(0.8).timeout
+	stato = Stato.ESCE
+	return true
+
+
+func sta_attendendo() -> bool:
+	return stato == Stato.ATTENDE
+
+
+func get_ordine() -> String:
+	return ordine
+
 
 func _muoviti_verso(dest: Vector2) -> void:
-	var dir = (dest - position)
-	if dir.length() < 0.01:
+	var dir := dest - global_position
+	if dir.length() <= DIST_STOP:
 		velocity = Vector2.ZERO
 		return
 

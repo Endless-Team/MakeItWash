@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://ih8v8vtuyhw8" path="res://UI/Taglio/panelSceltaAssembla.tscn" id="2_uuaqg"]
 [ext_resource type="PackedScene" uid="uid://q3fhy100v0ah" path="res://Scene/ZonaTaglio.tscn" id="3_tq8ox"]
 [ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://Scene/cameriere.tscn" id="4_74pey"]
+[ext_resource type="PackedScene" uid="uid://gn8a1y0e6o5u" path="res://Scene/cliente.tscn" id="4_u6yaq"]
 [ext_resource type="PackedScene" uid="uid://dk0k1ay4w0som" path="res://UI/Taglio/panelSceltaTaglio.tscn" id="5_fpu6t"]
 [ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
+[ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://UI/money_label.tscn" id="10_e27gh"]
 
 [node name="Sushi" type="Node2D" unique_id=2084916691]
 scale = Vector2(6, 6)
@@ -39,6 +41,9 @@ z_index = 0
 position = Vector2(992.66656, 261.5)
 scale = Vector2(1.4, 1.4)
 collision_layer = 1
+
+[node name="Cliente" parent="." unique_id=760365552 instance=ExtResource("4_u6yaq")]
+position = Vector2(751.6667, 409.1667)
 
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
 position = Vector2(748.1666, 288.16666)
@@ -78,3 +83,5 @@ position = Vector2(727.6667, 261.1667)
 
 [node name="TavoloCliente" type="Node2D" parent="." unique_id=1146753952]
 position = Vector2(728.6667, 232.83334)
+
+[node name="MoneyLabel" parent="." unique_id=1856258133 instance=ExtResource("10_e27gh")]
