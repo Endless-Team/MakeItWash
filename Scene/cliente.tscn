@@ -210,4 +210,4 @@ animation = &"walk_down"
 
 [node name="IconaOrdine" type="Sprite2D" parent="." unique_id=1034350555]
 position = Vector2(0, -20)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.08, 0.08)

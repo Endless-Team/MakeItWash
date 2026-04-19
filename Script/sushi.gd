@@ -16,7 +16,7 @@ func _spawna_cliente() -> void:
 	if cliente_attivo != null:
 		return
 	var c = ClienteScene.instantiate()
-	get_parent().add_child(c)                        # ← era get_parent().add_child(c)
+	add_child(c)                        # ← era get_parent().add_child(c)
 	c.global_position = spawn_cliente
 	c.inizia(pos_tavolo, pos_uscita)
 	c.ordine_consegnato.connect(_on_ordine_consegnato)
