@@ -3,6 +3,6 @@
 [ext_resource type="Script" uid="uid://b38fwx7x24avv" path="res://Script/moneyLabel.gd" id="1_2ncie"]
 
 [node name="MoneyLabel" type="Label" unique_id=1856258133]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_right = 471.0
+offset_bottom = 160.0
 script = ExtResource("1_2ncie")

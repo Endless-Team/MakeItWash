@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 120.0
+const SPEED = 200.0
 const DIST_STOP = 4.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -95,6 +95,7 @@ func consegna_piatto(nome: String) -> bool:
 	if nome != ordine or stato != Stato.ATTENDE:
 		return false
 
+	Inventario.accredita_vendita(nome)
 	emit_signal("ordine_consegnato", nome)
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO

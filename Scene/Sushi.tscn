@@ -77,6 +77,10 @@ transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
 
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1284364786]
+
+[node name="MoneyLabel" parent="CanvasLayer" unique_id=1856258133 instance=ExtResource("10_e27gh")]
+
 [node name="PuntoConsegnaCameriere" type="Node2D" parent="." unique_id=1408878782]
 position = Vector2(813.8334, 238.83334)
 
@@ -85,8 +89,6 @@ position = Vector2(727.6667, 261.1667)
 
 [node name="TavoloCliente" type="Node2D" parent="." unique_id=1146753952]
 position = Vector2(728.6667, 232.83334)
-
-[node name="MoneyLabel" parent="." unique_id=1856258133 instance=ExtResource("10_e27gh")]
 
 [node name="SpawnCliente" type="Node2D" parent="." unique_id=605042856]
 position = Vector2(469.5, 537.3334)
