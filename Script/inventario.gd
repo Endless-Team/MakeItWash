@@ -9,10 +9,7 @@ const COSTI_INGREDIENTI = {
 	"Gambero": 5
 }
 
-const RICAVI_PIATTI = {
-	"Nigiri salmone": 12,
-	"Nigiri gambero": 14
-}
+const RICAVO_CONSEGNA = 10
 
 signal inventario_cambiato
 signal piatto_aggiunto(nome: String)
@@ -73,11 +70,8 @@ func ritira_piatto() -> String:
 	return piatto
 
 
-func accredita_vendita(nome_piatto: String) -> void:
-	if not RICAVI_PIATTI.has(nome_piatto):
-		return
-
-	soldi += RICAVI_PIATTI[nome_piatto]
+func accredita_vendita() -> void:
+	soldi += RICAVO_CONSEGNA
 	emit_signal("soldi_cambiati", soldi)
 
 

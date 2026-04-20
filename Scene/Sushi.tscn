@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dhvxnha00c4q3" path="res://Scene/ZonaConsegna.tscn" id="6_mpkty"]
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
 [ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://UI/money_label.tscn" id="10_e27gh"]
+[ext_resource type="Script" uid="uid://xcjns5xl3a4h" path="res://Script/money_panel_style.gd" id="11_ibefy"]
 
 [node name="Sushi" type="Node2D" unique_id=2084916691]
 scale = Vector2(6, 6)
@@ -44,7 +45,7 @@ collision_layer = 1
 
 [node name="Cliente" parent="." unique_id=760365552 instance=ExtResource("4_u6yaq")]
 z_index = 1
-position = Vector2(468.83334, 536.8334)
+position = Vector2(516.8333, 296.3333)
 collision_mask = 3
 
 [node name="Cameriere" parent="." unique_id=1922064150 instance=ExtResource("4_74pey")]
@@ -79,7 +80,20 @@ transform = Transform2D(1, 0, 0, 1, 0, 0)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1284364786]
 
-[node name="MoneyLabel" parent="CanvasLayer" unique_id=1856258133 instance=ExtResource("10_e27gh")]
+[node name="MoneyPanel" type="Panel" parent="CanvasLayer" unique_id=1954309570]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 110.0
+script = ExtResource("11_ibefy")
+
+[node name="MoneyLabel" parent="CanvasLayer/MoneyPanel" unique_id=1856258133 instance=ExtResource("10_e27gh")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 240.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 32
 
 [node name="PuntoConsegnaCameriere" type="Node2D" parent="." unique_id=1408878782]
 position = Vector2(813.8334, 238.83334)
@@ -91,10 +105,10 @@ position = Vector2(727.6667, 261.1667)
 position = Vector2(728.6667, 232.83334)
 
 [node name="SpawnCliente" type="Node2D" parent="." unique_id=605042856]
-position = Vector2(469.5, 537.3334)
+position = Vector2(519.5, 302.5)
 
 [node name="PuntoTavoloCliente" type="Node2D" parent="." unique_id=799501414]
 position = Vector2(726, 230.66667)
 
 [node name="UscitaCliente" type="Node2D" parent="." unique_id=2109054276]
-position = Vector2(495.33334, 523.3333)
+position = Vector2(574.8334, 425.99997)

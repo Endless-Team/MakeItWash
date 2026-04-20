@@ -22,6 +22,7 @@ var stato := Stato.INATTIVO
 var ordine := ""
 var pos_tavolo := Vector2.ZERO
 var pos_uscita := Vector2.ZERO
+var gia_pagato := false
 
 
 func _ready() -> void:
@@ -34,6 +35,7 @@ func attiva(spawn_pos: Vector2, tavolo_pos: Vector2, uscita_pos: Vector2) -> voi
 	pos_tavolo = tavolo_pos
 	pos_uscita = uscita_pos
 	ordine = ""
+	gia_pagato = false
 	stato = Stato.ENTRA
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
@@ -48,6 +50,7 @@ func attiva(spawn_pos: Vector2, tavolo_pos: Vector2, uscita_pos: Vector2) -> voi
 func reset_cliente() -> void:
 	stato = Stato.INATTIVO
 	ordine = ""
+	gia_pagato = false
 	velocity = Vector2.ZERO
 	icona_ordine.visible = false
 
@@ -92,10 +95,11 @@ func _scegli_ordine() -> void:
 
 
 func consegna_piatto(nome: String) -> bool:
-	if nome != ordine or stato != Stato.ATTENDE:
+	if nome != ordine or stato != Stato.ATTENDE or gia_pagato:
 		return false
 
-	Inventario.accredita_vendita(nome)
+	gia_pagato = true
+	Inventario.accredita_vendita()
 	emit_signal("ordine_consegnato", nome)
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO
