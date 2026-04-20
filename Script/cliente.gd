@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 200.0
 const DIST_STOP = 4.0
+const EXIT_STOP = 1.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var icona_ordine: Sprite2D = $IconaOrdine
@@ -68,7 +69,7 @@ func _physics_process(_delta: float) -> void:
 			return
 
 		Stato.ENTRA:
-			_muoviti_verso(pos_tavolo)
+			_muoviti_verso(pos_tavolo, DIST_STOP)
 			if global_position.distance_to(pos_tavolo) <= DIST_STOP:
 				global_position = pos_tavolo
 				velocity = Vector2.ZERO
@@ -81,8 +82,10 @@ func _physics_process(_delta: float) -> void:
 			_set_idle()
 
 		Stato.ESCE:
-			_muoviti_verso(pos_uscita)
-			if global_position.distance_to(pos_uscita) <= DIST_STOP:
+			_muoviti_verso(pos_uscita, EXIT_STOP)
+			if global_position.distance_to(pos_uscita) <= EXIT_STOP:
+				global_position = pos_uscita
+				velocity = Vector2.ZERO
 				reset_cliente()
 				visible = false
 
@@ -124,9 +127,9 @@ func _set_idle() -> void:
 		sprite.stop()
 
 
-func _muoviti_verso(dest: Vector2) -> void:
+func _muoviti_verso(dest: Vector2, stop_distance: float) -> void:
 	var dir := dest - global_position
-	if dir.length() <= DIST_STOP:
+	if dir.length() <= stop_distance:
 		velocity = Vector2.ZERO
 		_set_idle()
 		return

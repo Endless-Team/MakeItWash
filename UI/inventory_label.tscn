@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c8a61yvtgdg8c"]
+
+[node name="InventoryLabel" type="Label" unique_id=1271330087]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -916.0
+offset_bottom = -524.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24

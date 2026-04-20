@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://bcqguqbl33qyg" path="res://Scene/ZonaAssemblo.tscn" id="6_tibrt"]
 [ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://UI/money_label.tscn" id="10_e27gh"]
 [ext_resource type="Script" uid="uid://xcjns5xl3a4h" path="res://Script/money_panel_style.gd" id="11_ibefy"]
+[ext_resource type="PackedScene" uid="uid://c8a61yvtgdg8c" path="res://UI/inventory_label.tscn" id="13_1pyk2"]
+[ext_resource type="Script" uid="uid://fvavl6hrxi71" path="res://Script/inventory_panel_style.gd" id="13_catxg"]
+[ext_resource type="Script" uid="uid://d30ll7uqmjgi3" path="res://Script/inventory_label.gd" id="14_88qcu"]
 
 [node name="Sushi" type="Node2D" unique_id=2084916691]
 scale = Vector2(6, 6)
@@ -73,27 +76,53 @@ tile_map_data = PackedByteArray("AAA7AAgAAgAKAAQAAAA8AAgAAgATAAIAAAA6AAgAAgAKAAQ
 tile_set = ExtResource("1_r38da")
 
 [node name="sceltaIngrediente" parent="." unique_id=532995143 instance=ExtResource("5_fpu6t")]
+offset = Vector2(300, 300)
 scale = Vector2(1, 1)
-transform = Transform2D(1, 0, 0, 1, 0, 0)
+transform = Transform2D(1, 0, 0, 1, 300, 300)
 
 [node name="PanelSceltaAssembla" parent="." unique_id=1209876604 instance=ExtResource("2_uuaqg")]
+offset = Vector2(-200, -600)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, -200, -600)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1284364786]
+[node name="CanvasLayerMoney" type="CanvasLayer" parent="." unique_id=1284364786]
 
-[node name="MoneyPanel" type="Panel" parent="CanvasLayer" unique_id=1954309570]
+[node name="MoneyPanel" type="Panel" parent="CanvasLayerMoney" unique_id=1954309570]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 280.0
 offset_bottom = 110.0
 script = ExtResource("11_ibefy")
 
-[node name="MoneyLabel" parent="CanvasLayer/MoneyPanel" unique_id=1856258133 instance=ExtResource("10_e27gh")]
+[node name="MoneyLabel" parent="CanvasLayerMoney/MoneyPanel" unique_id=1856258133 instance=ExtResource("10_e27gh")]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 240.0
 offset_bottom = 70.0
 theme_override_font_sizes/font_size = 32
+
+[node name="InventoryPanel" type="Panel" parent="CanvasLayerMoney" unique_id=1418124574]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_bottom = 140.0
+grow_horizontal = 0
+script = ExtResource("13_catxg")
+
+[node name="InventoryLabel" parent="CanvasLayerMoney/InventoryPanel" unique_id=1271330087 instance=ExtResource("13_1pyk2")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 1
+grow_vertical = 1
+script = ExtResource("14_88qcu")
 
 [node name="PuntoConsegnaCameriere" type="Node2D" parent="." unique_id=1408878782]
 position = Vector2(813.8334, 238.83334)

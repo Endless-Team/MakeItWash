@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dk0k1ay4w0som"]
 
 [ext_resource type="Script" uid="uid://wtp74fy1ivt1" path="res://Script/canvasTaglio.gd" id="1_ydwv0"]
+[ext_resource type="Texture2D" uid="uid://d7o1vrt2ivs" path="res://Tiles/personal assets/salmon to cut.png" id="2_oxh0q"]
+[ext_resource type="Texture2D" uid="uid://oiih8loo0unr" path="res://Tiles/personal assets/shrimp to cut.png" id="3_x0ow2"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=532995143]
 scale = Vector2(2, 2)
@@ -30,16 +32,32 @@ text = "Scegli ingrediente:"
 
 [node name="Salmone" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1302820537]
 layout_mode = 2
-text = "Salmone"
+text = "       Salmone (€4)"
+
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Salmone" unique_id=545548918]
+layout_mode = 1
+offset_right = 500.0
+offset_bottom = 500.0
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("2_oxh0q")
 
 [node name="Gambero" type="Button" parent="PanelContainer/VBoxContainer" unique_id=613243936]
 layout_mode = 2
-text = "Gambero"
+text = "      Gambero (€5)"
+
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Gambero" unique_id=1128672377]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("3_x0ow2")
 
 [node name="Button" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1928951414]
 layout_mode = 2
 text = "chiudi"
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Salmone" to="PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Salmone/TextureButton" to="PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Gambero" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Gambero/TextureButton" to="PanelContainer" method="_on_gambero_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Button" to="PanelContainer" method="_on_chiudi_pressed"]
