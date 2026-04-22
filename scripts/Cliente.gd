@@ -1,3 +1,4 @@
+# feat: aggiunto Osomaki tra gli ordini possibili del cliente
 extends CharacterBody2D
 
 const SPEED = 200.0
@@ -11,9 +12,14 @@ const EXIT_STOP = 1.0
 const TEXTURE_ORDINI = {
 	"Nigiri salmone": preload("res://Tiles/Sushi/r_1653.png"),
 	"Nigiri gambero": preload("res://Tiles/Sushi/r_1643.png"),
+	"Osomaki": preload("res://Tiles/Sushi/r_1652.png"),
 }
 
-const ORDINI_DISPONIBILI = ["Nigiri salmone", "Nigiri gambero"]
+const ORDINI_DISPONIBILI = [
+	"Nigiri salmone",
+	"Nigiri gambero",
+	"Osomaki"
+]
 
 signal ordine_consegnato(nome: String)
 
@@ -107,6 +113,7 @@ func consegna_piatto(nome: String) -> bool:
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO
 	_set_idle()
+
 	await get_tree().create_timer(0.8).timeout
 	stato = Stato.ESCE
 	return true

@@ -39,7 +39,7 @@ func _on_nigiri_gambero_pressed() -> void:
 
 func _on_osomaki_intero_pressed() -> void:
 	if player:
-		player.assembla_preparazione("Osomaki intero", "Salmone")
+		player.assembla_osomaki_intero()  # ← FIX: era assembla_preparazione() che non esiste
 	aggiorna_bottoni()
 
 

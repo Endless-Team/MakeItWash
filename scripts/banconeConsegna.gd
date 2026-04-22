@@ -1,4 +1,4 @@
-# Script/banconeConsegna.gd
+# feat: gestita occupazione del bancone e supporto completo a Osomaki
 extends Area2D
 
 signal piatto_depositato(nome: String)
@@ -7,27 +7,42 @@ signal piatto_depositato(nome: String)
 
 const TEXTURE_PIATTI = {
 	"Nigiri salmone": preload("res://Tiles/Sushi/r_1653.png"),
-	"Nigiri gambero":  preload("res://Tiles/Sushi/r_1643.png"),
+	"Nigiri gambero": preload("res://Tiles/Sushi/r_1643.png"),
 	"Osomaki": preload("res://Tiles/Sushi/r_1652.png")
 }
+
+var piatto_corrente: String = ""
+
 
 func _ready() -> void:
 	add_to_group("bancone_consegna")
 	sprite_piatto.visible = false
 
+
 func _on_body_entered(body) -> void:
 	if body.has_method("set_vicino_bancone"):
 		body.set_vicino_bancone(true, "consegna")
+
 
 func _on_body_exited(body) -> void:
 	if body.has_method("set_vicino_bancone"):
 		body.set_vicino_bancone(false, "")
 
-func deposita_piatto(nome: String) -> void:
+
+func deposita_piatto(nome: String) -> bool:
+	if piatto_corrente != "":
+		return false
+
+	piatto_corrente = nome
+
 	if TEXTURE_PIATTI.has(nome):
 		sprite_piatto.texture = TEXTURE_PIATTI[nome]
 		sprite_piatto.visible = true
+
 	emit_signal("piatto_depositato", nome)
+	return true
+
 
 func ritira_piatto_visivo() -> void:
+	piatto_corrente = ""
 	sprite_piatto.visible = false

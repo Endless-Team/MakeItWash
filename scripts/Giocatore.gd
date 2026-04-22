@@ -1,3 +1,4 @@
+# fix: consegna robusta e supporto completo a nigiri e osomaki nel flusso inventario
 extends CharacterBody2D
 
 const SPEED = 500.0
@@ -33,9 +34,12 @@ func _physics_process(_delta: float) -> void:
 
 		elif tipo_bancone == "consegna" and Inventario.piatti_pronti.size() > 0:
 			var bancone = get_tree().get_first_node_in_group("bancone_consegna")
-			if bancone:
+			if bancone and bancone.has_method("deposita_piatto"):
 				var piatto = Inventario.ritira_piatto()
-				bancone.deposita_piatto(piatto)
+				var depositato: bool = bancone.deposita_piatto(piatto)
+				if not depositato and piatto != "":
+					Inventario.piatti_pronti.push_front(piatto)
+					Inventario.emit_signal("inventario_cambiato")
 
 	if Input.is_action_just_pressed("ui_cancel"):
 		if ui_taglio:

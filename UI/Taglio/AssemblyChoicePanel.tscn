@@ -87,7 +87,7 @@ stretch_mode = 0
 layout_mode = 2
 text = "Chiudi"
 
-[connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriSalmone" to="PanelSceltaAssembla/PanelContainer" method="_on_salmone_pressed"]
+[connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriSalmone" to="PanelSceltaAssembla/PanelContainer" method="_on_nigiri_salmone_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriSalmone/TextureButton" to="PanelSceltaAssembla/PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriGambero" to="PanelSceltaAssembla/PanelContainer" method="_on_gambero_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriGambero/TextureButton" to="PanelSceltaAssembla/PanelContainer" method="_on_nigiri_gambero_pressed"]
