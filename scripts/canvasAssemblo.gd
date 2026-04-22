@@ -4,6 +4,8 @@ var player
 
 @onready var btn_nigiri_salmone: Button = $VBoxContainer/NigiriSalmone
 @onready var btn_nigiri_gambero: Button = $VBoxContainer/NigiriGambero
+@onready var btn_osomaki_intero: Button = $VBoxContainer/OsomakiIntero
+@onready var btn_chiudi: Button = $VBoxContainer/Chiudi
 
 
 func _ready() -> void:
@@ -20,25 +22,27 @@ func _ready() -> void:
 func aggiorna_bottoni() -> void:
 	btn_nigiri_salmone.disabled = not Inventario.ha_ingrediente("Salmone")
 	btn_nigiri_gambero.disabled = not Inventario.ha_ingrediente("Gambero")
+	btn_osomaki_intero.disabled = not Inventario.ha_ingrediente("Salmone")
 
 
-func _on_salmone_pressed() -> void:
+func _on_nigiri_salmone_pressed() -> void:
 	if player:
 		player.assembla_piatto("Nigiri salmone", "Salmone")
 	aggiorna_bottoni()
 
 
-func _on_gambero_pressed() -> void:
+func _on_nigiri_gambero_pressed() -> void:
 	if player:
 		player.assembla_piatto("Nigiri gambero", "Gambero")
 	aggiorna_bottoni()
 
 
-func _on_osomaki_pressed() -> void:
+func _on_osomaki_intero_pressed() -> void:
 	if player:
-		player.assembla_piatto("Osomaki_intero", "Salmone")
-	pass
-	
+		player.assembla_preparazione("Osomaki intero", "Salmone")
+	aggiorna_bottoni()
+
+
 func _on_chiudi_pressed() -> void:
 	visible = false
 

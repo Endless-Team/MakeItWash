@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://ih8v8vtuyhw8"]
 
-[ext_resource type="Texture2D" uid="uid://kcy850kaxtyy" path="res://tiles/Sushi/r_1653.png" id="1_6pjgg"]
+[ext_resource type="Texture2D" uid="uid://kcy850kaxtyy" path="res://Tiles/Sushi/r_1653.png" id="1_6pjgg"]
 [ext_resource type="Script" uid="uid://dfamfni5nhs77" path="res://scripts/canvasAssemblo.gd" id="1_otmq6"]
-[ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://tiles/Sushi/r_1643.png" id="2_otmq6"]
+[ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://Tiles/Sushi/r_1643.png" id="2_otmq6"]
+[ext_resource type="Texture2D" uid="uid://ddafxpv0vlbte" path="res://Tiles/Sushi/r_1652.png" id="4_6d5ux"]
 
 [node name="SceltaAssemblaggio" type="Control" unique_id=492479406]
 layout_mode = 3
@@ -65,6 +66,23 @@ texture_normal = ExtResource("2_otmq6")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="OsomakiIntero" type="Button" parent="PanelSceltaAssembla/PanelContainer/VBoxContainer" unique_id=641601725]
+layout_mode = 2
+text = "          Osomaki intero"
+icon_alignment = 1
+vertical_icon_alignment = 2
+
+[node name="TextureButton" type="TextureButton" parent="PanelSceltaAssembla/PanelContainer/VBoxContainer/OsomakiIntero" unique_id=1818267520]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 39.0
+offset_right = 318.7948
+offset_bottom = 741.00507
+rotation = -1.5707964
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("4_6d5ux")
+stretch_mode = 0
+
 [node name="chiudi" type="Button" parent="PanelSceltaAssembla/PanelContainer/VBoxContainer" unique_id=1316641657]
 layout_mode = 2
 text = "Chiudi"
@@ -72,4 +90,7 @@ text = "Chiudi"
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriSalmone" to="PanelSceltaAssembla/PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriSalmone/TextureButton" to="PanelSceltaAssembla/PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriGambero" to="PanelSceltaAssembla/PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/NigiriGambero/TextureButton" to="PanelSceltaAssembla/PanelContainer" method="_on_nigiri_gambero_pressed"]
+[connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/OsomakiIntero" to="PanelSceltaAssembla/PanelContainer" method="_on_osomaki_intero_pressed"]
+[connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/OsomakiIntero/TextureButton" to="PanelSceltaAssembla/PanelContainer" method="_on_osomaki_intero_pressed"]
 [connection signal="pressed" from="PanelSceltaAssembla/PanelContainer/VBoxContainer/chiudi" to="PanelSceltaAssembla/PanelContainer" method="_on_chiudi_pressed"]

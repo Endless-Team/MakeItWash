@@ -1,6 +1,7 @@
 extends Node
 
 var ingredienti: Dictionary = {}
+var preparazioni: Dictionary = {}
 var piatti_pronti: Array = []
 var soldi: int = 100
 
@@ -53,6 +54,27 @@ func rimuovi_ingrediente(nome: String, quantita: int = 1) -> bool:
 
 func ha_ingrediente(nome: String, quantita: int = 1) -> bool:
 	return ingredienti.get(nome, 0) >= quantita
+
+
+func aggiungi_preparazione(nome: String, quantita: int = 1) -> void:
+	preparazioni[nome] = preparazioni.get(nome, 0) + quantita
+	emit_signal("inventario_cambiato")
+
+
+func rimuovi_preparazione(nome: String, quantita: int = 1) -> bool:
+	if preparazioni.get(nome, 0) < quantita:
+		return false
+
+	preparazioni[nome] -= quantita
+	if preparazioni[nome] <= 0:
+		preparazioni.erase(nome)
+
+	emit_signal("inventario_cambiato")
+	return true
+
+
+func ha_preparazione(nome: String, quantita: int = 1) -> bool:
+	return preparazioni.get(nome, 0) >= quantita
 
 
 func aggiungi_piatto(nome: String) -> void:

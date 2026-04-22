@@ -53,17 +53,18 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_pressed("ui_up") or Input.is_key_pressed(KEY_W):
 		direction.y -= 1
 	if Input.is_action_pressed("ui_down") or Input.is_key_pressed(KEY_S):
-			direction.y += 1
+		direction.y += 1
 	if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A):
-			direction.x -= 1
+		direction.x -= 1
 	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
-			direction.x += 1
-		
+		direction.x += 1
+
 	var touch_ui = get_tree().get_first_node_in_group("touch_ui")
 	if touch_ui and touch_ui.has_method("get_input_vector"):
 		var touch_dir: Vector2 = touch_ui.get_input_vector()
 		if touch_dir.length() > 0.15:
 			direction = touch_dir
+
 	if direction.length() > 1.0:
 		direction = direction.normalized()
 
@@ -99,28 +100,37 @@ func set_vicino_bancone(valore: bool, tipo: String) -> void:
 
 
 func taglia_ingrediente(nome: String) -> void:
-	if ui_taglio:
-		ui_taglio.visible = false
-
 	sta_tagliando = true
-	
-	if nome == "Osomaki":
-		if not Inventario.ha_ingrediente("Osomaki_intero"):
-			return
-		else:
-			print("Tagliato: " + nome)
-			Inventario.aggiungi_piatto("Osomaki")
-	else:		
-		var ok := Inventario.aggiungi_ingrediente(nome)
-		if ok:
-			print("Tagliato: " + nome)
-		else:
-			print("Soldi insufficienti per: " + nome)
+
+	var ok := Inventario.aggiungi_ingrediente(nome)
+	if ok:
+		print("Tagliato: " + nome)
+	else:
+		print("Soldi insufficienti per: " + nome)
 
 	sta_tagliando = false
 
-	if ui_taglio and ui_taglio.has_method("aggiorna_bottoni"):
-		ui_taglio.aggiorna_bottoni()
+	if ui_taglio:
+		ui_taglio.visible = false
+		if ui_taglio.has_method("aggiorna_bottoni"):
+			ui_taglio.aggiorna_bottoni()
+
+
+func taglia_osomaki() -> void:
+	if not Inventario.ha_preparazione("Osomaki intero"):
+		print("Non hai Osomaki intero")
+		return
+
+	sta_tagliando = true
+	Inventario.rimuovi_preparazione("Osomaki intero")
+	Inventario.aggiungi_piatto("Osomaki")
+	print("Tagliato: Osomaki intero -> Osomaki")
+	sta_tagliando = false
+
+	if ui_taglio:
+		ui_taglio.visible = false
+		if ui_taglio.has_method("aggiorna_bottoni"):
+			ui_taglio.aggiorna_bottoni()
 
 
 func assembla_piatto(nome_piatto: String, ingrediente_richiesto: String) -> void:
@@ -128,15 +138,26 @@ func assembla_piatto(nome_piatto: String, ingrediente_richiesto: String) -> void
 		print("Non hai: " + ingrediente_richiesto)
 		return
 
+	Inventario.rimuovi_ingrediente(ingrediente_richiesto)
+	Inventario.aggiungi_piatto(nome_piatto)
+	print("Assemblato: " + nome_piatto)
+
 	if ui_assemblaggio:
 		ui_assemblaggio.visible = false
+		if ui_assemblaggio.has_method("aggiorna_bottoni"):
+			ui_assemblaggio.aggiorna_bottoni()
 
-	Inventario.rimuovi_ingrediente(ingrediente_richiesto)
-	if nome_piatto == "Osomaki_intero":
-		Inventario.aggiungi_ingrediente("Osomaki_intero")
-	else:
-		Inventario.aggiungi_piatto(nome_piatto)
-		print("Assemblato: " + nome_piatto)
 
-	if ui_assemblaggio and ui_assemblaggio.has_method("aggiorna_bottoni"):
-		ui_assemblaggio.aggiorna_bottoni()
+func assembla_osomaki_intero() -> void:
+	if not Inventario.ha_ingrediente("Salmone"):
+		print("Non hai Salmone")
+		return
+
+	Inventario.rimuovi_ingrediente("Salmone")
+	Inventario.aggiungi_preparazione("Osomaki intero")
+	print("Assemblato: Osomaki intero")
+
+	if ui_assemblaggio:
+		ui_assemblaggio.visible = false
+		if ui_assemblaggio.has_method("aggiorna_bottoni"):
+			ui_assemblaggio.aggiorna_bottoni()
