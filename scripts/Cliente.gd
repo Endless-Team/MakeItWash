@@ -108,7 +108,7 @@ func consegna_piatto(nome: String) -> bool:
 		return false
 
 	gia_pagato = true
-	Inventario.accredita_vendita()
+	Inventario.accredita_vendita(nome)
 	emit_signal("ordine_consegnato", nome)
 	icona_ordine.visible = false
 	velocity = Vector2.ZERO

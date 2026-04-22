@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dyfega6rqhvcj"]
 
 [ext_resource type="Script" uid="uid://c5j8ykk2qcfi0" path="res://scripts/Cameriere.gd" id="1_gsqkg"]
-[ext_resource type="Texture2D" uid="uid://ds8wvuoykf8qf" path="res://tiles/Modern tiles_Free/Characters_free/Bob_idle_16x16.png" id="2_8v2x8"]
-[ext_resource type="Texture2D" uid="uid://bj0y2ksf2sqtq" path="res://tiles/Modern tiles_Free/Characters_free/Bob_run_16x16.png" id="3_nn6px"]
+[ext_resource type="Texture2D" uid="uid://ds8wvuoykf8qf" path="res://Tiles/Modern tiles_Free/Characters_free/Bob_idle_16x16.png" id="2_8v2x8"]
+[ext_resource type="Texture2D" uid="uid://bj0y2ksf2sqtq" path="res://Tiles/Modern tiles_Free/Characters_free/Bob_run_16x16.png" id="3_nn6px"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xftlc"]
 radius = 5.0

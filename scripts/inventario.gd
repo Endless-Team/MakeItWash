@@ -1,3 +1,4 @@
+# fix: aggiorna anche l'HUD alla consegna emettendo inventario_cambiato
 extends Node
 
 var ingredienti: Dictionary = {}
@@ -92,9 +93,13 @@ func ritira_piatto() -> String:
 	return piatto
 
 
-func accredita_vendita() -> void:
-	soldi += RICAVO_CONSEGNA
+func accredita_vendita(piatto: String) -> void:
+	if piatto == "Osomaki":
+		soldi += RICAVO_CONSEGNA+5
+	else:
+		soldi += RICAVO_CONSEGNA
 	emit_signal("soldi_cambiati", soldi)
+	emit_signal("inventario_cambiato")
 
 
 func get_soldi() -> int:
