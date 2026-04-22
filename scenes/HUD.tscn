@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://brvm4pop5sec4"]
 
 [ext_resource type="Script" uid="uid://xcjns5xl3a4h" path="res://scripts/styles/money_panel_style.gd" id="1_nysna"]
-[ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://ui/money_label.tscn" id="2_f6qnu"]
+[ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://UI/money_label.tscn" id="2_f6qnu"]
 [ext_resource type="Script" uid="uid://fvavl6hrxi71" path="res://scripts/styles/inventory_panel_style.gd" id="3_k4w17"]
-[ext_resource type="PackedScene" uid="uid://c8a61yvtgdg8c" path="res://ui/inventory_label.tscn" id="4_twldb"]
+[ext_resource type="PackedScene" uid="uid://c8a61yvtgdg8c" path="res://UI/inventory_label.tscn" id="4_twldb"]
 [ext_resource type="Script" uid="uid://d30ll7uqmjgi3" path="res://scripts/inventory_label.gd" id="5_8cuoo"]
 
 [node name="HUD" type="Control" unique_id=444513986]
@@ -38,7 +38,7 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -260.0
-offset_bottom = 140.0
+offset_bottom = 351.0
 grow_horizontal = 0
 script = ExtResource("3_k4w17")
 
