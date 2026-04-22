@@ -34,6 +34,11 @@ func _on_gambero_pressed() -> void:
 	aggiorna_bottoni()
 
 
+func _on_osomaki_pressed() -> void:
+	if player:
+		player.assembla_piatto("Osomaki_intero", "Salmone")
+	pass
+	
 func _on_chiudi_pressed() -> void:
 	visible = false
 

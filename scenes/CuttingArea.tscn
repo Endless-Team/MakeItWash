@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://q3fhy100v0ah"]
 
-[ext_resource type="Script" uid="uid://bx2ywkhfec2v4" path="res://Script/banconeTaglio.gd" id="1_7urgv"]
+[ext_resource type="Script" uid="uid://bx2ywkhfec2v4" path="res://scripts/banconeTaglio.gd" id="1_7urgv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7urgv"]
 size = Vector2(45.5, 33)

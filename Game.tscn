@@ -1,7 +1,55 @@
 [gd_scene format=3 uid="uid://ct2ng3nms2xrr"]
 
+<<<<<<< HEAD
 [ext_resource type="PackedScene" uid="uid://b0tubxbulxm7i" path="res://Scene/Sushi.tscn" id="1_wbfu4"]
+[ext_resource type="Texture2D" uid="uid://7vnppyx23hn6" path="res://Tiles/Sushi/r_1687.png" id="3_u44n3"]
+[ext_resource type="Texture2D" uid="uid://chqqxbbg7gbr" path="res://Tiles/Sushi/r_1689.png" id="4_t88pq"]
+=======
+[ext_resource type="PackedScene" uid="uid://b0tubxbulxm7i" path="res://scenes/Sushi.tscn" id="1_wbfu4"]
+>>>>>>> cf739a97e72d4feeea0369a4265f63de2f88e7d5
 
 [node name="Game" type="Node2D" unique_id=1555197573]
 
 [node name="Sushi" parent="." unique_id=2084916691 instance=ExtResource("1_wbfu4")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1465861775]
+visible = false
+
+[node name="TouchUi" type="Control" parent="CanvasLayer" unique_id=5811320]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.4, 2.4)
+
+[node name="Interagisci" type="TouchScreenButton" parent="CanvasLayer/TouchUi" unique_id=2062965107]
+position = Vector2(1018, 503)
+scale = Vector2(0.53846157, 0.30033004)
+texture_normal = ExtResource("4_t88pq")
+action = "interagisci"
+
+[node name="Up" type="TouchScreenButton" parent="CanvasLayer/TouchUi" unique_id=1977997874]
+position = Vector2(70.00001, 427.99997)
+scale = Vector2(0.21657753, 0.2385787)
+texture_normal = ExtResource("3_u44n3")
+action = "ui_up"
+
+[node name="Left" type="TouchScreenButton" parent="CanvasLayer/TouchUi" unique_id=801155809]
+position = Vector2(4.0000005, 485.99997)
+scale = Vector2(0.21657753, 0.23096453)
+texture_normal = ExtResource("3_u44n3")
+action = "ui_left"
+
+[node name="Right" type="TouchScreenButton" parent="CanvasLayer/TouchUi" unique_id=401397541]
+position = Vector2(132, 486.00003)
+scale = Vector2(0.21390374, 0.24111664)
+texture_normal = ExtResource("3_u44n3")
+action = "ui_right"
+
+[node name="Down" type="TouchScreenButton" parent="CanvasLayer/TouchUi" unique_id=14606554]
+position = Vector2(64.00001, 550)
+scale = Vector2(0.24866313, 0.24619289)
+texture_normal = ExtResource("3_u44n3")
+action = "ui_down"

@@ -8,6 +8,7 @@ signal piatto_depositato(nome: String)
 const TEXTURE_PIATTI = {
 	"Nigiri salmone": preload("res://Tiles/Sushi/r_1653.png"),
 	"Nigiri gambero":  preload("res://Tiles/Sushi/r_1643.png"),
+	"Osomaki": preload("res://Tiles/Sushi/r_1652.png")
 }
 
 func _ready() -> void:

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dhvxnha00c4q3"]
 
-[ext_resource type="Script" uid="uid://2fgn1ixje31w" path="res://Script/banconeConsegna.gd" id="1_68ojh"]
+[ext_resource type="Script" uid="uid://2fgn1ixje31w" path="res://scripts/banconeConsegna.gd" id="1_68ojh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhs36"]
 size = Vector2(48, 57.5)

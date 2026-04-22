@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://kcy850kaxtyy" path="res://Tiles/Sushi/r_1653.png" id="1_6pjgg"]
 [ext_resource type="Script" uid="uid://dfamfni5nhs77" path="res://Script/canvasAssemblo.gd" id="1_otmq6"]
 [ext_resource type="Texture2D" uid="uid://blk2qfd42e566" path="res://Tiles/Sushi/r_1643.png" id="2_otmq6"]
+[ext_resource type="Texture2D" uid="uid://ddafxpv0vlbte" path="res://Tiles/Sushi/r_1652.png" id="4_x536i"]
 
 [node name="PanelSceltaAssembla" type="CanvasLayer" unique_id=1209876604]
 
@@ -57,6 +58,22 @@ texture_normal = ExtResource("2_otmq6")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="Osomaki" type="Button" parent="PanelContainer/VBoxContainer" unique_id=448125505]
+layout_mode = 2
+text = "    Osomaki"
+icon_alignment = 1
+vertical_icon_alignment = 2
+
+[node name="TextureButton" type="TextureButton" parent="PanelContainer/VBoxContainer/Osomaki" unique_id=1429730622]
+layout_mode = 0
+offset_top = 38.0
+offset_right = 344.20898
+offset_bottom = 874.46094
+rotation = -1.5707964
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("4_x536i")
+stretch_mode = 0
+
 [node name="chiudi" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1316641657]
 layout_mode = 2
 text = "Chiudi"
@@ -64,4 +81,7 @@ text = "Chiudi"
 [connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriSalmone" to="PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriSalmone/TextureButton" to="PanelContainer" method="_on_salmone_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriGambero" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/NigiriGambero/TextureButton" to="PanelContainer" method="_on_gambero_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Osomaki" to="PanelContainer" method="_on_osomaki_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Osomaki/TextureButton" to="PanelContainer" method="_on_osomaki_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/chiudi" to="PanelContainer" method="_on_chiudi_pressed"]

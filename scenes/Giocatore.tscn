@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://by1jfblcwry3u"]
 
-[ext_resource type="Script" uid="uid://beuhjtar556ek" path="res://Script/giocatore.gd" id="1_5anei"]
-[ext_resource type="Texture2D" uid="uid://5dj5v73lj6g5" path="res://Tiles/Modern tiles_Free/Characters_free/Alex_idle_anim_16x16.png" id="2_38fe7"]
-[ext_resource type="Texture2D" uid="uid://df8c7gsnsnwwx" path="res://Tiles/Modern tiles_Free/Characters_free/Alex_run_16x16.png" id="3_7nefn"]
+[ext_resource type="Script" uid="uid://beuhjtar556ek" path="res://scripts/Giocatore.gd" id="1_5anei"]
+[ext_resource type="Texture2D" uid="uid://5dj5v73lj6g5" path="res://tiles/Modern tiles_Free/Characters_free/Alex_idle_anim_16x16.png" id="2_38fe7"]
+[ext_resource type="Texture2D" uid="uid://df8c7gsnsnwwx" path="res://tiles/Modern tiles_Free/Characters_free/Alex_run_16x16.png" id="3_7nefn"]
+[ext_resource type="PackedScene" uid="uid://brvm4pop5sec4" path="res://scenes/HUD.tscn" id="4_vx7rd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
 atlas = ExtResource("2_38fe7")
@@ -414,3 +415,5 @@ animation = &"walk_up"
 position = Vector2(0, 10)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_xftlc")
+
+[node name="HUD" parent="." unique_id=444513986 instance=ExtResource("4_vx7rd")]

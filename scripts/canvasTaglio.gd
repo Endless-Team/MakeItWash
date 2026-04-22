@@ -30,6 +30,10 @@ func _on_gambero_pressed() -> void:
 	if player:
 		player.taglia_ingrediente("Gambero")
 
+func _on_osomaki_pressed() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		player.taglia_ingrediente("Osomaki")
 
 func _on_chiudi_pressed() -> void:
 	visible = false

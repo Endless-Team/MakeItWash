@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcqguqbl33qyg"]
 
-[ext_resource type="Script" uid="uid://bcc50btn1mjqt" path="res://Script/banconeAssemblo.gd" id="1_vwuto"]
+[ext_resource type="Script" uid="uid://bcc50btn1mjqt" path="res://scripts/banconeAssemblo.gd" id="1_vwuto"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vnisa"]
 size = Vector2(65.75, 54.5)

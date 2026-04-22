@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://7qn2ddt533dk"]
+
+[ext_resource type="PackedScene" uid="uid://b0tubxbulxm7i" path="res://scenes/Sushi.tscn" id="1_ibkli"]
+
+[node name="Game" type="Node2D" unique_id=1310619221]
+
+[node name="Sushi" parent="." unique_id=2084916691 instance=ExtResource("1_ibkli")]

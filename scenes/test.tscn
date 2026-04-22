@@ -1,8 +1,8 @@
-[gd_scene format=4 uid="uid://bjrd5kfqiuln6"]
+[gd_scene format=4 uid="uid://djqv5ovuiaid4"]
 
 [ext_resource type="Texture2D" uid="uid://dvsb3acrjx0nn" path="res://Tiles/Modern tiles_Free/Interiors_free/48x48/Room_Builder_free_48x48.png" id="1_7yhko"]
-[ext_resource type="PackedScene" uid="uid://by1jfblcwry3u" path="res://Scene/Giocatore.tscn" id="2_1n30v"]
-[ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://Scene/cameriere.tscn" id="3_35kre"]
+[ext_resource type="PackedScene" uid="uid://by1jfblcwry3u" path="res://scenes/Giocatore.tscn" id="2_1n30v"]
+[ext_resource type="PackedScene" uid="uid://dyfega6rqhvcj" path="res://scenes/Cameriere.tscn" id="3_35kre"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_1n30v"]
 tile_data = PackedInt32Array(0, 2162689, 27, 65536, 2162689, 28, 131072, 2162689, 29, 1, 2228225, 27, 65537, 2228225, 28, 131073, 2228225, 29, 2, 2293761, 27, 65538, 2293761, 28, 131074, 2293761, 29)

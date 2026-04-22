@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://brvm4pop5sec4"]
+
+[ext_resource type="Script" uid="uid://xcjns5xl3a4h" path="res://scripts/styles/money_panel_style.gd" id="1_nysna"]
+[ext_resource type="PackedScene" uid="uid://dsi7tdwyyfo8r" path="res://ui/money_label.tscn" id="2_f6qnu"]
+[ext_resource type="Script" uid="uid://fvavl6hrxi71" path="res://scripts/styles/inventory_panel_style.gd" id="3_k4w17"]
+[ext_resource type="PackedScene" uid="uid://c8a61yvtgdg8c" path="res://ui/inventory_label.tscn" id="4_twldb"]
+[ext_resource type="Script" uid="uid://d30ll7uqmjgi3" path="res://scripts/inventory_label.gd" id="5_8cuoo"]
+
+[node name="HUD" type="Control" unique_id=444513986]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 768.0
+offset_bottom = 432.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayerMoney" type="CanvasLayer" parent="." unique_id=756823506]
+
+[node name="MoneyPanel" type="Panel" parent="CanvasLayerMoney" unique_id=313694302]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 280.0
+offset_bottom = 110.0
+script = ExtResource("1_nysna")
+
+[node name="MoneyLabel" parent="CanvasLayerMoney/MoneyPanel" unique_id=1856258133 instance=ExtResource("2_f6qnu")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 240.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 32
+
+[node name="InventoryPanel" type="Panel" parent="CanvasLayerMoney" unique_id=2129161551]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_bottom = 140.0
+grow_horizontal = 0
+script = ExtResource("3_k4w17")
+
+[node name="InventoryLabel" parent="CanvasLayerMoney/InventoryPanel" unique_id=1271330087 instance=ExtResource("4_twldb")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 238.0
+offset_bottom = 116.0
+grow_horizontal = 1
+grow_vertical = 1
+script = ExtResource("5_8cuoo")
