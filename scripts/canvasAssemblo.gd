@@ -6,7 +6,7 @@ var player
 @onready var btn_nigiri_salmone: Button = $VBoxContainer/NigiriSalmone
 @onready var btn_nigiri_gambero: Button = $VBoxContainer/NigiriGambero
 @onready var btn_osomaki_intero: Button = $VBoxContainer/OsomakiIntero
-@onready var btn_chiudi: Button = $VBoxContainer/Chiudi
+@onready var btn_chiudi: Button = $VBoxContainer/chiudi
 
 
 func _ready() -> void:
